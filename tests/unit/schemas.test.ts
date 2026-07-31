@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { contactSchema, experienceSchema, profileSchema } from '../../src/content/schemas';
+import {
+  casesSchema,
+  contactSchema,
+  experienceSchema,
+  profileSchema,
+  stackSchema,
+  uiSchema,
+} from '../../src/content/schemas';
 
 describe('profileSchema', () => {
   const valid = {
@@ -61,6 +68,99 @@ describe('contactSchema', () => {
         email: 'someone@example.com',
         links: [{ label: 'GitHub', url: 'github.com/handle' }],
       }),
+    ).toThrow();
+  });
+});
+
+describe('casesSchema', () => {
+  const valid = {
+    entries: [
+      {
+        title: 'Proxy outage recovery',
+        problem: 'The proxy silently dropped traffic under load.',
+        action: 'Rebuilt the routing rules and added health checks.',
+        result: 'Zero unplanned downtime since.',
+      },
+    ],
+  };
+
+  it('accepts a complete cases entry', () => {
+    expect(casesSchema.parse(valid)).toEqual(valid);
+  });
+
+  it('rejects an entry missing the result', () => {
+    const { result, ...withoutResult } = valid.entries[0];
+    expect(() => casesSchema.parse({ entries: [withoutResult] })).toThrow();
+  });
+
+  it('rejects an entry with an empty problem string', () => {
+    expect(() =>
+      casesSchema.parse({ entries: [{ ...valid.entries[0], problem: '' }] }),
+    ).toThrow();
+  });
+
+  it('rejects more than three entries', () => {
+    const fourEntries = [valid.entries[0], valid.entries[0], valid.entries[0], valid.entries[0]];
+    expect(() => casesSchema.parse({ entries: fourEntries })).toThrow();
+  });
+});
+
+describe('stackSchema', () => {
+  const valid = {
+    groups: [{ label: 'infrastructure', items: ['Linux', 'Docker', 'HAProxy'] }],
+  };
+
+  it('accepts a complete stack', () => {
+    expect(stackSchema.parse(valid)).toEqual(valid);
+  });
+
+  it('rejects a group with no items', () => {
+    expect(() =>
+      stackSchema.parse({ groups: [{ label: 'infrastructure', items: [] }] }),
+    ).toThrow();
+  });
+
+  it('rejects a group missing a label', () => {
+    expect(() => stackSchema.parse({ groups: [{ items: ['Linux'] }] })).toThrow();
+  });
+});
+
+describe('uiSchema', () => {
+  const valid = {
+    siteTitle: 'Mubinjon Mukhamedov, infrastructure engineer',
+    metaDescription: 'Infrastructure engineer and product developer.',
+    sections: {
+      name: 'NAME',
+      experience: 'EXPERIENCE',
+      cases: 'WHAT I FIXED',
+      stack: 'STACK',
+      contact: 'CONTACT',
+    },
+    caseLabels: {
+      problem: 'Problem',
+      action: 'What I did',
+      result: 'Result',
+    },
+    controls: {
+      switchLanguage: 'Switch language',
+      switchToDark: 'Switch to dark theme',
+      switchToLight: 'Switch to light theme',
+      otherLanguageName: 'Русский',
+    },
+  };
+
+  it('accepts a complete ui object', () => {
+    expect(uiSchema.parse(valid)).toEqual(valid);
+  });
+
+  it('rejects ui data missing a section label', () => {
+    const { name, ...sectionsWithoutName } = valid.sections;
+    expect(() => uiSchema.parse({ ...valid, sections: sectionsWithoutName })).toThrow();
+  });
+
+  it('rejects ui data with an empty control label', () => {
+    expect(() =>
+      uiSchema.parse({ ...valid, controls: { ...valid.controls, switchLanguage: '' } }),
     ).toThrow();
   });
 });
