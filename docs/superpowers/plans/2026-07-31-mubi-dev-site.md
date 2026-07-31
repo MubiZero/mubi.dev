@@ -2147,13 +2147,13 @@ test('text remains readable and unclipped at 200 percent zoom', async ({ page })
 test('body copy is capped at a comfortable measure', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.goto('/');
-  const width = await page
-    .getByTestId('hero-cta')
-    .evaluate(() => {
-      const paragraph = document.querySelector('main p');
-      return paragraph ? paragraph.getBoundingClientRect().width : 0;
-    });
-  expect(width).toBeLessThanOrEqual(900);
+  const widths = await page
+    .locator('main p')
+    .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().width));
+  expect(widths.length).toBeGreaterThan(0);
+  for (const width of widths) {
+    expect(width).toBeLessThanOrEqual(800);
+  }
 });
 ```
 
