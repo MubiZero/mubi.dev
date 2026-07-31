@@ -1,0 +1,47 @@
+---
+interface Props {
+  toDark: string;
+  toLight: string;
+}
+
+const { toDark, toLight } = Astro.props;
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  data-to-dark={toDark}
+  data-to-light={toLight}
+  class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-[var(--radius-sm)] px-2 py-1
+         font-mono text-muted transition-transform duration-150 hover:text-accent-text
+         active:scale-[0.97]"
+>
+  <span aria-hidden="true" data-icon>☾</span>
+</button>
+
+<script is:inline>
+  const toggle = document.getElementById('theme-toggle');
+  const icon = toggle.querySelector('[data-icon]');
+
+  function render() {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    icon.textContent = isDark ? '☾' : '☀';
+    toggle.setAttribute(
+      'aria-label',
+      isDark ? toggle.dataset.toLight : toggle.dataset.toDark,
+    );
+  }
+
+  toggle.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Storage is unavailable in some privacy modes; the theme still flips for this page view.
+    }
+    render();
+  });
+
+  render();
+</script>

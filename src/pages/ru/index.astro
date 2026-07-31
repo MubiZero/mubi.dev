@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
 import { loadPage } from '../../lib/content';
 
 const page = await loadPage('ru');
 ---
 
 <BaseLayout locale="ru" ui={page.ui} profile={page.profile} contact={page.contact}>
+  <Header locale="ru" controls={page.ui.controls} />
   <main>
     <h1>{page.profile.name}</h1>
     <p>mubi.dev</p>

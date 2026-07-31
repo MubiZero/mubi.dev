@@ -1,0 +1,21 @@
+---
+import { localizedPath, otherLocale, type Locale } from '../lib/locale';
+
+interface Props {
+  locale: Locale;
+  label: string;
+  otherLanguageName: string;
+}
+
+const { locale, label, otherLanguageName } = Astro.props;
+---
+
+<a
+  href={localizedPath(otherLocale(locale))}
+  hreflang={otherLocale(locale)}
+  aria-label={`${label}: ${otherLanguageName}`}
+  class="inline-flex min-h-6 min-w-6 items-center px-2 py-1 font-mono text-muted no-underline
+         transition-colors duration-150 hover:text-accent-text active:scale-[0.97]"
+>
+  {otherLanguageName}
+</a>

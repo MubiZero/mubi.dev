@@ -1,0 +1,32 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import type { Locale } from '../lib/locale';
+
+interface Props {
+  locale: Locale;
+  controls: {
+    switchLanguage: string;
+    switchToDark: string;
+    switchToLight: string;
+    otherLanguageName: string;
+  };
+}
+
+const { locale, controls } = Astro.props;
+---
+
+<header
+  class="mx-auto flex max-w-3xl items-center justify-between gap-4 border-b border-border
+         px-4 py-4 sm:px-6"
+>
+  <span class="font-mono text-[var(--text-step-minus-1)] text-muted">mubi.dev</span>
+  <nav class="flex items-center gap-2">
+    <LangSwitch
+      locale={locale}
+      label={controls.switchLanguage}
+      otherLanguageName={controls.otherLanguageName}
+    />
+    <ThemeToggle toDark={controls.switchToDark} toLight={controls.switchToLight} />
+  </nav>
+</header>
