@@ -1,28 +1,80 @@
 # mubi.dev
 
-Personal CV site for Mubinjon Mukhamedov. It uses Astro static output and deploys to Coolify.
+[mubi.dev](https://mubi.dev) is the bilingual personal CV and developer portfolio of [Mubinjon Mukhamedov](https://www.linkedin.com/in/mubizero). The site is static, fast to load, and designed to work equally well as a web page and a one-page printable CV.
 
-## Commands
+## What is included
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Starts a local server on port 4321 |
-| `npm run build` | Builds static files into `dist/` |
-| `npm run preview` | Serves the built output locally |
-| `npm test` | Runs content schema, locale parity, copy and contrast tests |
-| `npm run test:e2e` | Runs Playwright interaction, accessibility, responsive and print tests |
+- English at `/` and Russian at `/ru/`
+- Experience timeline, selected engineering cases, technology stack, education, and contacts
+- Light and dark themes, with the choice remembered in the browser
+- Responsive layout, keyboard navigation, visible focus states, and reduced-motion support
+- A4 print layout, so the current page can be saved as a PDF without maintaining a second CV file
 
-## Content
+## Stack
 
-All copy is in `src/content/<section>/{en,ru}.yaml`. Both locales must use the same data shape.
-See [docs/HANDOVER.md](docs/HANDOVER.md) for every placeholder that requires real information.
+- [Astro](https://astro.build/) for static rendering
+- Tailwind CSS 4 for utility styles, backed by shared CSS design tokens
+- Vitest for content, localisation, and contrast checks
+- Playwright and axe-core for browser, accessibility, responsive, and print checks
+- nginx in a multi-stage Docker build for production
 
-## Design
+## Run locally
 
-The design specification is [docs/superpowers/specs/2026-07-31-mubi-dev-design.md](docs/superpowers/specs/2026-07-31-mubi-dev-design.md).
-Color, spacing, type and motion tokens live in `src/styles/tokens.css`.
+```bash
+npm ci
+npm run dev
+```
 
-## Coolify
+The development server is available at `http://localhost:4321`.
 
-Coolify builds the root `Dockerfile`. It compiles the site with `npm ci && npm run build`, then nginx serves only the
-resulting `dist` files on port 80. The static site does not require environment variables.
+## Useful commands
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local development server. |
+| `npm run build` | Build the static site into `dist/`. |
+| `npm run preview` | Serve the production build locally. |
+| `npm test` | Validate content schemas, locale parity, English copy rules, and colour contrast. |
+| `npm run test:e2e` | Run browser interaction, accessibility, responsive, and print tests. |
+
+Before publishing a site change, run:
+
+```bash
+npm test
+npm run test:e2e
+npm run build
+```
+
+## Updating the CV
+
+All public copy is separated from the components. Edit the matching English and Russian YAML files under `src/content/`:
+
+| Section | Files |
+| --- | --- |
+| Profile and navigation labels | `profile/{en,ru}.yaml` |
+| Work history and print-only condensed entries | `experience/{en,ru}.yaml` |
+| Education | `education/{en,ru}.yaml` |
+| Selected engineering cases | `cases/{en,ru}.yaml` |
+| Skills and contacts | `stack/{en,ru}.yaml`, `contact/{en,ru}.yaml` |
+| Interface labels | `ui/{en,ru}.yaml` |
+
+Keep both locales structurally identical. The test suite intentionally fails if a field is added in only one language. For content conventions and a short maintenance checklist, see [docs/HANDOVER.md](docs/HANDOVER.md).
+
+## Print a CV
+
+Open either language version in a browser and use **Print** / `Ctrl+P` (or `Cmd+P`). The print stylesheet targets a single A4 page and omits navigation and theme controls. No separately generated PDF is stored in the repository.
+
+## Deployment
+
+The production site is deployed by Coolify from the `main` branch using the root [Dockerfile](Dockerfile):
+
+1. Node installs locked dependencies and runs `npm run build`.
+2. A minimal nginx image serves only the generated `dist/` files on port `80`.
+
+The site needs no runtime environment variables or database. DNS and TLS are managed outside this repository.
+
+## Project documentation
+
+- [Design specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
+- [Implementation plan](docs/superpowers/plans/2026-07-31-mubi-dev-site.md)
+- [Content handover](docs/HANDOVER.md)
