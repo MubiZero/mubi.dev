@@ -1,0 +1,33 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  entries: { period: string; employer: string; role: string; lines: string[] }[];
+  sectionLabel: string;
+}
+
+const { entries, sectionLabel } = Astro.props;
+---
+
+<section aria-labelledby="section-experience" class="mt-12">
+  <SectionHeading id="section-experience" label={sectionLabel} />
+
+  <ol data-testid="experience-axis" class="relative m-0 list-none border-l border-border pl-6">
+    {
+      entries.map((entry) => (
+        <li data-testid="experience-entry" class="relative pb-8 last:pb-0">
+          <span
+            aria-hidden="true"
+            class="absolute top-[0.55rem] -left-[calc(0.25rem+1px)] block h-2 w-2 rounded-full bg-accent"
+          />
+          <p class="font-mono text-[var(--text-step-minus-1)] text-muted">{entry.period}</p>
+          <h3 class="mt-1 text-[var(--text-step-1)]">{entry.employer}</h3>
+          <p class="mt-1 font-mono text-[var(--text-step-minus-1)] text-accent-text">{entry.role}</p>
+          <div class="mt-2 max-w-[66ch] space-y-1 text-text">
+            {entry.lines.map((line) => <p>{line}</p>)}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
