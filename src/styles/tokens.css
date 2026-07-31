@@ -60,6 +60,7 @@
   --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
+  --text-step-minus-1: 0.8rem;
   --text-step-0: 1rem;
   --text-step-1: 1.25rem;
   --text-step-2: 1.5625rem;
