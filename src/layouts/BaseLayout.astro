@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+import { localizedPath, otherLocale, type Locale } from '../lib/locale';
+
+interface Props {
+  locale: Locale;
+  ui: { siteTitle: string; metaDescription: string };
+  profile: { name: string; manLine: string };
+  contact: { email: string; links: { label: string; url: string }[] };
+}
+
+const { locale, ui, profile, contact } = Astro.props;
+const site = 'https://mubi.dev';
+const canonical = new URL(localizedPath(locale), site).href;
+const alternate = new URL(localizedPath(otherLocale(locale)), site).href;
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  description: profile.manLine,
+  url: canonical,
+  email: `mailto:${contact.email}`,
+  sameAs: contact.links.map((link) => link.url),
+};
+---
+
+<html lang={locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{ui.siteTitle}</title>
+    <meta name="description" content={ui.metaDescription} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale} href={canonical} />
+    <link rel="alternate" hreflang={otherLocale(locale)} href={alternate} />
+    <link rel="alternate" hreflang="x-default" href={`${site}/`} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={ui.siteTitle} />
+    <meta property="og:description" content={ui.metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/og.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script is:inline>
+      const stored = localStorage.getItem('theme');
+      const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored ?? preferred;
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
