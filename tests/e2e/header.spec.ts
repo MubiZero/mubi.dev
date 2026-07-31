@@ -19,6 +19,14 @@ test('theme toggle flips the theme and persists it', async ({ browser }) => {
   await context.close();
 });
 
+test('theme indicator reflects the active theme', async ({ page }) => {
+  await page.goto('/');
+  const indicator = page.getByTestId('theme-indicator');
+  await expect(indicator).toHaveAttribute('data-theme-icon', 'dark');
+  await page.getByRole('button', { name: /theme/i }).click();
+  await expect(indicator).toHaveAttribute('data-theme-icon', 'light');
+});
+
 test('every header control is keyboard reachable with a visible focus ring', async ({ page }) => {
   await page.goto('/');
   const controls = page.locator('header a, header button');

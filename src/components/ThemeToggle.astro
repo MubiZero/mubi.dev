@@ -16,7 +16,13 @@ const { toDark, toLight } = Astro.props;
          font-mono text-muted transition-[color,transform] duration-150 hover:text-accent-text
          active:scale-[0.97]"
 >
-  <span aria-hidden="true" data-icon class="font-sans">☾</span>
+  <span
+    aria-hidden="true"
+    data-icon
+    data-testid="theme-indicator"
+    data-theme-icon="dark"
+    class="inline-block size-3 rounded-full border border-current"
+  ></span>
 </button>
 
 <script is:inline>
@@ -26,7 +32,8 @@ const { toDark, toLight } = Astro.props;
 
   function render() {
     const isDark = document.documentElement.dataset.theme === 'dark';
-    icon.textContent = isDark ? '☾' : '☀';
+    icon.dataset.themeIcon = isDark ? 'dark' : 'light';
+    icon.classList.toggle('bg-current', !isDark);
     toggle.setAttribute(
       'aria-label',
       isDark ? toggle.dataset.toLight : toggle.dataset.toDark,
