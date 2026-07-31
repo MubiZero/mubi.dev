@@ -1370,7 +1370,7 @@ const { locale, label, otherLanguageName } = Astro.props;
   hreflang={otherLocale(locale)}
   aria-label={label}
   class="inline-flex min-h-6 min-w-6 items-center px-2 py-1 font-mono text-muted no-underline
-         transition-colors duration-150 hover:text-accent-text active:scale-[0.97]"
+         transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
 >
   {otherLanguageName}
 </a>
@@ -1396,7 +1396,7 @@ const { toDark, toLight } = Astro.props;
   data-to-dark={toDark}
   data-to-light={toLight}
   class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-[var(--radius-sm)] px-2 py-1
-         font-mono text-muted transition-transform duration-150 hover:text-accent-text
+         font-mono text-muted transition-[color,transform] duration-150 hover:text-accent-text
          active:scale-[0.97]"
 >
   <span aria-hidden="true" data-icon>☾</span>
@@ -1619,7 +1619,7 @@ const { profile, contact, sectionLabel } = Astro.props;
       data-testid="hero-cta"
       href={`mailto:${contact.email}`}
       class="inline-flex min-h-11 items-center rounded-[var(--radius-md)] border border-accent
-             px-5 py-2 font-mono text-text no-underline transition-transform duration-150
+             px-5 py-2 font-mono text-text no-underline transition-[background-color,transform] duration-150
              hover:bg-surface active:scale-[0.97]"
     >
       {profile.ctaLabel}
@@ -2199,7 +2199,7 @@ test('no element animates the all property', async ({ page }) => {
 - [ ] **Step 6: Run it and fix what it reports**
 
 Run: `npm run test:e2e -- tests/e2e/motion.spec.ts`
-Expected: PASS. If `transition-property` resolves to `all` anywhere, replace the Tailwind `transition` utility with the explicit `transition-colors` or `transition-transform` variant.
+Expected: PASS. If `transition-property` resolves to `all` anywhere, replace the bare Tailwind `transition` utility with an explicit property list. When an element both changes colour on hover and scales on press, the list must name both, for example `transition-[color,transform]`: a colour-only utility leaves the press scale un-animated, and a transform-only utility leaves the colour snapping.
 
 - [ ] **Step 7: Run the whole suite**
 
