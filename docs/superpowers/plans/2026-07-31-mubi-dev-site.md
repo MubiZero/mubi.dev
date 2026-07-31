@@ -1418,7 +1418,11 @@ const { toDark, toLight } = Astro.props;
   toggle.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem('theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Storage is unavailable in some privacy modes; the theme still flips for this page view.
+    }
     render();
   });
 
@@ -1426,7 +1430,7 @@ const { toDark, toLight } = Astro.props;
 </script>
 ```
 
-The label describes the action the click performs, so it reads as "Switch to light theme" while dark is active. The test matches `/theme/i`, which both labels satisfy.
+Storage writes are guarded the same way the layout's bootstrap read is: when storage access throws, the toggle still flips the theme for the current page view instead of dying mid-handler. The label describes the action the click performs, so it reads as "Switch to light theme" while dark is active. The test matches `/theme/i`, which both labels satisfy.
 
 - [ ] **Step 5: Write Header**
 
