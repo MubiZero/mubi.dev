@@ -1,6 +1,6 @@
 # mubi.dev
 
-Personal CV site for Mubinjon Mukhamedov. It uses Astro static output and is prepared for Cloudflare Pages.
+Personal CV site for Mubinjon Mukhamedov. It uses Astro static output and deploys to Coolify.
 
 ## Commands
 
@@ -22,6 +22,7 @@ See [docs/HANDOVER.md](docs/HANDOVER.md) for every placeholder that requires rea
 The design specification is [docs/superpowers/specs/2026-07-31-mubi-dev-design.md](docs/superpowers/specs/2026-07-31-mubi-dev-design.md).
 Color, spacing, type and motion tokens live in `src/styles/tokens.css`.
 
-## Cloudflare Pages
+## Coolify
 
-Use `npm run build` as the build command and `dist` as the output directory. The static site does not require environment variables.
+Coolify builds the root `Dockerfile`. It compiles the site with `npm ci && npm run build`, then nginx serves only the
+resulting `dist` files on port 80. The static site does not require environment variables.
