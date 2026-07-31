@@ -49,8 +49,7 @@ const person = {
       } catch {
         stored = null;
       }
-      const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : preferred;
+      document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
     </script>
   </head>
   <body>
