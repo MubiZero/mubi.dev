@@ -1,6 +1,4 @@
 ---
-import SectionHeading from './SectionHeading.astro';
-
 interface Props {
   entries: { degree: string; institution: string; period: string; details: string[] }[];
   sectionLabel: string;
@@ -9,17 +7,17 @@ interface Props {
 const { entries, sectionLabel } = Astro.props;
 ---
 
-<section aria-labelledby="section-education" class="mt-12">
-  <SectionHeading id="section-education" label={sectionLabel} />
-
-  <ol class="m-0 list-none space-y-6">
+<section id="education" class="module education-module" aria-labelledby="education-title">
+  <span class="module-label">{sectionLabel}</span>
+  <h2 id="education-title" class="section-title">{sectionLabel}</h2>
+  <ol class="education-list">
     {
       entries.map((entry) => (
-        <li data-testid="education-entry">
-          <p class="font-mono text-[var(--text-step-minus-1)] text-muted">{entry.period}</p>
-          <h3 class="mt-1 text-[var(--text-step-1)]">{entry.institution}</h3>
-          <p class="mt-1 font-mono text-[var(--text-step-minus-1)] text-accent-text">{entry.degree}</p>
-          {entry.details.map((detail) => <p class="mt-2 text-text">{detail}</p>)}
+        <li data-testid="education-entry" class="education-entry">
+          <p class="entry-period">{entry.period}</p>
+          <h3>{entry.institution}</h3>
+          <p class="entry-role">{entry.degree}</p>
+          {entry.details.map((detail) => <p class="entry-meta">{detail}</p>)}
         </li>
       ))
     }

@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   toDark: string;
   toLight: string;
@@ -7,49 +9,35 @@ interface Props {
 const { toDark, toLight } = Astro.props;
 ---
 
-<button
-  type="button"
-  id="theme-toggle"
-  data-to-dark={toDark}
-  data-to-light={toLight}
-  class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-[var(--radius-sm)] px-2 py-1
-         font-mono text-muted transition-[color,transform] duration-150 hover:text-accent-text
-         active:scale-[0.97]"
->
-  <span
-    aria-hidden="true"
-    data-icon
-    data-testid="theme-indicator"
-    data-theme-icon="dark"
-    class="inline-block size-3 rounded-full border border-current"
-  ></span>
+<button type="button" id="theme-toggle" class="icon-button" data-to-dark={toDark} data-to-light={toLight}>
+  <Icon name="ph:sun" class="theme-icon theme-icon--sun" size="19" aria-hidden="true" />
+  <Icon name="ph:moon" class="theme-icon theme-icon--moon" size="19" aria-hidden="true" />
 </button>
 
 <script is:inline>
-  // Assumes one Header instance per page; a second instance would silently leave its toggle dead.
   const toggle = document.getElementById('theme-toggle');
-  const icon = toggle.querySelector('[data-icon]');
 
-  function render() {
+  const renderThemeToggle = () => {
+    if (!toggle) return;
     const isDark = document.documentElement.dataset.theme === 'dark';
-    icon.dataset.themeIcon = isDark ? 'dark' : 'light';
-    icon.classList.toggle('bg-current', !isDark);
-    toggle.setAttribute(
-      'aria-label',
-      isDark ? toggle.dataset.toLight : toggle.dataset.toDark,
-    );
-  }
+    toggle.setAttribute('aria-label', isDark ? toggle.dataset.toLight : toggle.dataset.toDark);
+  };
 
-  toggle.addEventListener('click', () => {
+  toggle?.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     try {
       localStorage.setItem('theme', next);
-    } catch {
-      // Storage is unavailable in some privacy modes; the theme still flips for this page view.
-    }
-    render();
+    } catch {}
+    renderThemeToggle();
   });
 
-  render();
+  renderThemeToggle();
 </script>
+
+<style>
+  :global([data-theme='light']) .theme-icon--moon,
+  :global([data-theme='dark']) .theme-icon--sun {
+    display: none;
+  }
+</style>

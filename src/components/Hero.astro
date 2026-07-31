@@ -1,60 +1,46 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   profile: {
     name: string;
     manLine: string;
     summary: string[];
-    inlineStack: string[];
     ctaLabel: string;
   };
   contact: { email: string; links: { label: string; url: string }[] };
-  sectionLabel: string;
 }
 
-const { profile, contact, sectionLabel } = Astro.props;
+const { profile, contact } = Astro.props;
+const socialIcons: Record<string, string> = {
+  GitHub: 'simple-icons:github',
+  LinkedIn: 'simple-icons:linkedin',
+  Telegram: 'simple-icons:telegram',
+};
 ---
 
-<section aria-labelledby="section-name" class="pt-4">
-  <h2
-    id="section-name"
-    class="mb-4 font-mono text-[var(--text-step-minus-1)] font-normal tracking-[0.08em] text-muted uppercase"
-  >
-    {sectionLabel}
-  </h2>
+<section id="home" class="module hero-module" aria-labelledby="hero-title">
+  <span class="module-label">mubi.dev</span>
 
-  <h1 class="text-[var(--text-step-4)] sm:text-[var(--text-step-5)]">{profile.name}</h1>
-
-  <p class="mt-3 font-mono text-[var(--text-step-1)] text-accent-text">{profile.manLine}</p>
-
-  <div class="mt-6 max-w-[66ch] space-y-3 text-[var(--text-step-0)] text-text">
-    {profile.summary.map((sentence) => <p>{sentence}</p>)}
+  <div class="hero-copy">
+    <h1 id="hero-title">{profile.name}</h1>
+    <p class="hero-role">{profile.manLine}</p>
+    <div class="hero-summary">
+      {profile.summary.map((sentence) => <p>{sentence}</p>)}
+    </div>
   </div>
 
-  <p class="mt-4 font-mono text-[var(--text-step-minus-1)] text-muted">
-    {profile.inlineStack.join(' · ')}
-  </p>
-
-  <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-    <a
-      data-testid="hero-cta"
-      href={`mailto:${contact.email}`}
-      class="inline-flex min-h-11 items-center rounded-[var(--radius-md)] border border-accent px-5 py-2 font-mono text-text no-underline transition-[background-color,transform] duration-150 hover:bg-surface active:scale-[0.97]"
-    >
+  <div class="hero-actions">
+    <a data-testid="hero-cta" class="button" href={`mailto:${contact.email}`}>
       {profile.ctaLabel}
+      <Icon name="ph:arrow-up-right" size="18" aria-hidden="true" />
     </a>
-
-    <span data-testid="hero-secondary" class="flex flex-wrap items-center gap-x-4 gap-y-2">
-      {
-        contact.links.map((link) => (
-          <a
-            href={link.url}
-            rel="me noopener"
-            class="inline-flex min-h-6 items-center font-mono text-[var(--text-step-minus-1)] text-muted transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
-          >
-            {link.label} <span aria-hidden="true">↗</span>
-          </a>
-        ))
-      }
-    </span>
+    {
+      contact.links.map((link) => (
+        <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
+          <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
+        </a>
+      ))
+    }
   </div>
 </section>

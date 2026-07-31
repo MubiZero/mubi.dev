@@ -1,38 +1,39 @@
 ---
-import SectionHeading from './SectionHeading.astro';
+import { Icon } from 'astro-icon/components';
 
 interface Props {
   contact: { email: string; links: { label: string; url: string }[] };
   sectionLabel: string;
+  title: string;
+  lead: string;
 }
 
-const { contact, sectionLabel } = Astro.props;
+const { contact, sectionLabel, title, lead } = Astro.props;
+const socialIcons: Record<string, string> = {
+  GitHub: 'simple-icons:github',
+  LinkedIn: 'simple-icons:linkedin',
+  Telegram: 'simple-icons:telegram',
+};
 ---
 
-<section aria-labelledby="section-contact" class="mt-12">
-  <SectionHeading id="section-contact" label={sectionLabel} />
+<section id="contact" class="module contact-module" aria-labelledby="contact-title">
+  <div>
+    <span class="module-label">{sectionLabel}</span>
+    <h2 id="contact-title" class="contact-title">{title}</h2>
+    <p class="contact-lead">{lead}</p>
+  </div>
 
-  <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-    <a
-      data-testid="contact-email"
-      href={`mailto:${contact.email}`}
-      class="inline-flex min-h-11 items-center break-all font-mono text-[var(--text-step-1)] text-text transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
-    >
+  <div data-testid="contact-links" class="contact-links">
+    <a data-testid="contact-email" class="button contact-email" href={`mailto:${contact.email}`}>
+      <Icon name="ph:envelope" size="18" aria-hidden="true" />
       {contact.email}
     </a>
-
-    <span data-testid="contact-links" class="flex flex-wrap items-center gap-x-4 gap-y-2">
-      {
-        contact.links.map((link) => (
-          <a
-            href={link.url}
-            rel="me noopener"
-            class="inline-flex min-h-6 items-center font-mono text-[var(--text-step-minus-1)] text-muted transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
-          >
-            {link.label} <span aria-hidden="true">↗</span>
-          </a>
-        ))
-      }
-    </span>
+    {
+      contact.links.map((link) => (
+        <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
+          <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
+        </a>
+      ))
+    }
   </div>
 </section>

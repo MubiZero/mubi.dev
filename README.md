@@ -5,7 +5,7 @@
 ## What is included
 
 - English at `/` and Russian at `/ru/`
-- Experience timeline, selected engineering cases, technology stack, education, and contacts
+- Modular personal homepage with an interactive workspace, capabilities, selected work, experience, education, and contacts
 - Light and dark themes, with the choice remembered in the browser
 - Responsive layout, keyboard navigation, visible focus states, and reduced-motion support
 - A4 print layout, so the current page can be saved as a PDF without maintaining a second CV file
@@ -75,6 +75,7 @@ The site needs no runtime environment variables or database. DNS and TLS are man
 
 ## Project documentation
 
-- [Design specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
-- [Implementation plan](docs/superpowers/plans/2026-07-31-mubi-dev-site.md)
+- [Current redesign specification](docs/superpowers/specs/2026-07-31-mubi-dev-redesign-design.md)
+- [Current redesign plan](docs/superpowers/plans/2026-07-31-mubi-dev-redesign.md)
+- [Original site specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
 - [Content handover](docs/HANDOVER.md)

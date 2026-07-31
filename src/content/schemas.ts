@@ -104,4 +104,36 @@ export const uiSchema = z.object({
     switchToLight: nonEmpty,
     otherLanguageName: nonEmpty,
   }),
+  navigation: z.object({
+    label: nonEmpty,
+    home: nonEmpty,
+    about: nonEmpty,
+    expertise: nonEmpty,
+    work: nonEmpty,
+    experience: nonEmpty,
+    contact: nonEmpty,
+  }),
+  about: z.object({
+    title: nonEmpty,
+    lead: nonEmpty,
+    principle: nonEmpty,
+  }),
+  workspace: z.object({
+    label: nonEmpty,
+    title: nonEmpty,
+  }),
+  capabilities: z.object({
+    title: nonEmpty,
+    items: z.array(z.object({ title: nonEmpty, description: nonEmpty })).length(3),
+  }),
+  labels: z.object({
+    selectedWork: nonEmpty,
+    journey: nonEmpty,
+    toolkit: nonEmpty,
+    education: nonEmpty,
+    contactTitle: nonEmpty,
+    contactLead: nonEmpty,
+    openDetails: nonEmpty,
+    skipToContent: nonEmpty,
+  }),
 });

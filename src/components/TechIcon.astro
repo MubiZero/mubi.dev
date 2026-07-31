@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const icons: Record<string, string> = {
+  Linux: 'simple-icons:linux',
+  vSphere: 'simple-icons:vmware',
+  Docker: 'simple-icons:docker',
+  RKE2: 'ph:cube',
+  Rancher: 'simple-icons:rancher',
+  Nginx: 'simple-icons:nginx',
+  HAProxy: 'simple-icons:haproxy',
+  Coolify: 'simple-icons:coolify',
+  Terraform: 'simple-icons:terraform',
+  Ansible: 'simple-icons:ansible',
+  FreeIPA: 'simple-icons:freeipa',
+  Prometheus: 'simple-icons:prometheus',
+  Grafana: 'simple-icons:grafana',
+  Go: 'simple-icons:go',
+  Flutter: 'simple-icons:flutter',
+  Angular: 'simple-icons:angular',
+  PrimeNG: 'ph:diamond',
+  '.NET': 'simple-icons:dotnet',
+};
+
+const iconName = icons[name] ?? 'ph:cube';
+---
+
+<Icon name={iconName} class={className} aria-hidden="true" />

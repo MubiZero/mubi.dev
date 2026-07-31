@@ -1,0 +1,31 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  label: string;
+  title: string;
+  items: { title: string; description: string }[];
+}
+
+const { label, title, items } = Astro.props;
+const icons = ['ph:stack', 'ph:git-branch', 'ph:code'];
+---
+
+<section id="expertise" class="module capabilities-module" aria-labelledby="expertise-title">
+  <span class="module-label">{label}</span>
+  <h2 id="expertise-title" class="section-title">{title}</h2>
+
+  <div class="capability-list">
+    {
+      items.map((item, index) => (
+        <article class="capability-row">
+          <span class="capability-icon" aria-hidden="true">
+            <Icon name={icons[index]} size="24" />
+          </span>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

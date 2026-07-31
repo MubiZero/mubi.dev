@@ -1,25 +1,25 @@
 ---
-import SectionHeading from './SectionHeading.astro';
+import TechIcon from './TechIcon.astro';
 
 interface Props {
   groups: { label: string; items: string[] }[];
-  sectionLabel: string;
+  label: string;
 }
 
-const { groups, sectionLabel } = Astro.props;
+const { groups, label } = Astro.props;
+const items = groups.flatMap((group) => group.items);
 ---
 
-<section aria-labelledby="section-stack" class="mt-12">
-  <SectionHeading id="section-stack" label={sectionLabel} />
-
-  <dl class="grid gap-y-4">
+<section id="stack" class="module stack-module" aria-labelledby="stack-title">
+  <span class="module-label" id="stack-title">{label}</span>
+  <ul class="stack-rail">
     {
-      groups.map((group) => (
-        <div data-testid="stack-group" class="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
-          <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{group.label}</dt>
-          <dd class="m-0 font-mono text-text">{group.items.join(' · ')}</dd>
-        </div>
+      items.map((item) => (
+        <li class="stack-chip">
+          <TechIcon name={item} />
+          <span>{item}</span>
+        </li>
       ))
     }
-  </dl>
+  </ul>
 </section>

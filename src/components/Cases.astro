@@ -1,31 +1,38 @@
 ---
-import SectionHeading from './SectionHeading.astro';
-
 interface Props {
   entries: { title: string; problem: string; action: string; result: string }[];
   sectionLabel: string;
   labels: { problem: string; action: string; result: string };
+  openDetails: string;
 }
 
-const { entries, sectionLabel, labels } = Astro.props;
+const { entries, sectionLabel, labels, openDetails } = Astro.props;
 ---
 
-<section aria-labelledby="section-cases" class="mt-12">
-  <SectionHeading id="section-cases" label={sectionLabel} />
+<section id="work" class="module work-module" aria-labelledby="work-title">
+  <span class="module-label">{sectionLabel}</span>
+  <h2 id="work-title" class="section-title">{sectionLabel}</h2>
 
-  <div class="space-y-8">
+  <div class="case-grid">
     {
       entries.map((entry) => (
-        <article data-testid="case-entry" class="border-t border-border pt-6 first:border-t-0 first:pt-0">
-          <h3 class="text-[var(--text-step-1)]">{entry.title}</h3>
-          <dl class="mt-3 grid max-w-[66ch] gap-x-6 gap-y-2 sm:grid-cols-[8rem_1fr]">
-            <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{labels.problem}</dt>
-            <dd class="m-0">{entry.problem}</dd>
-            <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{labels.action}</dt>
-            <dd class="m-0">{entry.action}</dd>
-            <dt class="font-mono text-[var(--text-step-minus-1)] text-accent-text">{labels.result}</dt>
-            <dd class="m-0">{entry.result}</dd>
-          </dl>
+        <article data-testid="case-entry" class="case-card">
+          <span class="module-label">{labels.result}</span>
+          <h3>{entry.title}</h3>
+          <p class="case-result">{entry.result}</p>
+          <details>
+            <summary>{openDetails}</summary>
+            <dl class="case-details">
+              <div>
+                <dt>{labels.problem}</dt>
+                <dd>{entry.problem}</dd>
+              </div>
+              <div>
+                <dt>{labels.action}</dt>
+                <dd>{entry.action}</dd>
+              </div>
+            </dl>
+          </details>
         </article>
       ))
     }
