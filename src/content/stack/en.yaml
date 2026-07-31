@@ -1,7 +1,9 @@
 groups:
   - label: infrastructure
-    items: [Linux, Docker, HAProxy, FreeIPA, Coolify]
-  - label: backend
-    items: [Go, .NET]
-  - label: apps
-    items: [Flutter, Angular]
+    items: [Linux, vSphere, Docker, RKE2, Rancher, Nginx, HAProxy, Coolify]
+  - label: automation & access
+    items: [Terraform, Ansible, FreeIPA]
+  - label: observability
+    items: [Prometheus, Grafana]
+  - label: development
+    items: [Go, Flutter, Angular, PrimeNG, .NET]

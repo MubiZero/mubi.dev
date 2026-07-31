@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Hero from '../../components/Hero.astro';
 import Experience from '../../components/Experience.astro';
+import Education from '../../components/Education.astro';
 import Cases from '../../components/Cases.astro';
 import Contact from '../../components/Contact.astro';
 import Stack from '../../components/Stack.astro';
@@ -15,7 +16,12 @@ const page = await loadPage('ru');
   <Header locale="ru" controls={page.ui.controls} />
   <main class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
     <Hero profile={page.profile} contact={page.contact} sectionLabel={page.ui.sections.name} />
-    <Experience entries={page.experience.entries} sectionLabel={page.ui.sections.experience} />
+    <Experience
+      entries={page.experience.entries}
+      printEntries={page.experience.printEntries}
+      sectionLabel={page.ui.sections.experience}
+    />
+    <Education entries={page.education.entries} sectionLabel={page.ui.sections.education} />
     <Cases entries={page.cases.entries} sectionLabel={page.ui.sections.cases} labels={page.ui.caseLabels} />
     <Stack groups={page.stack.groups} sectionLabel={page.ui.sections.stack} />
     <Contact contact={page.contact} sectionLabel={page.ui.sections.contact} />

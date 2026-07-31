@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   casesSchema,
   contactSchema,
+  educationSchema,
   experienceSchema,
   profileSchema,
   stackSchema,
@@ -50,8 +51,40 @@ describe('experienceSchema', () => {
           lines: ['Proxy layer, identity, container platform.'],
         },
       ],
+      printEntries: [
+        {
+          period: '2022 - now',
+          employer: 'Bank Eskhata',
+          role: 'Infrastructure engineer',
+          lines: ['Automated a production workflow.'],
+        },
+      ],
     };
     expect(experienceSchema.parse(value)).toEqual(value);
+  });
+});
+
+describe('educationSchema', () => {
+  it('accepts a complete education entry', () => {
+    const value = {
+      entries: [
+        {
+          degree: "Bachelor's degree in Computer Software Engineering",
+          institution: 'Moscow Financial and Industrial University',
+          period: 'Sep 2021 - Dec 2025',
+          details: ['CTF Club'],
+        },
+      ],
+    };
+    expect(educationSchema.parse(value)).toEqual(value);
+  });
+
+  it('rejects an education entry without an institution', () => {
+    expect(() =>
+      educationSchema.parse({
+        entries: [{ degree: 'Bachelor', period: '2021 - 2025', details: [] }],
+      }),
+    ).toThrow();
   });
 });
 
@@ -132,6 +165,7 @@ describe('uiSchema', () => {
     sections: {
       name: 'NAME',
       experience: 'EXPERIENCE',
+      education: 'EDUCATION',
       cases: 'WHAT I FIXED',
       stack: 'STACK',
       contact: 'CONTACT',

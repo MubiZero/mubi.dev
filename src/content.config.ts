@@ -3,6 +3,7 @@ import { glob } from 'astro/loaders';
 import {
   casesSchema,
   contactSchema,
+  educationSchema,
   experienceSchema,
   profileSchema,
   stackSchema,
@@ -19,6 +20,7 @@ function localeCollection(directory: string, schema: Parameters<typeof defineCol
 export const collections = {
   profile: localeCollection('profile', profileSchema),
   experience: localeCollection('experience', experienceSchema),
+  education: localeCollection('education', educationSchema),
   cases: localeCollection('cases', casesSchema),
   stack: localeCollection('stack', stackSchema),
   contact: localeCollection('contact', contactSchema),

@@ -5,7 +5,7 @@ test('experience renders every entry with period, employer, and role', async ({ 
   const entries = page.getByTestId('experience-entry');
   expect(await entries.count()).toBeGreaterThanOrEqual(1);
   await expect(entries.first()).toContainText('Bank Eskhata');
-  await expect(entries.first()).toContainText('2022');
+  await expect(entries.first()).toContainText('2026');
 });
 
 test('experience entries sit on a single shared axis', async ({ page }) => {

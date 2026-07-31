@@ -1,11 +1,34 @@
 entries:
-  - period: 2022 - now
+  - period: Jan 2026 - present
     employer: Bank Eskhata
-    role: Infrastructure engineer
+    role: Middle DevOps/SRE
     lines:
-      - 'TODO: two lines on scope, for example proxy layer, identity, container platform.'
-  - period: 'TODO: years'
-    employer: 'TODO: previous employer'
-    role: 'TODO: role'
+      - Design and improve the bank's infrastructure so critical services remain stable, predictable, and secure.
+      - Automate deployments with Ansible and Docker, standardize services, and develop monitoring and alerting with Prometheus and Grafana.
+      - Own the lifecycle of server environments and core services, including performance tuning, capacity planning, release support, and incident resolution.
+  - period: Jul 2025 - Jan 2026
+    employer: Bank Eskhata
+    role: Junior DevOps/SRE
     lines:
-      - 'TODO: what you were responsible for.'
+      - Automated server deployment and configuration with Ansible and SemaphoreUI.
+      - Set up Prometheus and Grafana monitoring, analyzed metrics, and removed bottlenecks.
+      - Provisioned and supported server environments, optimized performance, and worked with development and employee teams.
+  - period: Oct 2024 - Jun 2025
+    employer: CJSC Behdoshti
+    role: IT Technician
+    lines:
+      - Assembled and maintained computers, installed networks, and kept them operational.
+      - Configured network, computer, and medical equipment.
+      - Trained employees to use computers and software, provided IT support, and performed on-site repairs.
+printEntries:
+  - period: Jul 2025 - present
+    employer: Bank Eskhata
+    role: Junior DevOps/SRE to Middle DevOps/SRE
+    lines:
+      - 'Automated VM provisioning with Terraform, Ansible, and FreeIPA: from two to four hours to about 30 minutes, with up to 10 servers in parallel.'
+      - Built and operate the RKE2/Rancher platform, standardize services with Docker, and monitor them with Prometheus and Grafana.
+  - period: Oct 2024 - Jun 2025
+    employer: CJSC Behdoshti
+    role: IT Technician
+    lines:
+      - Built Go and Angular monitoring for 50+ branches, cutting first response from about six business hours to one minute and typical resolution from ten hours to one hour.

@@ -1,9 +1,9 @@
 entries:
-  - title: 'TODO: short case name'
-    problem: 'TODO: what was broken or missing, in one sentence.'
-    action: 'TODO: what you did.'
-    result: 'TODO: the measurable outcome.'
-  - title: 'TODO: short case name'
-    problem: 'TODO: what was broken or missing, in one sentence.'
-    action: 'TODO: what you did.'
-    result: 'TODO: the measurable outcome.'
+  - title: Automated server provisioning
+    problem: 'Preparing one server manually, from vSphere resources and networking to the OS, packages, and local users, took between two and four hours.'
+    action: 'Automated mass provisioning: Terraform creates VMs with the required resources and baseline configuration, Ansible completes configuration, and FreeIPA grants access. Standardized service containerization and orchestration with RKE2/Rancher.'
+    result: 'A server is ready in about 30 minutes, with up to 10 servers provisioned in parallel. Standardization speeds up operations and improves service resilience when poorly optimized code causes flapping.'
+  - title: Network incident monitoring for 50+ branches
+    problem: 'There was no centralized network monitoring for branches. Staff had to report an outage, IT had to read the chat, and then contact the provider, so first response took around six business hours and resolution could take up to ten.'
+    action: 'Built a Go service that monitors the network of more than 50 branches. On a connection loss, it sends the provider an investigation request, records the event in a web panel with an Angular status dashboard, and notifies the team by SMS through a local provider.'
+    result: 'Time to first response fell from about six business hours to one minute. Typical resolution time fell from ten business hours to one hour, in part because providers learned about incidents immediately.'

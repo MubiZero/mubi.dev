@@ -21,6 +21,30 @@ export const experienceSchema = z.object({
       }),
     )
     .min(1),
+  printEntries: z
+    .array(
+      z.object({
+        period: nonEmpty,
+        employer: nonEmpty,
+        role: nonEmpty,
+        lines: z.array(nonEmpty).min(1).max(3),
+      }),
+    )
+    .min(1),
+});
+
+export const educationSchema = z.object({
+  entries: z
+    .array(
+      z.object({
+        degree: nonEmpty,
+        institution: nonEmpty,
+        period: nonEmpty,
+        details: z.array(nonEmpty).max(2),
+      }),
+    )
+    .min(1)
+    .max(2),
 });
 
 export const casesSchema = z.object({
@@ -64,6 +88,7 @@ export const uiSchema = z.object({
   sections: z.object({
     name: nonEmpty,
     experience: nonEmpty,
+    education: nonEmpty,
     cases: nonEmpty,
     stack: nonEmpty,
     contact: nonEmpty,

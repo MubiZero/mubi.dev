@@ -1,16 +1,7 @@
-# Handover: real facts to add
+# Handover: keeping the CV current
 
-The site is intentionally built with marked placeholders rather than invented experience or
-contact details. Replace every `TODO` below in both language files before publishing.
-
-| File | Field | What to add |
-|---|---|---|
-| `src/content/profile/{en,ru}.yaml` | `summary[1]` | One sentence about the next role or work you want |
-| `src/content/experience/{en,ru}.yaml` | first entry `lines` | Two lines about your Bank Eskhata scope |
-| `src/content/experience/{en,ru}.yaml` | second entry | Employer, years, role, responsibilities |
-| `src/content/cases/{en,ru}.yaml` | both entries | Case name, problem, action, measurable result |
-| `src/content/contact/{en,ru}.yaml` | `email` | Personal email address |
-| `src/content/contact/{en,ru}.yaml` | `links` | GitHub, LinkedIn and Telegram URLs |
+The initial CV content is filled in English and Russian. Keep both language files current when a
+role, project, contact link, or core technology changes.
 
 When changing content:
 
@@ -18,3 +9,7 @@ When changing content:
 - Do not use an em dash in English copy. The copy test rejects it.
 - Regenerate `public/og.png` after changing the hero text.
 - Run `npm test && npm run test:e2e && npm run build` before deployment.
+
+For a new experience entry, add the detailed version to `entries` and a short, outcome-led version
+to `printEntries` in `src/content/experience/{en,ru}.yaml`. This keeps the website informative and
+the browser's printed A4 CV concise.

@@ -53,6 +53,10 @@ a:hover {
   color: var(--bg);
 }
 
+.print-experience {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
@@ -62,18 +66,39 @@ a:hover {
 }
 
 @media print {
-  html {
+  html,
+  html[data-theme='dark'],
+  html[data-theme='light'] {
     background: #ffffff;
     color: #000000;
-    font-size: 11pt;
+    font-size: 10pt;
+    --text: #000000;
+    --text-muted: #000000;
+    --text-disabled: #000000;
+    --accent: #000000;
+    --accent-text: #000000;
+    --border: #000000;
+    --border-strong: #000000;
+    --focus: #000000;
   }
 
   body {
     background: #ffffff;
     min-height: auto;
+    padding: 10mm 12mm;
+  }
+
+  header {
+    max-width: none;
+    padding: 0 0 8px;
   }
 
   header nav {
+    display: none;
+  }
+
+  [data-testid='hero-cta'],
+  [data-testid='hero-secondary'] {
     display: none;
   }
 
@@ -84,12 +109,31 @@ a:hover {
 
   section {
     break-inside: avoid;
-    margin-top: 16px;
+    margin-top: 8px;
+  }
+
+  section h2 {
+    margin-bottom: 4px;
+    padding-top: 6px;
   }
 
   li[data-testid='experience-entry'],
   article[data-testid='case-entry'] {
     break-inside: avoid;
+  }
+
+  .screen-experience,
+  section[aria-labelledby='section-cases'],
+  [data-testid='education-entry'] > p:last-child {
+    display: none;
+  }
+
+  .print-experience {
+    display: block;
+  }
+
+  .print-experience ul {
+    margin-bottom: 0;
   }
 
   a {
@@ -108,6 +152,6 @@ a:hover {
   }
 
   @page {
-    margin: 14mm;
+    margin: 0;
   }
 }

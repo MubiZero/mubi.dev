@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { load } from 'js-yaml';
 import { describe, expect, it } from 'vitest';
 
-const COLLECTIONS = ['profile', 'experience', 'cases', 'stack', 'contact', 'ui'] as const;
+const COLLECTIONS = ['profile', 'experience', 'education', 'cases', 'stack', 'contact', 'ui'] as const;
 
 function read(collection: string, locale: string): unknown {
   return load(readFileSync(`src/content/${collection}/${locale}.yaml`, 'utf8'));
