@@ -37,7 +37,7 @@ test('an invalid stored value falls back to the system preference', async ({ bro
 });
 
 test('a valid theme still resolves when storage access throws', async ({ browser }) => {
-  const context = await browser.newContext({ colorScheme: 'dark' });
+  const context = await browser.newContext({ colorScheme: 'light' });
   const page = await context.newPage();
   await page.addInitScript(() => {
     Object.defineProperty(window, 'localStorage', {
@@ -47,6 +47,6 @@ test('a valid theme still resolves when storage access throws', async ({ browser
     });
   });
   await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await context.close();
 });
