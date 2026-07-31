@@ -1,0 +1,38 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  contact: { email: string; links: { label: string; url: string }[] };
+  sectionLabel: string;
+}
+
+const { contact, sectionLabel } = Astro.props;
+---
+
+<section aria-labelledby="section-contact" class="mt-12">
+  <SectionHeading id="section-contact" label={sectionLabel} />
+
+  <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+    <a
+      data-testid="contact-email"
+      href={`mailto:${contact.email}`}
+      class="inline-flex min-h-11 items-center break-all font-mono text-[var(--text-step-1)] text-text transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
+    >
+      {contact.email}
+    </a>
+
+    <span data-testid="contact-links" class="flex flex-wrap items-center gap-x-4 gap-y-2">
+      {
+        contact.links.map((link) => (
+          <a
+            href={link.url}
+            rel="me noopener"
+            class="inline-flex min-h-6 items-center font-mono text-[var(--text-step-minus-1)] text-muted transition-[color,transform] duration-150 hover:text-accent-text active:scale-[0.97]"
+          >
+            {link.label} <span aria-hidden="true">↗</span>
+          </a>
+        ))
+      }
+    </span>
+  </div>
+</section>

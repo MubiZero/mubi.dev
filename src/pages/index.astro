@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Experience from '../components/Experience.astro';
 import Cases from '../components/Cases.astro';
+import Contact from '../components/Contact.astro';
+import Stack from '../components/Stack.astro';
 import { loadPage } from '../lib/content';
 
 const page = await loadPage('en');
@@ -15,5 +17,7 @@ const page = await loadPage('en');
     <Hero profile={page.profile} contact={page.contact} sectionLabel={page.ui.sections.name} />
     <Experience entries={page.experience.entries} sectionLabel={page.ui.sections.experience} />
     <Cases entries={page.cases.entries} sectionLabel={page.ui.sections.cases} labels={page.ui.caseLabels} />
+    <Stack groups={page.stack.groups} sectionLabel={page.ui.sections.stack} />
+    <Contact contact={page.contact} sectionLabel={page.ui.sections.contact} />
   </main>
 </BaseLayout>
