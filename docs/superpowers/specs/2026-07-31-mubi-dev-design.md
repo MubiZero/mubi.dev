@@ -120,7 +120,7 @@ print stylesheet derives from it.
 - Geist Mono: headings, section labels, years, stack values.
 - IBM Plex Sans: body copy. Chosen for honest numerals and legibility, not decoration.
 - Inter and JetBrains Mono are deliberately avoided as reflexive defaults.
-- Modular scale, base 16px, ratio 1.25: 16 / 20 / 25 / 31 / 39 / 49px.
+- Modular scale, base 16px, ratio 1.25, with one step down for utility labels: 12.8 / 16 / 20 / 25 / 31 / 39 / 49px. Utility text (section labels, years, roles, inline stack, secondary links) uses the 12.8px step. No size outside the scale.
 - Hero capped at 3.5rem. Headings tracking `-0.02em`, body tracking 0.
 - Line height: body 1.5, headings 1.15. Text containers capped at 66ch.
 - Two well-separated weights per family (400 / 700).
@@ -128,7 +128,7 @@ print stylesheet derives from it.
 **Motion.** Named tokens: `--dur-short` 150ms (hover, press), `--dur-medium` 250ms
 (transitions), exits about 30 percent shorter than entrances. Material 3 curves:
 `--ease-enter cubic-bezier(0.05,0.7,0.1,1)`, `--ease-exit cubic-bezier(0.3,0,0.8,0.15)`.
-Only `transform` and `opacity` are animated, never `transition: all`.
+Movement and fading use `transform` and `opacity` only. Color changes may transition through an explicit property list (`color`, `text-decoration-color`, `background-color`, `border-color`), which are paint-only and trigger no layout. `transition: all` stays forbidden.
 `prefers-reduced-motion: reduce` replaces movement with a near-instant opacity change.
 
 **Radius.** `--radius-sm` 6px, `--radius-md` 10px. Nested radii stay concentric (child

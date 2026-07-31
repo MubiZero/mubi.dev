@@ -19,7 +19,7 @@ Every task's requirements implicitly include this section. Values are copied ver
 - **Contrast:** text at least 4.5:1; large text and non-text UI that identifies a component (focus rings, interactive borders, icons) at least 3:1. Verified in both themes.
 - **Targets:** interactive targets at least 24px, using transparent padding where the visual is smaller.
 - **Focus:** visible `:focus-visible` outline, 2px, at least 3:1 against the adjacent background. Bare `outline: none` is a defect.
-- **Motion:** only `transform` and `opacity` animated; never `transition: all`. `--dur-short` 150ms, `--dur-medium` 250ms, exits about 30 percent shorter. `prefers-reduced-motion: reduce` removes non-essential motion.
+- **Motion:** movement and fading use `transform` and `opacity` only. Color changes may transition through an explicit property list (`color`, `text-decoration-color`, `background-color`, `border-color`), since those are paint-only and trigger no layout. `transition: all` stays forbidden, and no other layout-affecting property may be transitioned. `--dur-short` 150ms, `--dur-medium` 250ms, exits about 30 percent shorter. `prefers-reduced-motion: reduce` removes non-essential motion.
 - **Spacing:** 4px scale only (4, 8, 12, 16, 24, 32, 48, 64). No arbitrary pixel values in components.
 - **Radius:** `--radius-sm` 6px, `--radius-md` 10px; a child radius never exceeds its parent's.
 - **Banned patterns:** fake product UI built from `<div>` (terminal, dashboard, chat), gradient text, glow gradients, glassmorphism, a card nested in a card, rows of identical tiles, an eyebrow label above every section, `01 / 02 / 03` section markers, skill bars or proficiency percentages, contact forms, buzzword copy.
@@ -253,7 +253,7 @@ git commit -m "chore: scaffold astro project with vitest and playwright"
 
 **Interfaces:**
 - Consumes: the build from Task 1.
-- Produces: CSS custom properties `--bg`, `--surface`, `--text`, `--text-muted`, `--text-disabled`, `--border`, `--accent`, `--accent-text`, `--focus`, `--space-{1,2,3,4,6,8,12,16}`, `--radius-sm`, `--radius-md`, `--dur-short`, `--dur-medium`, `--ease-enter`, `--ease-exit`, plus Tailwind theme names `bg`, `surface`, `text`, `muted`, `border`, `accent`, and font families `font-mono` (Geist Mono) and `font-sans` (IBM Plex Sans). Themes switch on `[data-theme='dark']` and `[data-theme='light']` on `<html>`.
+- Produces: CSS custom properties `--bg`, `--surface`, `--text`, `--text-muted`, `--text-disabled`, `--border`, `--accent`, `--accent-text`, `--focus`, `--space-{1,2,3,4,6,8,12,16}`, `--radius-sm`, `--radius-md`, `--dur-short`, `--dur-medium`, `--ease-enter`, `--ease-exit`, `--text-step-minus-1` through `--text-step-5`, plus Tailwind theme names `bg`, `surface`, `text`, `muted`, `border`, `accent`, and font families `font-mono` (Geist Mono) and `font-sans` (IBM Plex Sans). Themes switch on `[data-theme='dark']` and `[data-theme='light']` on `<html>`.
 
 All color values below were verified by WCAG relative-luminance calculation. Do not substitute approximations.
 
@@ -416,6 +416,7 @@ Create `src/styles/tokens.css`:
   --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
+  --text-step-minus-1: 0.8rem;
   --text-step-0: 1rem;
   --text-step-1: 1.25rem;
   --text-step-2: 1.5625rem;
@@ -1454,7 +1455,7 @@ const { locale, controls } = Astro.props;
   class="mx-auto flex max-w-3xl items-center justify-between gap-4 border-b border-border
          px-4 py-4 sm:px-6"
 >
-  <span class="font-mono text-sm text-muted">mubi.dev</span>
+  <span class="font-mono text-[var(--text-step-minus-1)] text-muted">mubi.dev</span>
   <nav class="flex items-center gap-2">
     <LangSwitch
       locale={locale}
@@ -1559,7 +1560,7 @@ const { label, id } = Astro.props;
 
 <h2
   id={id}
-  class="mb-6 border-t border-border pt-8 font-mono text-sm font-normal tracking-[0.08em]
+  class="mb-6 border-t border-border pt-8 font-mono text-[var(--text-step-minus-1)] font-normal tracking-[0.08em]
          text-muted uppercase"
 >
   {label}
@@ -1592,7 +1593,7 @@ const { profile, contact, sectionLabel } = Astro.props;
 <section aria-labelledby="section-name" class="pt-4">
   <h2
     id="section-name"
-    class="mb-4 font-mono text-sm font-normal tracking-[0.08em] text-muted uppercase"
+    class="mb-4 font-mono text-[var(--text-step-minus-1)] font-normal tracking-[0.08em] text-muted uppercase"
   >
     {sectionLabel}
   </h2>
@@ -1605,7 +1606,7 @@ const { profile, contact, sectionLabel } = Astro.props;
     {profile.summary.map((sentence) => <p>{sentence}</p>)}
   </div>
 
-  <p class="mt-4 font-mono text-sm text-muted">
+  <p class="mt-4 font-mono text-[var(--text-step-minus-1)] text-muted">
     {profile.inlineStack.join(' · ')}
   </p>
 
@@ -1626,7 +1627,7 @@ const { profile, contact, sectionLabel } = Astro.props;
           <a
             href={link.url}
             rel="me noopener"
-            class="inline-flex min-h-6 items-center font-mono text-sm text-muted
+            class="inline-flex min-h-6 items-center font-mono text-[var(--text-step-minus-1)] text-muted
                    transition-colors duration-150 hover:text-accent-text"
           >
             {link.label} <span aria-hidden="true">↗</span>
@@ -1734,9 +1735,9 @@ const { entries, sectionLabel } = Astro.props;
             class="absolute top-[0.55rem] -left-[calc(0.25rem+1px)] block h-2 w-2 rounded-full
                    bg-accent"
           />
-          <p class="font-mono text-sm text-muted">{entry.period}</p>
+          <p class="font-mono text-[var(--text-step-minus-1)] text-muted">{entry.period}</p>
           <h3 class="mt-1 text-[var(--text-step-1)]">{entry.employer}</h3>
-          <p class="mt-1 font-mono text-sm text-accent-text">{entry.role}</p>
+          <p class="mt-1 font-mono text-[var(--text-step-minus-1)] text-accent-text">{entry.role}</p>
           <div class="mt-2 max-w-[66ch] space-y-1 text-text">
             {entry.lines.map((line) => <p>{line}</p>)}
           </div>
@@ -1841,11 +1842,11 @@ const { entries, sectionLabel, labels } = Astro.props;
         <article data-testid="case-entry" class="border-t border-border pt-6 first:border-t-0 first:pt-0">
           <h3 class="text-[var(--text-step-1)]">{entry.title}</h3>
           <dl class="mt-3 grid max-w-[66ch] gap-x-6 gap-y-2 sm:grid-cols-[8rem_1fr]">
-            <dt class="font-mono text-sm text-muted">{labels.problem}</dt>
+            <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{labels.problem}</dt>
             <dd class="m-0">{entry.problem}</dd>
-            <dt class="font-mono text-sm text-muted">{labels.action}</dt>
+            <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{labels.action}</dt>
             <dd class="m-0">{entry.action}</dd>
-            <dt class="font-mono text-sm text-accent-text">{labels.result}</dt>
+            <dt class="font-mono text-[var(--text-step-minus-1)] text-accent-text">{labels.result}</dt>
             <dd class="m-0">{entry.result}</dd>
           </dl>
         </article>
@@ -1964,7 +1965,7 @@ const { groups, sectionLabel } = Astro.props;
     {
       groups.map((group) => (
         <div data-testid="stack-group" class="grid gap-1 sm:col-span-2 sm:grid-cols-subgrid">
-          <dt class="font-mono text-sm text-muted">{group.label}</dt>
+          <dt class="font-mono text-[var(--text-step-minus-1)] text-muted">{group.label}</dt>
           <dd class="m-0 font-mono text-text">{group.items.join(' · ')}</dd>
         </div>
       ))
@@ -2008,7 +2009,7 @@ const { contact, sectionLabel } = Astro.props;
           <a
             href={link.url}
             rel="me noopener"
-            class="inline-flex min-h-6 items-center font-mono text-sm text-muted
+            class="inline-flex min-h-6 items-center font-mono text-[var(--text-step-minus-1)] text-muted
                    transition-colors duration-150 hover:text-accent-text"
           >
             {link.label} <span aria-hidden="true">↗</span>
