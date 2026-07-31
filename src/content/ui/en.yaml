@@ -1,0 +1,17 @@
+siteTitle: Mubinjon Mukhamedov, infrastructure engineer and product developer
+metaDescription: Infrastructure engineer working on banking systems, and developer of the applications that run on them. Linux, Docker, HAProxy, Go, Flutter.
+sections:
+  name: NAME
+  experience: EXPERIENCE
+  cases: WHAT I FIXED
+  stack: STACK
+  contact: CONTACT
+caseLabels:
+  problem: Problem
+  action: What I did
+  result: Result
+controls:
+  switchLanguage: Switch language
+  switchToDark: Switch to dark theme
+  switchToLight: Switch to light theme
+  otherLanguageName: Русский

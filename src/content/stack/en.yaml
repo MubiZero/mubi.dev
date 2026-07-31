@@ -1,0 +1,7 @@
+groups:
+  - label: infrastructure
+    items: [Linux, Docker, HAProxy, FreeIPA, Coolify]
+  - label: backend
+    items: [Go, .NET]
+  - label: apps
+    items: [Flutter, Angular]
