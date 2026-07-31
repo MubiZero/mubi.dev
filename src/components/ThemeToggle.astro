@@ -13,13 +13,14 @@ const { toDark, toLight } = Astro.props;
   data-to-dark={toDark}
   data-to-light={toLight}
   class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-[var(--radius-sm)] px-2 py-1
-         font-mono text-muted transition-transform duration-150 hover:text-accent-text
+         font-mono text-muted transition-[color,transform] duration-150 hover:text-accent-text
          active:scale-[0.97]"
 >
   <span aria-hidden="true" data-icon>☾</span>
 </button>
 
 <script is:inline>
+  // Assumes one Header instance per page; a second instance would silently leave its toggle dead.
   const toggle = document.getElementById('theme-toggle');
   const icon = toggle.querySelector('[data-icon]');
 

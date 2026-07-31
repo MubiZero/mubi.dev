@@ -15,7 +15,7 @@ const { locale, label, otherLanguageName } = Astro.props;
   hreflang={otherLocale(locale)}
   aria-label={`${label}: ${otherLanguageName}`}
   class="inline-flex min-h-6 min-w-6 items-center px-2 py-1 font-mono text-muted no-underline
-         transition-colors duration-150 hover:text-accent-text active:scale-[0.97]"
+         transition-[color,transform]! duration-150 hover:text-accent-text active:scale-[0.97]"
 >
   {otherLanguageName}
 </a>

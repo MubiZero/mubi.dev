@@ -44,3 +44,23 @@ test('every header control meets the 24px target minimum', async ({ page }) => {
     expect(box?.width ?? 0, `control ${index} width`).toBeGreaterThanOrEqual(24);
   }
 });
+
+test('every header control animates both color and transform over 150ms', async ({ browser }) => {
+  // The global reduced-motion rule collapses transition durations, so this assertion
+  // needs an explicit no-preference context rather than the default test context.
+  const context = await browser.newContext({ reducedMotion: 'no-preference' });
+  const page = await context.newPage();
+  await page.goto('/');
+  const controls = page.locator('header a, header button');
+  for (let index = 0; index < (await controls.count()); index += 1) {
+    const control = controls.nth(index);
+    const { property, duration } = await control.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { property: style.transitionProperty, duration: style.transitionDuration };
+    });
+    expect(property, `control ${index} transition-property`).toContain('color');
+    expect(property, `control ${index} transition-property`).toContain('transform');
+    expect(duration, `control ${index} transition-duration`).toContain('0.15s');
+  }
+  await context.close();
+});
