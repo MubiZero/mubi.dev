@@ -41,11 +41,16 @@ const person = {
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={`${site}/og.png`} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script type="application/ld+json" set:html={JSON.stringify(person).replace(/</g, '\\u003c')} />
     <script is:inline>
-      const stored = localStorage.getItem('theme');
+      let stored = null;
+      try {
+        stored = localStorage.getItem('theme');
+      } catch {
+        stored = null;
+      }
       const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      document.documentElement.dataset.theme = stored ?? preferred;
+      document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : preferred;
     </script>
   </head>
   <body>

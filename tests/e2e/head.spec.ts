@@ -26,10 +26,21 @@ test('Russian page exposes correct metadata and alternates', async ({ page }) =>
     'href',
     'https://mubi.dev/',
   );
+  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute(
+    'href',
+    'https://mubi.dev/',
+  );
 });
 
 test('English page contains no em-dash in rendered text', async ({ page }) => {
   await page.goto('/');
   const text = await page.locator('body').innerText();
   expect(text).not.toContain('—');
+});
+
+test('English page contains no em-dash in title or meta description', async ({ page }) => {
+  await page.goto('/');
+  expect(await page.title()).not.toContain('—');
+  const description = await page.locator('meta[name="description"]').getAttribute('content');
+  expect(description ?? '').not.toContain('—');
 });
