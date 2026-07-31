@@ -60,3 +60,54 @@ a:hover {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  html {
+    background: #ffffff;
+    color: #000000;
+    font-size: 11pt;
+  }
+
+  body {
+    background: #ffffff;
+    min-height: auto;
+  }
+
+  header nav {
+    display: none;
+  }
+
+  main {
+    max-width: none;
+    padding: 0;
+  }
+
+  section {
+    break-inside: avoid;
+    margin-top: 16px;
+  }
+
+  li[data-testid='experience-entry'],
+  article[data-testid='case-entry'] {
+    break-inside: avoid;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  [data-testid='contact-links'] a::after,
+  [data-testid='hero-secondary'] a::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+  }
+
+  [aria-hidden='true'] {
+    display: none;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}
