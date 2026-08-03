@@ -11,7 +11,7 @@ test('education renders the degree, institution, and period', async ({ page }) =
 
 test('education is localized in Russian', async ({ page }) => {
   await page.goto('/ru/');
-  await expect(page.getByTestId('education-entry')).toContainText(
-    'Московский финансово-промышленный университет',
-  );
+  const entry = page.getByTestId('education-entry');
+  await expect(entry).toContainText('Бакалавр, программная инженерия');
+  await expect(entry).toContainText('Московский финансово-промышленный университет');
 });

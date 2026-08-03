@@ -63,6 +63,12 @@
   --sticky-anchor-offset: max(136px, 6rem);
 }
 
+@media (max-width: 640px) {
+  :root {
+    --sticky-anchor-offset: max(184px, 6rem);
+  }
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);

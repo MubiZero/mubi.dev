@@ -7,12 +7,18 @@ test('hero states the name and current man line while the page exposes the stack
   await expect(page.getByText('Linux', { exact: false }).first()).toBeVisible();
 });
 
-test('hero has exactly one primary call to action pointing at mailto', async ({ page }) => {
-  await page.goto('/');
-  const cta = page.getByTestId('hero-cta');
-  await expect(cta).toHaveCount(1);
-  await expect(cta).toHaveAttribute('href', /^mailto:/);
-});
+for (const { path, label } of [
+  { path: '/', label: 'Discuss a task' },
+  { path: '/ru/', label: 'Обсудить задачу' },
+]) {
+  test(`${path} hero has the exact task CTA pointing at mailto`, async ({ page }) => {
+    await page.goto(path);
+    const cta = page.getByTestId('hero-cta');
+    await expect(cta).toHaveCount(1);
+    await expect(cta).toHaveText(label);
+    await expect(cta).toHaveAttribute('href', /^mailto:/);
+  });
+}
 
 test('hero secondary links use HTTPS profile URLs', async ({ page }) => {
   await page.goto('/');

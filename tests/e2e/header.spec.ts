@@ -8,6 +8,14 @@ test('language switch moves between locales in both directions', async ({ page }
   await expect(page).toHaveURL('http://localhost:4321/');
 });
 
+test('language switch uses the localized name supplied by each locale catalog', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.language-switch a')).toHaveAccessibleName('Switch language: Русский');
+
+  await page.goto('/ru/');
+  await expect(page.locator('.language-switch a')).toHaveAccessibleName('Сменить язык: English');
+});
+
 test('navigation targets the evidence-first sections in reading order', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('header [data-site-nav] [data-section-link]');
@@ -37,11 +45,47 @@ test('navigation targets the evidence-first sections in reading order', async ({
 
 test('current-section state follows anchor navigation', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('header a[href="#home"]')).toHaveAttribute('aria-current', 'location');
   await page.locator('header a[href="#contact"]').click();
 
-  await expect(page.locator('header a[href="#contact"]')).toHaveAttribute('aria-current', 'page');
-  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('header a[href="#contact"]')).toHaveAttribute('aria-current', 'location');
+  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-current');
 });
+
+for (const path of ['/', '/ru/']) {
+  test(`${path} keeps every 320px mobile navigation label whole at 200 percent text`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto(path);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '32px';
+    });
+
+    const labels = await page.locator('header [data-section-link]:visible').evaluateAll((links) =>
+      links.map((link) => {
+        const range = document.createRange();
+        range.selectNodeContents(link);
+        const textRects = [...range.getClientRects()].filter((rect) => rect.width > 0);
+        const linkRect = link.getBoundingClientRect();
+
+        return {
+          label: link.textContent?.trim(),
+          lineCount: textRects.length,
+          textLeft: Math.min(...textRects.map((rect) => rect.left)),
+          textRight: Math.max(...textRects.map((rect) => rect.right)),
+          linkLeft: linkRect.left,
+          linkRight: linkRect.right,
+        };
+      }),
+    );
+
+    expect(labels).toHaveLength(4);
+    for (const label of labels) {
+      expect(label.lineCount, `${label.label} should stay on one line`).toBe(1);
+      expect(label.textLeft, `${label.label} left edge`).toBeGreaterThanOrEqual(label.linkLeft);
+      expect(label.textRight, `${label.label} right edge`).toBeLessThanOrEqual(label.linkRight);
+    }
+  });
+}
 
 for (const path of ['/', '/ru/']) {
   for (const textScale of [100, 200]) {

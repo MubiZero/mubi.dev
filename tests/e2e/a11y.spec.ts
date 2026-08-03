@@ -32,6 +32,37 @@ test('every focusable element shows a focus ring at least 2px wide', async ({ pa
   }
 });
 
+for (const path of paths) {
+  test(`${path} keeps the 320px skip-link focus outline fully visible at 200 percent text`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto(path);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '32px';
+    });
+
+    const skipLink = page.locator('.skip-link');
+    await skipLink.focus();
+    const focusBounds = await skipLink.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      const outlineWidth = parseFloat(style.outlineWidth);
+      const outlineOffset = parseFloat(style.outlineOffset);
+      const outerInset = outlineWidth + Math.max(0, outlineOffset);
+
+      return {
+        outlineWidth,
+        left: rect.left - outerInset,
+        right: rect.right + outerInset,
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    expect(focusBounds.outlineWidth).toBeGreaterThanOrEqual(2);
+    expect(focusBounds.left).toBeGreaterThanOrEqual(0);
+    expect(focusBounds.right).toBeLessThanOrEqual(focusBounds.viewportWidth);
+  });
+}
+
 test('heading order is correct and there is a single h1', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('h1')).toHaveCount(1);

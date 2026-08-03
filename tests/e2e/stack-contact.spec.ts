@@ -25,6 +25,26 @@ test('the page ships no contact form', async ({ page }) => {
   await expect(page.locator('form')).toHaveCount(0);
 });
 
+for (const { path, title, lead } of [
+  {
+    path: '/',
+    title: 'Let’s discuss the task.',
+    lead: 'Describe the infrastructure or product development task, its constraints, and context so we can decide on the next step.',
+  },
+  {
+    path: '/ru/',
+    title: 'Обсудим задачу.',
+    lead: 'Опишите задачу по инфраструктуре или разработке продукта, её ограничения и контекст, чтобы определить следующий шаг.',
+  },
+]) {
+  test(`${path} contact copy covers infrastructure and product work`, async ({ page }) => {
+    await page.goto(path);
+    const contact = page.locator('#contact');
+    await expect(contact.getByRole('heading', { level: 2 })).toHaveText(title);
+    await expect(contact.locator('.contact-lead')).toHaveText(lead);
+  });
+}
+
 test('every link is functional', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('a');

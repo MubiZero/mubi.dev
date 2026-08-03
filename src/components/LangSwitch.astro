@@ -4,16 +4,17 @@ import { localizedPath, otherLocale, type Locale } from '../lib/locale';
 interface Props {
   locale: Locale;
   label: string;
+  otherLanguageName: string;
 }
 
-const { locale, label } = Astro.props;
+const { locale, label, otherLanguageName } = Astro.props;
 const targetLocale = otherLocale(locale);
 ---
 
 <span class="language-switch" aria-label={label}>
   <span aria-current="page">{locale.toUpperCase()}</span>
   <span aria-hidden="true">/</span>
-  <a href={localizedPath(targetLocale)} hreflang={targetLocale} aria-label={`${label}: ${targetLocale === 'en' ? 'English' : 'Русский'}`}>
+  <a href={localizedPath(targetLocale)} hreflang={targetLocale} aria-label={`${label}: ${otherLanguageName}`}>
     {targetLocale.toUpperCase()}
   </a>
 </span>

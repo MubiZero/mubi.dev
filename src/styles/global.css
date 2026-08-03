@@ -75,8 +75,9 @@ button {
 .skip-link {
   position: fixed;
   top: var(--space-4);
-  left: var(--space-4);
+  inset-inline-start: var(--space-4);
   z-index: 100;
+  max-inline-size: calc(100vw - var(--space-8));
   min-height: 44px;
   translate: 0 -180%;
   border-radius: var(--radius-pill);
@@ -143,12 +144,12 @@ button {
   transition: color var(--dur-short) var(--ease-standard), background-color var(--dur-short) var(--ease-standard), transform var(--dur-short) var(--ease-standard);
 }
 
-.nav-link[aria-current='page'] {
+.nav-link[aria-current='location'] {
   background: var(--surface);
   color: var(--text);
 }
 
-.nav-link[aria-current='page']::after {
+.nav-link[aria-current='location']::after {
   position: absolute;
   right: 9px;
   bottom: 7px;
@@ -835,8 +836,8 @@ button {
   .primary-nav .nav-link {
     min-height: 44px;
     padding-inline: 2px !important;
-    overflow-wrap: anywhere;
-    white-space: normal !important;
+    overflow-wrap: normal;
+    white-space: nowrap !important;
   }
 
   .site-main {

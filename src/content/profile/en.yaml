@@ -15,4 +15,4 @@ proof:
     label: branches monitored
   - value: 1 min
     label: first incident response
-ctaLabel: Discuss a reliable system
+ctaLabel: Discuss a task
