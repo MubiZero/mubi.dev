@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const COLLECTIONS = ['profile', 'experience', 'cases', 'stack', 'contact', 'ui'];
+const COLLECTIONS = ['profile', 'experience', 'cases', 'stack', 'contact', 'repos', 'ui', 'v2'];
 
 function files(locale: string): string[] {
   return COLLECTIONS.map((collection) => `src/content/${collection}/${locale}.yaml`);

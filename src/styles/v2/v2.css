@@ -1,0 +1,1185 @@
+@import '@fontsource-variable/martian-mono/wdth.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* :where() keeps the reset at zero specificity, so a component rule setting
+   its own margin always wins instead of being silently zeroed. */
+:where([data-v2]) :where(body, figure, h1, h2, h3, p, ul, ol, dl, dd) {
+  margin: 0;
+  padding: 0;
+}
+
+:where([data-v2]) :where(ul, ol) {
+  list-style: none;
+}
+
+[data-v2] {
+  background: var(--v2-bg);
+}
+
+[data-v2] body {
+  min-height: 100dvh;
+  background: var(--v2-bg);
+  color: var(--v2-text);
+  font-family: var(--v2-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Only bites when a word genuinely cannot fit its column, which is where
+     Russian lands on a narrow phone at a doubled browser text size. Normal
+     sizes never reach it, so the measure is unchanged. */
+  overflow-wrap: break-word;
+}
+
+[data-v2] :focus-visible {
+  outline: 2px solid var(--v2-focus);
+  outline-offset: 3px;
+  border-radius: var(--v2-radius);
+}
+
+.v2-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.v2-skip {
+  position: absolute;
+  z-index: 20;
+  top: var(--v2-space-2);
+  left: var(--v2-space-2);
+  /* room for the focus ring on a 320px screen at a doubled text size, where
+     the label would otherwise run its outline off the edge */
+  max-width: calc(100vw - var(--v2-space-6));
+  padding: var(--v2-space-3) var(--v2-space-4);
+  border-radius: var(--v2-radius);
+  background: var(--v2-accent);
+  color: var(--v2-on-accent);
+  font-family: var(--v2-display);
+  font-size: 0.72rem;
+  font-stretch: 85%;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.v2-skip:focus-visible {
+  transform: none;
+}
+
+/* ---------- masthead ---------- */
+
+.v2-masthead {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  border-bottom: 1px solid var(--v2-line);
+  background: color-mix(in srgb, var(--v2-bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+/* The bar wraps instead of overflowing: at a browser text size of 200% the
+   five section links no longer fit beside the wordmark, and a taller header
+   is honest where a clipped or overhanging one is not. */
+.v2-masthead__inner {
+  display: flex;
+  min-height: var(--v2-masthead);
+  max-width: var(--v2-shell);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-inline: auto;
+  padding-inline: var(--v2-gutter);
+  gap: var(--v2-space-2) var(--v2-space-4);
+}
+
+.v2-mark {
+  display: inline-flex;
+  min-height: var(--v2-tap);
+  align-items: center;
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.78rem;
+  font-stretch: 90%;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.v2-mark::before {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: var(--v2-space-2);
+  background: var(--v2-accent);
+  content: '';
+  vertical-align: 1px;
+}
+
+.v2-masthead nav {
+  display: flex;
+  margin-left: auto;
+  gap: var(--v2-space-1);
+}
+
+.v2-navlink {
+  display: inline-flex;
+  min-width: var(--v2-tap);
+  min-height: var(--v2-tap);
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--v2-space-3);
+  border-radius: var(--v2-radius);
+  color: var(--v2-muted);
+  font-family: var(--v2-display);
+  font-size: 0.68rem;
+  font-stretch: 85%;
+  text-decoration: none;
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    background-color var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-navlink:hover,
+.v2-navlink:focus-visible {
+  background: var(--v2-surface);
+  color: var(--v2-text);
+}
+
+.v2-navlink[aria-current='location'] {
+  color: var(--v2-accent);
+}
+
+.v2-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-space-1);
+  padding-left: var(--v2-space-3);
+  border-left: 1px solid var(--v2-line);
+}
+
+.v2-lang {
+  display: inline-flex;
+  align-items: center;
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.68rem;
+  font-stretch: 85%;
+  gap: var(--v2-space-1);
+}
+
+/* The active code and the link share one box, so the pair does not resize when
+   the two swap roles. */
+.v2-lang a,
+.v2-lang [aria-current='page'] {
+  display: inline-flex;
+  min-width: var(--v2-tap);
+  min-height: var(--v2-tap);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--v2-radius);
+  color: var(--v2-faint);
+  text-decoration: none;
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    background-color var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-lang [aria-current='page'] {
+  color: var(--v2-text);
+}
+
+.v2-lang a:hover {
+  background: var(--v2-surface);
+  color: var(--v2-text);
+}
+
+.v2-iconbutton {
+  display: inline-flex;
+  width: var(--v2-tap);
+  height: var(--v2-tap);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--v2-radius);
+  background: transparent;
+  color: var(--v2-muted);
+  cursor: pointer;
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    background-color var(--v2-dur-micro) var(--v2-ease-out),
+    transform var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-iconbutton:hover {
+  background: var(--v2-surface);
+  color: var(--v2-text);
+}
+
+.v2-iconbutton:active {
+  transform: scale(0.94);
+}
+
+[data-theme='light'] .v2-theme-icon--moon,
+[data-theme='dark'] .v2-theme-icon--sun {
+  display: none;
+}
+
+/* The default cross fade would blur the two themes together halfway through.
+   The old theme simply holds still while the new one is wiped over it, which
+   is what makes the circle read as a wave rather than a dissolve. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* ---------- reading progress ---------- */
+
+.v2-progress {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--v2-accent);
+  transform: scaleX(var(--read, 0));
+  transform-origin: left;
+}
+
+/* ---------- shell and sections ---------- */
+
+.v2-shell {
+  max-width: var(--v2-shell);
+  margin-inline: auto;
+  padding-inline: var(--v2-gutter);
+}
+
+/* No rule between sections: the padding already separates them, and proximity
+   says it more quietly than a line does. */
+.v2-section {
+  display: grid;
+  gap: clamp(24px, 4vw, 64px);
+  grid-template-columns: var(--v2-rail) minmax(0, 1fr);
+  padding-block: clamp(64px, 9vw, 120px);
+  scroll-margin-top: calc(var(--v2-masthead) + 16px);
+}
+
+.v2-rail {
+  position: sticky;
+  top: calc(var(--v2-masthead) + var(--v2-space-8));
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  gap: var(--v2-space-2);
+}
+
+.v2-rail h2 {
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 1rem;
+  font-stretch: 100%;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.v2-rail p {
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.64rem;
+  font-stretch: 80%;
+  line-height: 1.6;
+}
+
+.v2-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-12);
+  max-width: 68ch;
+}
+
+.v2-lede {
+  display: flex;
+  flex-direction: column;
+  max-width: 60ch;
+  color: var(--v2-muted);
+  font-size: 1.05rem;
+  gap: var(--v2-space-3);
+}
+
+/* ---------- hero ---------- */
+
+.v2-hero {
+  align-items: start;
+  gap: var(--v2-space-12);
+  grid-template-columns: minmax(0, 1fr) 220px;
+  padding-block: clamp(56px, 10vw, 112px) clamp(48px, 7vw, 88px);
+}
+
+.v2-hero__summary {
+  display: flex;
+  flex-direction: column;
+  max-width: 54ch;
+  margin-top: var(--v2-space-6);
+  color: var(--v2-muted);
+  gap: var(--v2-space-3);
+}
+
+/* The portrait takes its height from the copy beside it, so the name, the
+   thesis, and the photo close on the same line instead of leaving a hole. */
+.v2-hero__portrait {
+  align-self: stretch;
+  min-height: 280px;
+  max-height: 460px;
+}
+
+/* The photo shares the page's light rather than fighting it: a shot on a white
+   backdrop would otherwise sit on the dark palette as a glaring rectangle. */
+.v2-hero__portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--v2-line);
+  border-radius: var(--v2-radius);
+  filter: grayscale(0.4) contrast(1.04);
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+.v2-hero h1 {
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: clamp(1.3rem, 5.4vw, 3.25rem);
+  font-stretch: 112.5%;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.v2-hero__role {
+  margin-top: var(--v2-space-6);
+  color: var(--v2-muted);
+  font-family: var(--v2-display);
+  font-size: 0.72rem;
+  font-stretch: 85%;
+  line-height: 1.7;
+}
+
+.v2-hero__lead {
+  margin-top: var(--v2-space-12);
+  max-width: 26ch;
+  font-size: clamp(1.4rem, 3.4vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+}
+
+/* ---------- actions ---------- */
+
+.v2-actions {
+  display: flex;
+  align-items: center;
+  margin-top: clamp(32px, 5vw, 56px);
+  flex-wrap: wrap;
+  gap: var(--v2-space-4);
+}
+
+.v2-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  padding-inline: var(--v2-space-6);
+  border-radius: var(--v2-radius);
+  background: var(--v2-accent);
+  color: var(--v2-on-accent);
+  font-family: var(--v2-display);
+  font-size: 0.76rem;
+  font-stretch: 85%;
+  font-weight: 600;
+  gap: var(--v2-space-2);
+  text-decoration: none;
+  transition: transform var(--v2-dur-micro) var(--v2-ease-out),
+    filter var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-button:hover {
+  filter: brightness(1.08);
+}
+
+.v2-button:active {
+  transform: scale(0.98);
+}
+
+.v2-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--v2-space-1);
+}
+
+.v2-social a,
+.v2-social button {
+  display: inline-flex;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v2-line);
+  border-radius: var(--v2-radius);
+  color: var(--v2-muted);
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    border-color var(--v2-dur-micro) var(--v2-ease-out),
+    transform var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-social a:hover,
+.v2-social button:hover {
+  border-color: var(--v2-line-strong);
+  color: var(--v2-text);
+}
+
+.v2-social a:active,
+.v2-social button:active {
+  transform: scale(0.95);
+}
+
+/* ---------- practice ---------- */
+
+.v2-practice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-8);
+}
+
+.v2-practice li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-2);
+}
+
+.v2-practice h3 {
+  margin: 0;
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.82rem;
+  font-stretch: 90%;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.v2-practice p {
+  color: var(--v2-muted);
+  max-width: 62ch;
+}
+
+/* ---------- cases ---------- */
+
+.v2-case {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-4);
+  scroll-margin-top: calc(var(--v2-masthead) + 24px);
+}
+
+/* The definition list already closes with a rule, so a second divider between
+   cases would read as an empty row. Space alone separates them. */
+.v2-case + .v2-case {
+  padding-top: var(--v2-space-8);
+}
+
+.v2-case h3 {
+  margin: 0;
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-stretch: 95%;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.v2-case dl {
+  display: grid;
+  border-top: 1px solid var(--v2-line);
+  gap: 0;
+  grid-template-columns: var(--v2-meta) minmax(0, 1fr);
+}
+
+.v2-case dt {
+  padding-block: var(--v2-space-3);
+  border-bottom: 1px solid var(--v2-line);
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  line-height: 1.7;
+}
+
+.v2-case dd {
+  padding-block: var(--v2-space-3);
+  border-bottom: 1px solid var(--v2-line);
+  color: var(--v2-muted);
+}
+
+.v2-case dd.v2-case__result {
+  color: var(--v2-text);
+}
+
+/* ---------- track ---------- */
+
+.v2-track,
+.v2-track__screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-8);
+}
+
+.v2-track__print {
+  display: none;
+}
+
+.v2-track__entry {
+  display: grid;
+  gap: var(--v2-space-1) var(--v2-space-6);
+  grid-template-columns: var(--v2-meta) minmax(0, 1fr);
+}
+
+.v2-track__period {
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  line-height: 1.9;
+}
+
+.v2-track__role {
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.8rem;
+  font-stretch: 90%;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* The accent stays reserved for measured outcomes and for things you can act
+   on, so employers and institutions read as quiet metadata instead. */
+.v2-track__employer {
+  color: var(--v2-muted);
+  font-family: var(--v2-display);
+  font-size: 0.66rem;
+  font-stretch: 80%;
+}
+
+.v2-track__lines {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--v2-space-2);
+  color: var(--v2-muted);
+  gap: var(--v2-space-2);
+  grid-column: 2;
+}
+
+.v2-education {
+  padding-top: var(--v2-space-8);
+  border-top: 1px solid var(--v2-line);
+}
+
+.v2-education h3 {
+  margin: 0 0 var(--v2-space-4);
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  font-weight: 400;
+}
+
+/* ---------- toolkit ---------- */
+
+.v2-toolkit {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.v2-toolkit__group {
+  display: grid;
+  padding-block: var(--v2-space-4);
+  border-bottom: 1px solid var(--v2-line);
+  gap: var(--v2-space-2) var(--v2-space-6);
+  grid-template-columns: var(--v2-meta) minmax(0, 1fr);
+}
+
+.v2-toolkit__group:first-child {
+  border-top: 1px solid var(--v2-line);
+}
+
+.v2-toolkit__label {
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  line-height: 1.8;
+}
+
+.v2-toolkit__items {
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.7rem;
+  font-stretch: 80%;
+  line-height: 1.8;
+}
+
+.v2-toolkit__items span {
+  color: var(--v2-line-strong);
+}
+
+.v2-toolkit__items .v2-toolkit__item {
+  color: var(--v2-text);
+  white-space: nowrap;
+}
+
+/* ---------- contribution calendar ---------- */
+
+.v2-calendar {
+  --cell: 10px;
+  --cell-gap: 3px;
+  position: relative;
+  /* headroom for the tooltip, which rises above the top row of cells */
+  margin-top: var(--v2-space-8);
+  margin-bottom: var(--v2-space-8);
+}
+
+.v2-calendar__scroll {
+  overflow-x: auto;
+  padding-bottom: var(--v2-space-2);
+}
+
+.v2-calendar__inner {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  gap: var(--v2-space-2);
+}
+
+.v2-calendar__months,
+.v2-calendar__grid {
+  display: grid;
+  gap: var(--cell-gap);
+  grid-template-columns: repeat(var(--weeks), var(--cell));
+}
+
+.v2-calendar__months span {
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.6rem;
+  font-stretch: 80%;
+  line-height: 1;
+}
+
+.v2-calendar__grid {
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, var(--cell));
+}
+
+.v2-calendar__day {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 2px;
+  background: var(--v2-raised);
+}
+
+/* A day lifts under the pointer so the cell being read is unmistakable at
+   10px, where a colour shift alone would be lost among its neighbours. */
+.v2-calendar__day[data-day] {
+  transition: transform var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-calendar__day[data-day]:hover,
+.v2-calendar__day[data-cursor] {
+  position: relative;
+  z-index: 1;
+  outline: 1px solid var(--v2-text);
+  outline-offset: 1px;
+  transform: scale(1.25);
+}
+
+.v2-calendar__day[data-empty] {
+  background: transparent;
+}
+
+.v2-calendar__tip {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  padding: var(--v2-space-2) var(--v2-space-3);
+  border: 1px solid var(--v2-line-strong);
+  border-radius: var(--v2-radius);
+  background: var(--v2-raised);
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  line-height: 1.2;
+  pointer-events: none;
+  white-space: nowrap;
+  /* parked out of the way until a cell asks for it */
+  visibility: hidden;
+  translate: calc(var(--x, 0px) - 50%) calc(var(--y, 0px) - 100% - 8px);
+}
+
+.v2-calendar__tip[data-shown] {
+  visibility: visible;
+}
+
+.v2-calendar__hint {
+  color: var(--v2-faint);
+}
+
+/* One accent, stepped by intensity, instead of a second colour imported from
+   another product. */
+.v2-calendar__day[data-level='1'] {
+  background: color-mix(in srgb, var(--v2-accent) 32%, var(--v2-raised));
+}
+
+.v2-calendar__day[data-level='2'] {
+  background: color-mix(in srgb, var(--v2-accent) 58%, var(--v2-raised));
+}
+
+.v2-calendar__day[data-level='3'] {
+  background: color-mix(in srgb, var(--v2-accent) 80%, var(--v2-raised));
+}
+
+.v2-calendar__day[data-level='4'] {
+  background: var(--v2-accent);
+}
+
+.v2-calendar__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: var(--v2-space-3);
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  gap: var(--v2-space-3);
+}
+
+.v2-calendar__caption strong {
+  color: var(--v2-text);
+  font-weight: 600;
+}
+
+/* ---------- code ---------- */
+
+.v2-repos {
+  display: flex;
+  flex-direction: column;
+}
+
+.v2-repo {
+  display: grid;
+  align-items: baseline;
+  padding-block: var(--v2-space-4);
+  border-top: 1px solid var(--v2-line);
+  color: inherit;
+  gap: var(--v2-space-1) var(--v2-space-6);
+  grid-template-columns: var(--v2-meta) minmax(0, 1fr) auto;
+  text-decoration: none;
+  transition: background-color var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-repos li:last-child .v2-repo {
+  border-bottom: 1px solid var(--v2-line);
+}
+
+.v2-repo:hover,
+.v2-repo:focus-visible {
+  background: var(--v2-surface);
+}
+
+.v2-repo__name {
+  color: var(--v2-text);
+  font-family: var(--v2-display);
+  font-size: 0.72rem;
+  font-stretch: 85%;
+  font-weight: 600;
+}
+
+.v2-repo:hover .v2-repo__name,
+.v2-repo:focus-visible .v2-repo__name {
+  color: var(--v2-accent);
+}
+
+.v2-repo__description {
+  color: var(--v2-muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.v2-repo__meta {
+  display: flex;
+  align-items: baseline;
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  gap: var(--v2-space-3);
+  white-space: nowrap;
+}
+
+.v2-repo__language {
+  color: var(--v2-text);
+}
+
+.v2-repo__meta svg {
+  color: var(--v2-line-strong);
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    translate var(--v2-dur-short) var(--v2-ease-out);
+}
+
+/* The arrow leans towards where the link goes. */
+.v2-repo:hover .v2-repo__meta svg,
+.v2-repo:focus-visible .v2-repo__meta svg {
+  color: var(--v2-accent);
+  translate: 2px -2px;
+}
+
+/* ---------- contact ---------- */
+
+.v2-contact__mail {
+  display: inline-flex;
+  align-items: center;
+  color: var(--v2-accent);
+  font-family: var(--v2-display);
+  font-size: clamp(0.95rem, 3vw, 1.5rem);
+  font-stretch: 90%;
+  font-weight: 600;
+  gap: var(--v2-space-3);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.v2-contact__mail span {
+  border-bottom: 2px solid color-mix(in srgb, var(--v2-accent) 40%, transparent);
+  transition: border-color var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-contact__mail:hover span,
+.v2-contact__mail:focus-visible span {
+  border-color: var(--v2-accent);
+}
+
+.v2-contact__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--v2-space-4) var(--v2-space-6);
+}
+
+.v2-copy {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  padding-inline: var(--v2-space-3);
+  border: 1px solid var(--v2-line);
+  border-radius: var(--v2-radius);
+  background: transparent;
+  color: var(--v2-muted);
+  cursor: pointer;
+  font-family: var(--v2-display);
+  font-size: 0.64rem;
+  font-stretch: 80%;
+  gap: var(--v2-space-2);
+  transition: color var(--v2-dur-micro) var(--v2-ease-out),
+    border-color var(--v2-dur-micro) var(--v2-ease-out),
+    transform var(--v2-dur-micro) var(--v2-ease-out);
+}
+
+.v2-copy:hover,
+.v2-copy:focus-visible {
+  border-color: var(--v2-line-strong);
+  color: var(--v2-text);
+}
+
+.v2-copy:active {
+  transform: scale(0.97);
+}
+
+.v2-copy[data-state='done'] {
+  border-color: var(--v2-accent);
+  color: var(--v2-accent);
+}
+
+.v2-copy[data-state='failed'] {
+  border-color: var(--v2-line-strong);
+  color: var(--v2-text);
+}
+
+.v2-copy__status {
+  color: var(--v2-muted);
+  font-family: var(--v2-display);
+  font-size: 0.64rem;
+  font-stretch: 80%;
+}
+
+.v2-copy[data-state='done'] + .v2-copy__status {
+  color: var(--v2-accent);
+}
+
+/* The tick replaces the copy glyph in place, so the label never shifts sideways
+   at the moment the user is reading whether it worked. */
+.v2-copy__icon--done,
+.v2-copy[data-state='done'] .v2-copy__icon--idle {
+  display: none;
+}
+
+.v2-copy[data-state='done'] .v2-copy__icon--done {
+  display: inline-block;
+}
+
+.v2-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-block: var(--v2-space-8) var(--v2-space-16);
+  color: var(--v2-faint);
+  font-family: var(--v2-display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  gap: var(--v2-space-4);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 900px) {
+  .v2-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2-rail {
+    position: static;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--v2-space-3);
+  }
+
+
+  /* Once the hero stacks, the portrait leads the way a business card does,
+     and it stops stretching so it cannot swallow the fold. */
+  .v2-hero__portrait {
+    max-width: 220px;
+    min-height: 0;
+    max-height: none;
+    align-self: start;
+    aspect-ratio: 4 / 5;
+    order: -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .v2-masthead nav {
+    display: none;
+  }
+
+  .v2-hero h1 {
+    font-stretch: 100%;
+  }
+
+  .v2-hero__portrait {
+    max-width: 160px;
+  }
+
+
+  .v2-case dl,
+  .v2-track__entry,
+  .v2-toolkit__group,
+  .v2-repo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2-repo {
+    gap: var(--v2-space-2);
+  }
+
+  .v2-case dt {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .v2-track__lines {
+    grid-column: 1;
+  }
+}
+
+/* One switch, not a per-component decision. Motion that only confirms or
+   decorates stops; nothing that carries information disappears with it. */
+@media (prefers-reduced-motion: reduce) {
+  [data-v2] *,
+  [data-v2] *::before,
+  [data-v2] *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .v2-calendar__day[data-day]:hover,
+  .v2-calendar__day[data-cursor] {
+    transform: none;
+  }
+}
+
+@media print {
+  [data-v2],
+  [data-v2][data-theme='dark'],
+  [data-v2][data-theme='light'] {
+    --v2-bg: #ffffff;
+    --v2-surface: #ffffff;
+    --v2-raised: #ffffff;
+    --v2-line: #bbbbbb;
+    --v2-line-strong: #888888;
+    --v2-text: #000000;
+    --v2-muted: #000000;
+    --v2-faint: #333333;
+    --v2-accent: #000000;
+    font-size: 8.5pt;
+  }
+
+  [data-v2] body {
+    min-height: 0;
+    padding: 8mm 10mm;
+    background: #ffffff;
+    color: #000000;
+  }
+
+  /* Everything the resume does not need: navigation, the on-screen history,
+     the essay sections, and any control that cannot be clicked on paper. */
+  .v2-masthead,
+  .v2-skip,
+  .v2-foot,
+  .v2-hero__portrait,
+  .v2-hero .v2-social,
+  .v2-button,
+  .v2-copy,
+  .v2-copy__status,
+  .v2-track__screen,
+  .v2-rail p,
+  #practice,
+  #work,
+  #code {
+    display: none !important;
+  }
+
+  .v2-track__print {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .v2-shell {
+    max-width: none;
+    padding: 0;
+  }
+
+  .v2-section {
+    display: block;
+    padding-block: 0;
+  }
+
+  .v2-section + .v2-section {
+    margin-top: 4mm;
+  }
+
+  .v2-body,
+  .v2-hero__summary,
+  .v2-lede {
+    max-width: none;
+    gap: 1mm;
+  }
+
+  .v2-rail {
+    position: static;
+  }
+
+  .v2-rail h2 {
+    margin-bottom: 1.5mm;
+    font-size: 10pt;
+  }
+
+  .v2-hero h1 {
+    font-size: 20pt;
+  }
+
+  .v2-hero__role,
+  .v2-hero__summary {
+    margin-top: 1.5mm;
+  }
+
+  .v2-hero__lead {
+    margin-top: 2mm;
+    max-width: none;
+    font-size: 11pt;
+  }
+
+  .v2-actions {
+    margin-top: 2mm;
+  }
+
+  .v2-track__entry,
+  .v2-toolkit__group {
+    padding-block: 1mm;
+    break-inside: avoid;
+  }
+
+  .v2-education {
+    margin-top: 3mm;
+    padding-top: 2mm;
+  }
+
+  .v2-education h3 {
+    color: #000000;
+    font-size: 10pt;
+  }
+
+  .v2-contact__mail {
+    font-size: 11pt;
+  }
+
+  /* On paper a link label is useless without its address. */
+  .v2-contact__links a {
+    width: auto;
+    border: 0;
+    padding: 0 3mm 0 0;
+  }
+
+  .v2-contact__links a::after {
+    /* a plain space would collapse against the label */
+    content: '\00a0' attr(href);
+    color: #333333;
+  }
+}

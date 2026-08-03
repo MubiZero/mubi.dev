@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const css = readFileSync('src/styles/tokens.css', 'utf8');
+const css = readFileSync('src/styles/v2/tokens.css', 'utf8');
 
 function block(selector: string): string {
   const start = css.indexOf(selector);
@@ -26,9 +26,7 @@ function luminance(hex: string): number {
   const h = hex.replace('#', '');
   const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
   return (
-    0.2126 * channelToLinear(r) +
-    0.7152 * channelToLinear(g) +
-    0.0722 * channelToLinear(b)
+    0.2126 * channelToLinear(r) + 0.7152 * channelToLinear(g) + 0.0722 * channelToLinear(b)
   );
 }
 
@@ -37,42 +35,37 @@ function contrast(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-describe('dark theme', () => {
-  const bg = token("[data-theme='dark']", '--bg');
+const THEMES = [
+  { name: 'night shift', selector: "[data-v2],\n[data-v2][data-theme='dark']" },
+  { name: 'day shift', selector: "[data-v2][data-theme='light']" },
+] as const;
+
+describe.each(THEMES)('$name palette', ({ selector }) => {
+  const bg = token(selector, '--v2-bg');
 
   it('primary text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='dark']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--v2-text'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('secondary text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='dark']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--v2-muted'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('accent text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='dark']", '--accent-strong'), bg)).toBeGreaterThanOrEqual(4.5);
+  it('the faintest text still meets 4.5:1', () => {
+    expect(contrast(token(selector, '--v2-faint'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('focus ring meets 3:1 as non-text UI', () => {
-    expect(contrast(token("[data-theme='dark']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
-  });
-});
-
-describe('light theme', () => {
-  const bg = token(":root,\n[data-theme='light']", '--bg');
-
-  it('primary text meets 4.5:1', () => {
-    expect(contrast(token(":root,\n[data-theme='light']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
+  it('the accent meets 4.5:1, because it carries the measured values', () => {
+    expect(contrast(token(selector, '--v2-accent'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('secondary text meets 4.5:1', () => {
-    expect(contrast(token(":root,\n[data-theme='light']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
+  it('text on the accent button meets 4.5:1', () => {
+    expect(
+      contrast(token(selector, '--v2-on-accent'), token(selector, '--v2-accent')),
+    ).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('accent text meets 4.5:1', () => {
-    expect(contrast(token(":root,\n[data-theme='light']", '--accent-strong'), bg)).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it('focus ring meets 3:1 as non-text UI', () => {
-    expect(contrast(token(":root,\n[data-theme='light']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
+  it('the focus ring meets 3:1 as non-text UI', () => {
+    expect(contrast(token(selector, '--v2-focus'), bg)).toBeGreaterThanOrEqual(3);
   });
 });

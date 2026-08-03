@@ -1,0 +1,46 @@
+mark: mubi.dev
+lead: I automate infrastructure and build the tools a team is missing.
+nav:
+  label: Primary navigation
+  practice: Practice
+  work: Cases
+  track: Track
+  code: Code
+  contact: Contact
+sections:
+  practice:
+    title: What I can do
+    rail: infrastructure, automation, tooling
+  work:
+    title: Cases
+    rail: problem, fix, outcome
+  track:
+    title: Track
+    rail: since Oct 2024
+  toolkit:
+    title: Toolkit
+    rail: in daily use
+  code:
+    title: Code
+    rail: public repositories
+    contributions:
+      one: contribution
+      few: contributions
+      many: contributions
+      other: contributions
+    calendarHint: Hover a day, or step through them with the arrow keys
+  contact:
+    title: Let us talk about the work
+    rail: Khujand, UTC+5
+    lead: Get in touch if you are looking for an engineer for infrastructure or internal tooling. Tell me about the team and the work, and I will reply with what I can bring.
+    action: Write an email
+    copy: Copy the address
+    copied: Address copied
+    copyFailed: Copying failed, please select it manually
+caseLabels:
+  context: Context
+  action: What I did
+  result: Outcome
+printLabel: Print the resume
+educationTitle: Education
+skipToContent: Skip to content

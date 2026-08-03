@@ -15,8 +15,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "@fontsource-variable/manrope": "^5.3.0",
-    "@fontsource/geist-mono": "^5.3.0",
+    "@fontsource-variable/martian-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/simple-icons": "^1.2.92",

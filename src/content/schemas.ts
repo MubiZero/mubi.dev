@@ -7,7 +7,11 @@ export const profileSchema = z.object({
   manLine: nonEmpty,
   summary: z.array(nonEmpty).min(1).max(3),
   inlineStack: z.array(nonEmpty).min(1),
-  proof: z.array(z.object({ value: nonEmpty, label: nonEmpty })).length(3),
+  now: z.object({
+    role: nonEmpty,
+    employer: nonEmpty,
+    location: nonEmpty,
+  }),
   ctaLabel: nonEmpty,
 });
 
@@ -52,7 +56,12 @@ export const casesSchema = z.object({
   entries: z
     .array(
       z.object({
+        id: z.string().regex(/^[a-z][a-z0-9-]*$/, 'case id must be a lowercase slug'),
         title: nonEmpty,
+        metrics: z
+          .array(z.object({ value: nonEmpty, unit: z.string().default(''), label: nonEmpty }))
+          .min(1)
+          .max(2),
         problem: nonEmpty,
         action: nonEmpty,
         result: nonEmpty,
@@ -60,6 +69,19 @@ export const casesSchema = z.object({
     )
     .min(1)
     .max(3),
+});
+
+export const reposSchema = z.object({
+  entries: z
+    .array(
+      z.object({
+        repo: z.string().min(1),
+        title: nonEmpty,
+        description: nonEmpty,
+      }),
+    )
+    .min(1)
+    .max(6),
 });
 
 export const stackSchema = z.object({
@@ -81,6 +103,51 @@ export const contactSchema = z.object({
       url: z.string().url(),
     }),
   ),
+});
+
+export const v2Schema = z.object({
+  mark: nonEmpty,
+  lead: nonEmpty,
+  nav: z.object({
+    label: nonEmpty,
+    practice: nonEmpty,
+    work: nonEmpty,
+    track: nonEmpty,
+    code: nonEmpty,
+    contact: nonEmpty,
+  }),
+  sections: z.object({
+    practice: z.object({ title: nonEmpty, rail: nonEmpty }),
+    work: z.object({ title: nonEmpty, rail: nonEmpty }),
+    track: z.object({ title: nonEmpty, rail: nonEmpty }),
+    toolkit: z.object({ title: nonEmpty, rail: nonEmpty }),
+    code: z.object({
+      title: nonEmpty,
+      rail: nonEmpty,
+      // every plural form the locale needs, so the yearly total can be stated
+      // correctly whatever number the build happens to read
+      contributions: z.object({
+        one: nonEmpty,
+        few: nonEmpty,
+        many: nonEmpty,
+        other: nonEmpty,
+      }),
+      calendarHint: nonEmpty,
+    }),
+    contact: z.object({
+      title: nonEmpty,
+      rail: nonEmpty,
+      lead: nonEmpty,
+      action: nonEmpty,
+      copy: nonEmpty,
+      copied: nonEmpty,
+      copyFailed: nonEmpty,
+    }),
+  }),
+  caseLabels: z.object({ context: nonEmpty, action: nonEmpty, result: nonEmpty }),
+  printLabel: nonEmpty,
+  educationTitle: nonEmpty,
+  skipToContent: nonEmpty,
 });
 
 export const uiSchema = z.object({
@@ -124,7 +191,7 @@ export const uiSchema = z.object({
     items: z.array(z.object({ title: nonEmpty, description: nonEmpty })).length(3),
   }),
   labels: z.object({
-    proof: nonEmpty,
+    now: nonEmpty,
     selectedWork: nonEmpty,
     journey: nonEmpty,
     toolkit: nonEmpty,

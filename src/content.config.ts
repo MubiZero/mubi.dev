@@ -6,8 +6,10 @@ import {
   educationSchema,
   experienceSchema,
   profileSchema,
+  reposSchema,
   stackSchema,
   uiSchema,
+  v2Schema,
 } from './content/schemas';
 
 function localeCollection(directory: string, schema: Parameters<typeof defineCollection>[0]['schema']) {
@@ -24,5 +26,7 @@ export const collections = {
   cases: localeCollection('cases', casesSchema),
   stack: localeCollection('stack', stackSchema),
   contact: localeCollection('contact', contactSchema),
+  repos: localeCollection('repos', reposSchema),
   ui: localeCollection('ui', uiSchema),
+  v2: localeCollection('v2', v2Schema),
 };

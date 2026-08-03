@@ -1,0 +1,208 @@
+---
+import { loadContributions, formatDay } from '../../lib/github';
+import type { Locale } from '../../lib/locale';
+
+interface Props {
+  locale: Locale;
+  labels: { one: string; few: string; many: string; other: string };
+  hint: string;
+}
+
+const { locale, labels, hint } = Astro.props;
+const { from, levels, counts } = await loadContributions();
+
+const DAYS_IN_WEEK = 7;
+
+/**
+ * GitHub hands over a full year, but its first months are nearly empty and
+ * read as dead space. Only the recent window is drawn, and the total below is
+ * summed over exactly that window, so the number always describes the picture
+ * above it rather than a longer period.
+ */
+const WEEKS_SHOWN = 43;
+
+const startDate = new Date(`${from}T00:00:00Z`);
+const leadingBlanks = startDate.getUTCDay();
+
+type Cell = { level: number; count: number; index: number } | null;
+const cells: Cell[] = [
+  ...Array<Cell>(leadingBlanks).fill(null),
+  ...[...levels].map((level, index) => ({ level: Number(level), count: counts[index], index })),
+];
+while (cells.length % DAYS_IN_WEEK !== 0) cells.push(null);
+
+const allWeeks = Array.from({ length: cells.length / DAYS_IN_WEEK }, (_, index) =>
+  cells.slice(index * DAYS_IN_WEEK, (index + 1) * DAYS_IN_WEEK),
+);
+const weeks = allWeeks.slice(-WEEKS_SHOWN);
+const shown = weeks.flat().filter((cell): cell is NonNullable<Cell> => cell !== null);
+const total = shown.reduce((sum, cell) => sum + cell.count, 0);
+
+function dayIso(index: number): string {
+  const day = new Date(startDate);
+  day.setUTCDate(day.getUTCDate() + index);
+  return day.toISOString().slice(0, 10);
+}
+
+const numbers = new Intl.NumberFormat(locale);
+const plurals = new Intl.PluralRules(locale);
+
+function amount(count: number): string {
+  const form = plurals.select(count) as keyof typeof labels;
+  return `${numbers.format(count)} ${labels[form] ?? labels.other}`;
+}
+
+/**
+ * Each cell carries its own finished sentence rather than raw numbers, so the
+ * pointer and keyboard handlers never have to format anything in the browser
+ * and both locales read exactly as the rest of the page does.
+ */
+function dayLabel(cell: NonNullable<Cell>): string {
+  return `${amount(cell.count)} · ${formatDay(dayIso(cell.index), locale)}`;
+}
+
+const monthFormat = new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UTC' });
+const monthLabels: { text: string; start: number; span: number }[] = [];
+
+weeks.forEach((week, weekIndex) => {
+  const first = week.find((cell) => cell !== null);
+  if (!first) return;
+  const text = monthFormat
+    .formatToParts(new Date(`${dayIso(first.index)}T00:00:00Z`))
+    .find((part) => part.type === 'month')!.value;
+  const previous = monthLabels[monthLabels.length - 1];
+  if (previous?.text === text) previous.span += 1;
+  else monthLabels.push({ text, start: weekIndex + 1, span: 1 });
+});
+
+// A month that only clips the edge of the calendar has no room for its name.
+const visibleMonths = monthLabels.filter((month) => month.span > 1);
+
+const countText = amount(total);
+const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
+  dayIso(shown[shown.length - 1].index),
+  locale,
+)}`;
+---
+
+<figure class="v2-calendar" data-testid="v2-calendar">
+  <!-- The scroller itself is focusable and named: a region you can only reach
+       by dragging is unreachable from a keyboard. Once focused it also becomes
+       the single tab stop from which the arrow keys walk the days, so reading
+       the data never costs three hundred presses of Tab. -->
+  <div
+    class="v2-calendar__scroll"
+    data-v2-calendar
+    tabindex="0"
+    role="group"
+    aria-label={`${countText}. ${range}`}
+    aria-describedby="v2-calendar-hint"
+  >
+    <div class="v2-calendar__inner" style={`--weeks:${weeks.length}`}>
+      <div class="v2-calendar__months" aria-hidden="true">
+        {
+          visibleMonths.map((month) => (
+            <span style={`grid-column:${month.start} / span ${month.span}`}>{month.text}</span>
+          ))
+        }
+      </div>
+
+      <div class="v2-calendar__grid" aria-hidden="true">
+        {
+          weeks
+            .flat()
+            .map((cell) =>
+              cell === null ? (
+                <span class="v2-calendar__day" data-empty />
+              ) : (
+                <span class="v2-calendar__day" data-level={cell.level} data-day={dayLabel(cell)} />
+              ),
+            )
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- The tooltip lives outside the scroller: an overlay drawn inside a box
+       with overflow set would be clipped the moment it rose above the grid. -->
+  <span class="v2-calendar__tip" data-v2-calendar-tip aria-hidden="true"></span>
+
+  <!-- The pointer gets the tooltip; a screen reader gets the same sentence
+       here, because the tooltip itself is a decorative overlay. -->
+  <span class="v2-hidden" data-v2-calendar-live aria-live="polite"></span>
+
+  <figcaption class="v2-calendar__caption">
+    <strong>{countText}</strong>
+    <span>{range}</span>
+    <span class="v2-calendar__hint" id="v2-calendar-hint">{hint}</span>
+  </figcaption>
+</figure>
+
+<script is:inline>
+  (() => {
+    const scroller = document.querySelector('[data-v2-calendar]');
+    if (!scroller) return;
+
+    const figure = scroller.closest('.v2-calendar');
+    const tip = figure.querySelector('[data-v2-calendar-tip]');
+    const live = figure.querySelector('[data-v2-calendar-live]');
+    const days = [...scroller.querySelectorAll('.v2-calendar__day[data-day]')];
+
+    // The calendar reads left to right in time, so a narrow screen should open
+    // on the most recent weeks rather than on the start of the window.
+    scroller.scrollLeft = scroller.scrollWidth;
+
+    let cursor = -1;
+
+    const place = (cell) => {
+      const box = cell.getBoundingClientRect();
+      const frame = figure.getBoundingClientRect();
+      tip.textContent = cell.dataset.day;
+      tip.style.setProperty('--x', `${box.left - frame.left + box.width / 2}px`);
+      tip.style.setProperty('--y', `${box.top - frame.top}px`);
+      tip.dataset.shown = '';
+    };
+
+    const hide = () => {
+      delete tip.dataset.shown;
+      if (cursor >= 0) delete days[cursor].dataset.cursor;
+      cursor = -1;
+    };
+
+    scroller.addEventListener('pointerover', (event) => {
+      const cell = event.target.closest('.v2-calendar__day[data-day]');
+      if (cell) place(cell);
+    });
+
+    scroller.addEventListener('pointerleave', hide);
+
+    // Left and right move a week at a time because a column is a week; up and
+    // down move a single day, which is what a column actually stacks.
+    const STEPS = { ArrowRight: 7, ArrowLeft: -7, ArrowDown: 1, ArrowUp: -1 };
+
+    scroller.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        hide();
+        return;
+      }
+
+      const step = STEPS[event.key];
+      const jump = event.key === 'Home' ? 0 : event.key === 'End' ? days.length - 1 : null;
+      if (step === undefined && jump === null) return;
+
+      event.preventDefault();
+      const start = cursor < 0 ? days.length - 1 : cursor;
+      const next = jump ?? Math.min(days.length - 1, Math.max(0, start + step));
+      if (cursor >= 0) delete days[cursor].dataset.cursor;
+      cursor = next;
+
+      const cell = days[cursor];
+      cell.dataset.cursor = '';
+      cell.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      place(cell);
+      live.textContent = cell.dataset.day;
+    });
+
+    scroller.addEventListener('blur', hide);
+  })();
+</script>

@@ -5,7 +5,7 @@ import { chromium } from '@playwright/test';
 const usage = `Usage:
   npm run qa:capture -- --output /tmp/mubi-dev-final-qa [--base-url http://127.0.0.1:4321]
 
-Capture EN/RU at 320px and 200% text: top navigation, focused skip link, and contact.
+Capture EN/RU at 320px and 200% text: the masthead, the focused skip link, and contact.
 Start the production preview before running this command.`;
 
 if (process.argv.includes('--help')) {
@@ -44,7 +44,7 @@ try {
 
     await page.screenshot({ path: resolve(outputDirectory, `${locale}-320-200-top.png`) });
 
-    const skipLink = page.locator('.skip-link');
+    const skipLink = page.locator('.v2-skip');
     await skipLink.focus();
     await skipLink.evaluate((element) =>
       Promise.all(element.getAnimations().map((animation) => animation.finished)),
@@ -53,16 +53,10 @@ try {
       path: resolve(outputDirectory, `${locale}-320-200-skip-focus.png`),
     });
 
-    const contactLink = page.locator('header a[href="#contact"]');
-    await contactLink.focus();
-    await contactLink.click();
-    await Promise.all(
-      [skipLink, contactLink].map((locator) =>
-        locator.evaluate((element) =>
-          Promise.all(element.getAnimations().map((animation) => animation.finished)),
-        ),
-      ),
-    );
+    // The section nav is hidden at this width by design, so contact is reached
+    // by its anchor rather than by a control that is not on screen.
+    await page.locator('#contact').scrollIntoViewIfNeeded();
+    await page.locator('[data-v2-copy]').focus();
     await page.screenshot({ path: resolve(outputDirectory, `${locale}-320-200-contact.png`) });
     await page.close();
   }

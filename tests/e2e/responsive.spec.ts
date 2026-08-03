@@ -27,6 +27,17 @@ async function horizontalBounds(page: Page) {
       const rect = element.getBoundingClientRect();
       return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
     };
+
+    // Content scrolled out of view inside its own horizontal scroller sits
+    // outside the viewport by design and cannot widen the page. Only elements
+    // laid out against the page itself are held to the viewport bounds.
+    const isScrolledInside = (element: HTMLElement) => {
+      for (let node = element.parentElement; node && node !== document.body; node = node.parentElement) {
+        if (getComputedStyle(node).overflowX !== 'visible') return true;
+      }
+      return false;
+    };
+    const isPageLevel = (element: HTMLElement) => isRendered(element) && !isScrolledInside(element);
     const describe = (element: HTMLElement) => {
       const selector = `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${
         typeof element.className === 'string' && element.className.trim()
@@ -36,14 +47,14 @@ async function horizontalBounds(page: Page) {
       return `${selector}: ${element.textContent?.trim().replaceAll(/\s+/g, ' ').slice(0, 60) ?? ''}`;
     };
 
-    const elementViolations = elements.filter(isRendered).flatMap((element) => {
+    const elementViolations = elements.filter(isPageLevel).flatMap((element) => {
       const rect = element.getBoundingClientRect();
       return rect.left < -tolerance || rect.right > viewportWidth + tolerance
         ? [`${describe(element)} [${rect.left.toFixed(1)}, ${rect.right.toFixed(1)}]`]
         : [];
     });
 
-    const textViolations = elements.filter(isRendered).flatMap((element) =>
+    const textViolations = elements.filter(isPageLevel).flatMap((element) =>
       [...element.childNodes]
         .filter((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
         .flatMap((node) => {

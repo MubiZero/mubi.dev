@@ -29,16 +29,16 @@ about:
   lead: I work across infrastructure and product development, turning repetitive operations into systems that teams can trust.
   principle: Make complex work calmer, clearer, and easier to operate.
 capabilities:
-  title: What I do
+  title: What I can do
   items:
-    - title: Operate critical infrastructure
-      description: Keep Linux services, networks, containers, and clusters stable, observable, and secure.
-    - title: Automate repetitive work
-      description: Replace manual provisioning and configuration with repeatable Terraform and Ansible workflows.
-    - title: Build useful products
-      description: Develop web and mobile tools with Go, Flutter, Angular, and .NET.
+    - title: I keep critical services running
+      description: Linux, networking, Docker, and RKE2 clusters. I watch the metrics in Prometheus and Grafana and dig for causes instead of symptoms.
+    - title: I take manual work out of provisioning
+      description: Terraform creates the virtual machines, Ansible finishes the configuration, FreeIPA grants access. A server is ready in 30 minutes, up to ten in parallel.
+    - title: I build the tools when none exist
+      description: Go, Angular, Flutter, and .NET. From a branch monitoring service to internal panels the team uses every day.
 labels:
-  proof: Evidence
+  now: Now
   selectedWork: Selected work
   journey: Journey
   toolkit: Tools and technologies

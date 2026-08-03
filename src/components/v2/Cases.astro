@@ -1,0 +1,41 @@
+---
+interface Props {
+  entries: {
+    id: string;
+    title: string;
+    problem: string;
+    action: string;
+    result: string;
+  }[];
+  labels: { context: string; action: string; result: string };
+}
+
+const { entries, labels } = Astro.props;
+---
+
+<div class="v2-cases">
+  {
+    entries.map((entry) => (
+      <article id={`case-${entry.id}`} class="v2-case" data-testid="v2-case">
+        <h3>{entry.title}</h3>
+
+        <dl>
+          <dt>{labels.context}</dt>
+          <dd>{entry.problem}</dd>
+          <dt>{labels.action}</dt>
+          <dd>{entry.action}</dd>
+          <dt>{labels.result}</dt>
+          <dd class="v2-case__result">{entry.result}</dd>
+        </dl>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .v2-cases {
+    display: flex;
+    flex-direction: column;
+    gap: var(--v2-space-12);
+  }
+</style>

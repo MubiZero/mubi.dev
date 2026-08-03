@@ -15,11 +15,7 @@ describe('profileSchema', () => {
     manLine: 'mubi - infrastructure engineer and product developer',
     summary: ['First sentence.', 'Second sentence.'],
     inlineStack: ['Linux', 'Docker'],
-    proof: [
-      { value: '30 min', label: 'server provisioning' },
-      { value: '50+', label: 'branches monitored' },
-      { value: '1 min', label: 'first incident response' },
-    ],
+    now: { role: 'Middle DevOps/SRE', employer: 'Eskhata Bank', location: 'Dushanbe' },
     ctaLabel: 'Get in touch',
   };
 
@@ -36,8 +32,9 @@ describe('profileSchema', () => {
     expect(() => profileSchema.parse(withoutManLine)).toThrow();
   });
 
-  it('rejects a profile with fewer than three proof points', () => {
-    expect(() => profileSchema.parse({ ...valid, proof: valid.proof.slice(0, 2) })).toThrow();
+  it('rejects a profile without the current role', () => {
+    const { now, ...withoutNow } = valid;
+    expect(() => profileSchema.parse(withoutNow)).toThrow();
   });
 });
 
@@ -118,7 +115,9 @@ describe('casesSchema', () => {
   const valid = {
     entries: [
       {
+        id: 'proxy-outage-recovery',
         title: 'Proxy outage recovery',
+        metrics: [{ value: '0', unit: '', label: 'unplanned downtime' }],
         problem: 'The proxy silently dropped traffic under load.',
         action: 'Rebuilt the routing rules and added health checks.',
         result: 'Zero unplanned downtime since.',
@@ -213,7 +212,7 @@ describe('uiSchema', () => {
       ],
     },
     labels: {
-      proof: 'Evidence',
+      now: 'Now',
       selectedWork: 'Selected work',
       journey: 'Journey',
       toolkit: 'Toolkit',

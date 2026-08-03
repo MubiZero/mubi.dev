@@ -1,0 +1,94 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  contact: { email: string; links: { label: string; url: string }[] };
+  lead: string;
+  action: string;
+  copyLabels: { idle: string; done: string; failed: string };
+}
+
+const { contact, lead, action, copyLabels } = Astro.props;
+---
+
+<p class="v2-lede">{lead}</p>
+
+<div class="v2-contact__row">
+  <a
+    class="v2-contact__mail"
+    data-testid="v2-contact-mail"
+    href={`mailto:${contact.email}`}
+    aria-label={`${action}: ${contact.email}`}
+  >
+    <span>{contact.email}</span>
+    <Icon name="ph:arrow-up-right" size="20" aria-hidden="true" />
+  </a>
+
+  <!-- Writing to the clipboard is instant and reversible, so the result is
+       reported next to the button instead of as a toast to dismiss. The
+       button's own label never changes: three labels of three different
+       lengths would resize it exactly as the reader looks at it. -->
+  <button
+    class="v2-copy"
+    type="button"
+    data-v2-copy={contact.email}
+    data-label-done={copyLabels.done}
+    data-label-failed={copyLabels.failed}
+  >
+    <Icon class="v2-copy__icon v2-copy__icon--idle" name="ph:copy" size="15" aria-hidden="true" />
+    <Icon class="v2-copy__icon v2-copy__icon--done" name="ph:check" size="15" aria-hidden="true" />
+    {copyLabels.idle}
+  </button>
+
+  <span class="v2-copy__status" data-v2-copy-status role="status"></span>
+</div>
+
+<div class="v2-social v2-contact__links" data-testid="v2-contact-links">
+  {
+    contact.links.map((link) => (
+      <a href={link.url} rel="me noopener">
+        {link.label}
+      </a>
+    ))
+  }
+</div>
+
+<script is:inline>
+  (() => {
+    const button = document.querySelector('[data-v2-copy]');
+    if (!button) return;
+
+    const status = document.querySelector('[data-v2-copy-status]');
+    let revert;
+
+    const report = (state) => {
+      clearTimeout(revert);
+      button.dataset.state = state;
+      status.textContent = button.dataset[state === 'done' ? 'labelDone' : 'labelFailed'];
+      revert = setTimeout(() => {
+        delete button.dataset.state;
+        status.textContent = '';
+      }, 2400);
+    };
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.v2Copy);
+        report('done');
+      } catch {
+        report('failed');
+      }
+    });
+  })();
+</script>
+
+<style>
+  .v2-social a {
+    width: auto;
+    padding-inline: var(--v2-space-4);
+    font-family: var(--v2-display);
+    font-size: 0.68rem;
+    font-stretch: 85%;
+    text-decoration: none;
+  }
+</style>

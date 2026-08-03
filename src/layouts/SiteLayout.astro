@@ -1,15 +1,16 @@
 ---
-import '../styles/global.css';
+import '../styles/v2/v2.css';
 import { localizedPath, otherLocale, type Locale } from '../lib/locale';
 
 interface Props {
   locale: Locale;
-  ui: { siteTitle: string; metaDescription: string };
+  title: string;
+  description: string;
   profile: { name: string; manLine: string };
   contact: { email: string; links: { label: string; url: string }[] };
 }
 
-const { locale, ui, profile, contact } = Astro.props;
+const { locale, title, description, profile, contact } = Astro.props;
 const site = 'https://mubi.dev';
 const canonical = new URL(localizedPath(locale), site).href;
 const alternate = new URL(localizedPath(otherLocale(locale)), site).href;
@@ -25,19 +26,19 @@ const person = {
 };
 ---
 
-<html lang={locale}>
+<html lang={locale} data-v2>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{ui.siteTitle}</title>
-    <meta name="description" content={ui.metaDescription} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={locale} href={canonical} />
     <link rel="alternate" hreflang={otherLocale(locale)} href={alternate} />
     <link rel="alternate" hreflang="x-default" href={`${site}/`} />
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content={ui.siteTitle} />
-    <meta property="og:description" content={ui.metaDescription} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={`${site}/og.png`} />
     <meta name="twitter:card" content="summary_large_image" />
@@ -50,7 +51,8 @@ const person = {
         stored = null;
       }
       const systemTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : systemTheme;
+      document.documentElement.dataset.theme =
+        stored === 'light' || stored === 'dark' ? stored : systemTheme;
     </script>
   </head>
   <body>

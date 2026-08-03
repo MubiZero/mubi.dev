@@ -1,0 +1,163 @@
+import snapshot from '../data/github-snapshot.json';
+import contributionsSnapshot from '../data/github-contributions.json';
+
+export interface RepoFacts {
+  name: string;
+  url: string;
+  language: string | null;
+  pushedAt: string;
+}
+
+const OWNER = 'MubiZero';
+const API = `https://api.github.com/users/${OWNER}/repos?per_page=100&type=owner`;
+const TIMEOUT_MS = 8000;
+
+/**
+ * Volatile repository facts, read at build time. Descriptions are not taken
+ * from here: GitHub holds one language per repo, and a Russian page must not
+ * fall back to English prose. Only the fields that go stale live here.
+ *
+ * The committed snapshot is the fallback, so a build without network access,
+ * or one that hits the GitHub rate limit, still produces the page instead of
+ * failing. It is the last known state, not invented data.
+ */
+export async function loadRepoFacts(): Promise<Map<string, RepoFacts>> {
+  const facts = new Map<string, RepoFacts>();
+  for (const repo of snapshot as RepoFacts[]) facts.set(repo.name, repo);
+
+  try {
+    const token = process.env.GITHUB_TOKEN;
+    const response = await fetch(API, {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      headers: {
+        Accept: 'application/vnd.github+json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
+
+    const live = (await response.json()) as {
+      name: string;
+      html_url: string;
+      language: string | null;
+      pushed_at: string;
+      fork: boolean;
+    }[];
+
+    for (const repo of live) {
+      if (repo.fork) continue;
+      facts.set(repo.name, {
+        name: repo.name,
+        url: repo.html_url,
+        language: repo.language,
+        pushedAt: repo.pushed_at,
+      });
+    }
+  } catch (error) {
+    console.warn(`[github] using the committed snapshot: ${(error as Error).message}`);
+  }
+
+  return facts;
+}
+
+export interface Contributions {
+  from: string;
+  to: string;
+  total: number;
+  /** One digit per day, 0 to 4, in date order starting from `from`. */
+  levels: string;
+  /** Contributions per day, same order and length as `levels`. */
+  counts: number[];
+}
+
+const CALENDAR = `https://github.com/users/${OWNER}/contributions`;
+
+/**
+ * Per-day counts come from the cell tooltips, not from the headline number.
+ * Without them the page could only ever state a yearly total, and any shorter
+ * window it draws would be captioned with a figure that does not match it.
+ */
+function parseCalendar(html: string): Contributions | null {
+  const tooltips = new Map<string, number>();
+  for (const match of html.matchAll(/<tool-tip[^>]*for="([^"]+)"[^>]*>([^<]+)<\/tool-tip>/g)) {
+    const count = match[2].match(/^(\d+|No) contribution/);
+    if (count) tooltips.set(match[1], count[1] === 'No' ? 0 : Number(count[1]));
+  }
+
+  const cells: { date: string; level: string; count: number }[] = [];
+  for (const [tag] of html.matchAll(/<td[^>]*class="ContributionCalendar-day"[^>]*>/g)) {
+    const date = tag.match(/data-date="(\d{4}-\d{2}-\d{2})"/);
+    const level = tag.match(/data-level="(\d)"/);
+    const id = tag.match(/id="([^"]+)"/);
+    if (!date || !level || !id) continue;
+    const count = tooltips.get(id[1]);
+    if (count === undefined) continue;
+    cells.push({ date: date[1], level: level[1], count });
+  }
+
+  if (cells.length < 300) return null;
+  cells.sort((a, b) => a.date.localeCompare(b.date));
+
+  return {
+    from: cells[0].date,
+    to: cells[cells.length - 1].date,
+    total: cells.reduce((sum, cell) => sum + cell.count, 0),
+    levels: cells.map((cell) => cell.level).join(''),
+    counts: cells.map((cell) => cell.count),
+  };
+}
+
+/**
+ * The contribution calendar, read at build time from the same public endpoint
+ * the profile page uses. GitHub's REST API does not expose it and the GraphQL
+ * one needs a token, so this is markup parsing: it can break on a redesign,
+ * which is why a failed or unrecognisable response falls back to the committed
+ * snapshot rather than throwing. The rendered caption always states the period
+ * the data covers, so a stale fallback is visible instead of silent.
+ */
+export async function loadContributions(): Promise<Contributions> {
+  try {
+    const response = await fetch(CALENDAR, {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      headers: { Accept: 'text/html' },
+    });
+    if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
+
+    const parsed = parseCalendar(await response.text());
+    if (!parsed) throw new Error('the calendar markup did not parse');
+    return parsed;
+  } catch (error) {
+    console.warn(`[github] contributions from snapshot: ${(error as Error).message}`);
+    return contributionsSnapshot as Contributions;
+  }
+}
+
+/**
+ * Dates are assembled from parts rather than format(), because the Russian
+ * short form appends a literal " г." that is noise in a column of dates.
+ */
+function joinParts(parts: Intl.DateTimeFormatPart[], wanted: Intl.DateTimeFormatPartTypes[]) {
+  return wanted
+    .map((type) => parts.find((part) => part.type === type)?.value ?? '')
+    .filter(Boolean)
+    .join(' ');
+}
+
+export function formatMonth(iso: string, locale: string): string {
+  const parts = new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).formatToParts(new Date(iso));
+  return joinParts(parts, ['month', 'year']);
+}
+
+export function formatDay(iso: string, locale: string): string {
+  const parts = new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).formatToParts(new Date(iso));
+  return joinParts(parts, ['day', 'month', 'year']);
+}

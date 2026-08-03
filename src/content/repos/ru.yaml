@@ -1,0 +1,16 @@
+entries:
+  - repo: afk4.net
+    title: AFK4
+    description: 'Облачная платформа для управления компьютерными клубами: клиент на рабочих местах, панель администратора и биллинг.'
+  - repo: mubi.dev
+    title: mubi.dev
+    description: Исходный код этого сайта. Astro, две локали, статическая сборка и тесты на доступность и печать.
+  - repo: RabbitFarm
+    title: RabbitFarm
+    description: 'Управление фермой: мобильное приложение на Flutter и REST API к нему.'
+  - repo: DuTaksim
+    title: DuTaksim
+    description: Приложение для деления счёта в кафе. Сделано для конкурса приложений Банка Эсхата.
+  - repo: Telegram-Bot-Ticket-Help-System
+    title: Ticket Help System
+    description: 'Телеграм-бот службы поддержки: заявки от клиентов, распределение по агентам и админ-панель.'

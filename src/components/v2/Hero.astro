@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import portrait from '../../assets/portrait.jpg';
+
+interface Props {
+  profile: {
+    name: string;
+    summary: string[];
+    now: { role: string; employer: string; location: string };
+    ctaLabel: string;
+  };
+  contact: { email: string; links: { label: string; url: string }[] };
+  lead: string;
+  printLabel: string;
+}
+
+const { profile, contact, lead, printLabel } = Astro.props;
+const socialIcons: Record<string, string> = {
+  GitHub: 'simple-icons:github',
+  LinkedIn: 'simple-icons:linkedin',
+  Telegram: 'simple-icons:telegram',
+};
+const role = [profile.now.role, profile.now.employer, profile.now.location].join(' · ');
+---
+
+<section id="home" class="v2-section v2-hero" aria-labelledby="v2-hero-title">
+  <div class="v2-hero__copy">
+    <h1 id="v2-hero-title">{profile.name}</h1>
+    <p class="v2-hero__role">{role}</p>
+    <p class="v2-hero__lead">{lead}</p>
+
+    <div class="v2-hero__summary">
+      {profile.summary.map((sentence) => <p>{sentence}</p>)}
+    </div>
+
+    <div class="v2-actions">
+      <a class="v2-button" data-testid="v2-hero-cta" href={`mailto:${contact.email}`}>
+        {profile.ctaLabel}
+        <Icon name="ph:arrow-up-right" size="16" aria-hidden="true" />
+      </a>
+      <div class="v2-social">
+        {
+          contact.links.map((link) => (
+            <a href={link.url} rel="me noopener" aria-label={link.label}>
+              <Icon name={socialIcons[link.label] ?? 'ph:link'} size="18" aria-hidden="true" />
+            </a>
+          ))
+        }
+        <button type="button" data-v2-print aria-label={printLabel}>
+          <Icon name="ph:printer" size="18" aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="v2-hero__portrait">
+    <!-- Wider than the 220px box on purpose: object-fit cover scales the image
+         to the taller side, so the browser needs more pixels than the box. -->
+    <Image src={portrait} alt={profile.name} widths={[400, 800]} sizes="400px" loading="eager" />
+  </div>
+</section>
+
+<script is:inline>
+  document
+    .querySelector('[data-v2-print]')
+    ?.addEventListener('click', () => window.print());
+</script>

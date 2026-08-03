@@ -1,0 +1,73 @@
+/**
+ * "Night shift" tokens. The base is a blue-cast slate rather than a neutral
+ * gray, and the single accent is sodium amber: the colour a monitoring panel
+ * uses for a degraded service, and the colour of a street lamp at 3am. Green
+ * is deliberately absent so the page never reads as a traffic-light dashboard.
+ */
+[data-v2],
+[data-v2][data-theme='dark'] {
+  --v2-bg: #0e1116;
+  --v2-surface: #171c24;
+  --v2-raised: #1f2530;
+  --v2-line: #2a313d;
+  --v2-line-strong: #3c4553;
+  --v2-text: #e8eaed;
+  --v2-muted: #98a2b3;
+  --v2-faint: #7c8798;
+  --v2-accent: #f2a33c;
+  --v2-accent-quiet: #6a4a1c;
+  --v2-on-accent: #0e1116;
+  --v2-focus: #f2a33c;
+  color-scheme: dark;
+}
+
+[data-v2][data-theme='light'] {
+  --v2-bg: #eef0f3;
+  --v2-surface: #e3e7ec;
+  --v2-raised: #f7f8fa;
+  --v2-line: #cdd3db;
+  --v2-line-strong: #aab3bf;
+  --v2-text: #11151b;
+  --v2-muted: #4a5563;
+  --v2-faint: #5c6878;
+  --v2-accent: #8f5200;
+  --v2-accent-quiet: #e5cfae;
+  --v2-on-accent: #ffffff;
+  --v2-focus: #8f5200;
+  color-scheme: light;
+}
+
+[data-v2] {
+  --v2-display: 'Martian Mono Variable', ui-monospace, SFMono-Regular, monospace;
+  --v2-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+
+  --v2-space-1: 4px;
+  --v2-space-2: 8px;
+  --v2-space-3: 12px;
+  --v2-space-4: 16px;
+  --v2-space-6: 24px;
+  --v2-space-8: 32px;
+  --v2-space-12: 48px;
+  --v2-space-16: 64px;
+  --v2-space-24: 96px;
+
+  /* the smallest comfortable target for a finger, applied to every control
+     that lives in the header */
+  --v2-tap: 44px;
+
+  --v2-radius: 4px;
+  --v2-radius-lg: 10px;
+
+  --v2-rail: 168px;
+  /* the inner metadata column shared by cases, track, and toolkit */
+  --v2-meta: 140px;
+  --v2-gutter: clamp(20px, 5vw, 56px);
+  --v2-shell: 1120px;
+  --v2-masthead: 60px;
+
+  --v2-dur-micro: 120ms;
+  --v2-dur-short: 220ms;
+  --v2-dur-draw: 520ms;
+  --v2-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --v2-ease-in: cubic-bezier(0.4, 0, 1, 1);
+}

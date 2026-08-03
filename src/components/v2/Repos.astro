@@ -1,0 +1,37 @@
+---
+import { Icon } from 'astro-icon/components';
+import { loadRepoFacts, formatMonth, type RepoFacts } from '../../lib/github';
+import type { Locale } from '../../lib/locale';
+
+interface Props {
+  locale: Locale;
+  entries: { repo: string; title: string; description: string }[];
+}
+
+const { locale, entries } = Astro.props;
+const facts = await loadRepoFacts();
+
+const rows = entries.map((entry) => {
+  const fact: RepoFacts | undefined = facts.get(entry.repo);
+  if (!fact) throw new Error(`no GitHub data for repository "${entry.repo}"`);
+  return { ...entry, ...fact, updated: formatMonth(fact.pushedAt, locale) };
+});
+---
+
+<ul class="v2-repos">
+  {
+    rows.map((row) => (
+      <li>
+        <a class="v2-repo" data-testid="v2-repo" href={row.url} rel="noopener">
+          <span class="v2-repo__name">{row.title}</span>
+          <span class="v2-repo__description">{row.description}</span>
+          <span class="v2-repo__meta">
+            {row.language && <span class="v2-repo__language">{row.language}</span>}
+            <span>{row.updated}</span>
+            <Icon name="ph:arrow-up-right" size="14" aria-hidden="true" />
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

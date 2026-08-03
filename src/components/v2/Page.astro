@@ -1,0 +1,79 @@
+---
+import Masthead from './Masthead.astro';
+import Hero from './Hero.astro';
+import Practice from './Practice.astro';
+import Cases from './Cases.astro';
+import Section from './Section.astro';
+import Track from './Track.astro';
+import Toolkit from './Toolkit.astro';
+import Repos from './Repos.astro';
+import Contributions from './Contributions.astro';
+import Contact from './Contact.astro';
+import { loadSitePage } from '../../lib/content';
+import type { Locale } from '../../lib/locale';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { profile, cases, experience, education, stack, contact, repos, ui, copy } =
+  await loadSitePage(locale);
+const year = 2026;
+---
+
+<a class="v2-skip" href="#main">{copy.skipToContent}</a>
+
+<Masthead locale={locale} mark={copy.mark} nav={copy.nav} controls={ui.controls} />
+
+<main id="main" class="v2-shell">
+  <Hero profile={profile} contact={contact} lead={copy.lead} printLabel={copy.printLabel} />
+
+  <Section id="practice" title={copy.sections.practice.title} rail={copy.sections.practice.rail}>
+    <Practice items={ui.capabilities.items} />
+  </Section>
+
+  <Section id="work" title={copy.sections.work.title} rail={copy.sections.work.rail}>
+    <Cases entries={cases.entries} labels={copy.caseLabels} />
+  </Section>
+
+  <Section id="track" title={copy.sections.track.title} rail={copy.sections.track.rail}>
+    <Track
+      entries={experience.entries}
+      printEntries={experience.printEntries}
+      education={education.entries}
+      educationTitle={copy.educationTitle}
+    />
+  </Section>
+
+  <Section id="toolkit" title={copy.sections.toolkit.title} rail={copy.sections.toolkit.rail}>
+    <Toolkit groups={stack.groups} />
+  </Section>
+
+  <Section id="code" title={copy.sections.code.title} rail={copy.sections.code.rail}>
+    <Contributions
+      locale={locale}
+      labels={copy.sections.code.contributions}
+      hint={copy.sections.code.calendarHint}
+    />
+    <Repos locale={locale} entries={repos.entries} />
+  </Section>
+
+  <Section id="contact" title={copy.sections.contact.title} rail={copy.sections.contact.rail}>
+    <Contact
+      contact={contact}
+      lead={copy.sections.contact.lead}
+      action={copy.sections.contact.action}
+      copyLabels={{
+        idle: copy.sections.contact.copy,
+        done: copy.sections.contact.copied,
+        failed: copy.sections.contact.copyFailed,
+      }}
+    />
+  </Section>
+
+  <div class="v2-foot">
+    <span>{copy.mark} · {year}</span>
+    <span>{profile.now.location}</span>
+  </div>
+</main>

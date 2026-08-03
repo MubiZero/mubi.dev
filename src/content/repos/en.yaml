@@ -1,0 +1,16 @@
+entries:
+  - repo: afk4.net
+    title: AFK4
+    description: 'A cloud platform for running computer clubs: a client on every machine, an admin panel, and billing.'
+  - repo: mubi.dev
+    title: mubi.dev
+    description: The source of this site. Astro, two locales, a static build, and tests for accessibility and print.
+  - repo: RabbitFarm
+    title: RabbitFarm
+    description: 'Farm management: a Flutter mobile app and the REST API behind it.'
+  - repo: DuTaksim
+    title: DuTaksim
+    description: An app for splitting a restaurant bill. Built for the Eskhata Bank app contest.
+  - repo: Telegram-Bot-Ticket-Help-System
+    title: Ticket Help System
+    description: 'A Telegram support bot: customer tickets, routing to agents, and an admin panel.'

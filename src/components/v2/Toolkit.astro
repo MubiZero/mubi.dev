@@ -1,0 +1,25 @@
+---
+interface Props {
+  groups: { label: string; items: string[] }[];
+}
+
+const { groups } = Astro.props;
+---
+
+<div class="v2-toolkit">
+  {
+    groups.map((group) => (
+      <div class="v2-toolkit__group">
+        <p class="v2-toolkit__label">{group.label}</p>
+        <p class="v2-toolkit__items">
+          {group.items.map((item, index) => (
+            <>
+              {index > 0 && <span aria-hidden="true"> · </span>}
+              <span class="v2-toolkit__item">{item}</span>
+            </>
+          ))}
+        </p>
+      </div>
+    ))
+  }
+</div>
