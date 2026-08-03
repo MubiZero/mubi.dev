@@ -204,10 +204,6 @@ describe('uiSchema', () => {
       lead: 'A short lead.',
       principle: 'A clear principle.',
     },
-    workspace: {
-      label: 'Workspace',
-      title: 'Tools I use',
-    },
     capabilities: {
       title: 'Capabilities',
       items: [
@@ -217,6 +213,7 @@ describe('uiSchema', () => {
       ],
     },
     labels: {
+      proof: 'Evidence',
       selectedWork: 'Selected work',
       journey: 'Journey',
       toolkit: 'Toolkit',

@@ -23,17 +23,19 @@ const socialIcons: Record<string, string> = {
     <p class="contact-lead">{lead}</p>
   </div>
 
-  <div data-testid="contact-links" class="contact-links">
+  <div class="contact-actions">
     <a data-testid="contact-email" class="button contact-email" href={`mailto:${contact.email}`}>
       <Icon name="ph:envelope" size="18" aria-hidden="true" />
       {contact.email}
     </a>
-    {
-      contact.links.map((link) => (
-        <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
-          <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
-        </a>
-      ))
-    }
+    <div data-testid="contact-links" class="contact-links">
+      {
+        contact.links.map((link) => (
+          <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
+            <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
+          </a>
+        ))
+      }
+    </div>
   </div>
 </section>

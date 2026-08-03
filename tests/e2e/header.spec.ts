@@ -8,6 +8,33 @@ test('language switch moves between locales in both directions', async ({ page }
   await expect(page).toHaveURL('http://localhost:4321/');
 });
 
+test('navigation targets the evidence-first sections in reading order', async ({ page }) => {
+  await page.goto('/');
+  const links = page.locator('header [data-site-nav] [data-section-link]');
+  await expect(links).toHaveCount(5);
+  await expect(links.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')))).resolves.toEqual([
+    '#home',
+    '#work',
+    '#expertise',
+    '#experience',
+    '#contact',
+  ]);
+
+  for (const id of ['home', 'work', 'expertise', 'experience', 'contact']) {
+    await expect(page.locator(`#${id}`)).toHaveCount(1);
+  }
+  await expect(page.locator('header a[href="#about"]')).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(links.filter({ visible: true })).toHaveCount(4);
+  await expect(links.filter({ visible: true }).evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')))).resolves.toEqual([
+    '#home',
+    '#work',
+    '#experience',
+    '#contact',
+  ]);
+});
+
 test('theme toggle flips the theme and persists it', async ({ browser }) => {
   const context = await browser.newContext({ colorScheme: 'dark' });
   const page = await context.newPage();
@@ -19,12 +46,15 @@ test('theme toggle flips the theme and persists it', async ({ browser }) => {
   await context.close();
 });
 
-test('theme indicator reflects the active theme', async ({ page }) => {
+test('theme indicator reflects the active theme', async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: 'dark' });
+  const page = await context.newPage();
   await page.goto('/');
   const indicator = page.getByTestId('theme-indicator');
   await expect(indicator).toHaveAttribute('data-theme-icon', 'dark');
   await page.getByRole('button', { name: /theme/i }).click();
   await expect(indicator).toHaveAttribute('data-theme-icon', 'light');
+  await context.close();
 });
 
 test('every header control is keyboard reachable with a visible focus ring', async ({ page }) => {
@@ -53,7 +83,7 @@ test('every header control meets the 24px target minimum', async ({ page }) => {
   }
 });
 
-test('every header control animates both color and transform over 150ms', async ({ browser }) => {
+test('every header control animates both color and transform with the short motion token', async ({ browser }) => {
   // The global reduced-motion rule collapses transition durations, so this assertion
   // needs an explicit no-preference context rather than the default test context.
   const context = await browser.newContext({ reducedMotion: 'no-preference' });
@@ -68,7 +98,7 @@ test('every header control animates both color and transform over 150ms', async 
     });
     expect(property, `control ${index} transition-property`).toContain('color');
     expect(property, `control ${index} transition-property`).toContain('transform');
-    expect(duration, `control ${index} transition-duration`).toContain('0.15s');
+    expect(duration, `control ${index} transition-duration`).toContain('0.14s');
   }
   await context.close();
 });

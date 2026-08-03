@@ -14,6 +14,15 @@ test('cases use a description list so label and value are associated', async ({ 
   await expect(page.getByTestId('case-entry').first().locator('dt')).toHaveCount(3);
 });
 
+test('case outcomes stay visible while supporting evidence uses native disclosure', async ({ page }) => {
+  await page.goto('/');
+  const firstCase = page.getByTestId('case-entry').first();
+  await expect(firstCase.getByText('A server is ready in about 30 minutes', { exact: false })).toBeVisible();
+  await expect(firstCase.locator('details')).toHaveCount(1);
+  await expect(firstCase.locator('details')).not.toHaveAttribute('open', '');
+  await expect(firstCase.locator('details summary')).toContainText('Read the full story');
+});
+
 test('Russian cases use translated labels', async ({ page }) => {
   await page.goto('/ru/');
   await expect(page.getByTestId('case-entry').first()).toContainText('Проблема');

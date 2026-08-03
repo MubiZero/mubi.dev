@@ -1,11 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-test('hero states the name, the man line, and the stack', async ({ page }) => {
+test('hero states the name and current man line while the page exposes the stack', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mubinjon Mukhamedov');
-  await expect(
-    page.getByText('mubi - infrastructure engineer and product developer'),
-  ).toBeVisible();
+  await expect(page.getByText('Infrastructure engineer and product developer')).toBeVisible();
   await expect(page.getByText('Linux', { exact: false }).first()).toBeVisible();
 });
 
@@ -19,10 +17,18 @@ test('hero has exactly one primary call to action pointing at mailto', async ({ 
 test('hero secondary links use HTTPS profile URLs', async ({ page }) => {
   await page.goto('/');
   const links = page.getByTestId('hero-secondary').locator('a');
-  expect(await links.count()).toBeGreaterThanOrEqual(2);
+  await expect(links).toHaveCount(3);
   for (let index = 0; index < (await links.count()); index += 1) {
     await expect(links.nth(index)).toHaveAttribute('href', /^https:\/\//);
   }
+});
+
+test('verified proof follows the hero before selected work', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByTestId('proof-item')).toHaveCount(3);
+  await expect(page.locator('main > section').nth(1)).toHaveAttribute('id', 'proof');
+  await expect(page.locator('main > section').nth(2)).toHaveAttribute('id', 'work');
+  await expect(page.locator('.workspace-module')).toHaveCount(0);
 });
 
 test('the page has exactly one h1', async ({ page }) => {

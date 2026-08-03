@@ -7,19 +7,25 @@ interface Props {
 }
 
 const { groups, label } = Astro.props;
-const items = groups.flatMap((group) => group.items);
 ---
 
 <section id="stack" class="module stack-module" aria-labelledby="stack-title">
-  <span class="module-label" id="stack-title">{label}</span>
-  <ul class="stack-rail">
+  <h2 id="stack-title" class="section-title">{label}</h2>
+  <div class="stack-groups">
     {
-      items.map((item) => (
-        <li class="stack-chip">
-          <TechIcon name={item} />
-          <span>{item}</span>
-        </li>
+      groups.map((group, index) => (
+        <section data-testid="stack-group" class="stack-group" aria-labelledby={`stack-group-${index}`}>
+          <h3 id={`stack-group-${index}`} class="stack-group-title">{group.label}</h3>
+          <ul class="stack-list">
+            {group.items.map((item) => (
+              <li class="stack-item">
+                <TechIcon name={item} />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
       ))
     }
-  </ul>
+  </div>
 </section>

@@ -28,9 +28,6 @@ about:
   title: I build things that run reliably and make sense.
   lead: I work across infrastructure and product development, turning repetitive operations into systems that teams can trust.
   principle: Make complex work calmer, clearer, and easier to operate.
-workspace:
-  label: My workspace
-  title: The tools I use to keep systems reliable and ship products.
 capabilities:
   title: What I do
   items:
@@ -41,6 +38,7 @@ capabilities:
     - title: Build useful products
       description: Develop web and mobile tools with Go, Flutter, Angular, and .NET.
 labels:
+  proof: Evidence
   selectedWork: Selected work
   journey: Journey
   toolkit: Tools and technologies

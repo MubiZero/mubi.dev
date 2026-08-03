@@ -10,8 +10,10 @@ const { toDark, toLight } = Astro.props;
 ---
 
 <button type="button" id="theme-toggle" class="icon-button" data-to-dark={toDark} data-to-light={toLight}>
-  <Icon name="ph:sun" class="theme-icon theme-icon--sun" size="19" aria-hidden="true" />
-  <Icon name="ph:moon" class="theme-icon theme-icon--moon" size="19" aria-hidden="true" />
+  <span data-testid="theme-indicator" data-theme-icon="dark">
+    <Icon name="ph:sun" class="theme-icon theme-icon--sun" size="19" aria-hidden="true" />
+    <Icon name="ph:moon" class="theme-icon theme-icon--moon" size="19" aria-hidden="true" />
+  </span>
 </button>
 
 <script is:inline>
@@ -21,6 +23,7 @@ const { toDark, toLight } = Astro.props;
     if (!toggle) return;
     const isDark = document.documentElement.dataset.theme === 'dark';
     toggle.setAttribute('aria-label', isDark ? toggle.dataset.toLight : toggle.dataset.toDark);
+    toggle.querySelector('[data-theme-icon]')?.setAttribute('data-theme-icon', isDark ? 'dark' : 'light');
   };
 
   toggle?.addEventListener('click', () => {

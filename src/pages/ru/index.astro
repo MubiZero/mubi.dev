@@ -2,8 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Hero from '../../components/Hero.astro';
-import Workspace from '../../components/Workspace.astro';
-import About from '../../components/About.astro';
+import Proof from '../../components/Proof.astro';
 import Capabilities from '../../components/Capabilities.astro';
 import Cases from '../../components/Cases.astro';
 import Experience from '../../components/Experience.astro';
@@ -18,20 +17,15 @@ const page = await loadPage('ru');
 <BaseLayout locale="ru" ui={page.ui} profile={page.profile} contact={page.contact}>
   <Header locale="ru" controls={page.ui.controls} navigation={page.ui.navigation} skipToContent={page.ui.labels.skipToContent} />
   <main id="main-content" class="site-main">
-    <div class="hero-grid">
-      <Hero profile={page.profile} contact={page.contact} />
-      <Workspace groups={page.stack.groups} label={page.ui.workspace.label} title={page.ui.workspace.title} />
-    </div>
-    <div class="intro-grid">
-      <About label={page.ui.navigation.about} title={page.ui.about.title} lead={page.ui.about.lead} principle={page.ui.about.principle} summary={page.profile.summary} />
-      <Stack groups={page.stack.groups} label={page.ui.labels.toolkit} />
-    </div>
-    <Capabilities label={page.ui.navigation.expertise} title={page.ui.capabilities.title} items={page.ui.capabilities.items} />
+    <Hero profile={page.profile} contact={page.contact} />
+    <Proof items={page.profile.proof} sectionLabel={page.ui.labels.proof} />
     <Cases entries={page.cases.entries} sectionLabel={page.ui.labels.selectedWork} labels={page.ui.caseLabels} openDetails={page.ui.labels.openDetails} />
+    <Capabilities label={page.ui.navigation.expertise} title={page.ui.capabilities.title} items={page.ui.capabilities.items} />
     <div class="journey-grid">
       <Experience entries={page.experience.entries} printEntries={page.experience.printEntries} sectionLabel={page.ui.labels.journey} />
       <Education entries={page.education.entries} sectionLabel={page.ui.labels.education} />
     </div>
+    <Stack groups={page.stack.groups} label={page.ui.labels.toolkit} />
     <Contact contact={page.contact} sectionLabel={page.ui.sections.contact} title={page.ui.labels.contactTitle} lead={page.ui.labels.contactLead} />
   </main>
 </BaseLayout>

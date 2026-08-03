@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 test('stack renders grouped technologies without proficiency indicators', async ({ page }) => {
   await page.goto('/');
   const groups = page.getByTestId('stack-group');
-  expect(await groups.count()).toBeGreaterThanOrEqual(2);
+  await expect(groups).toHaveCount(4);
+  await expect(groups.nth(0)).toContainText('infrastructure');
   await expect(groups.first()).toContainText('Docker');
   await expect(page.locator('progress, [role="progressbar"], meter')).toHaveCount(0);
   await expect(groups.first()).not.toContainText('%');

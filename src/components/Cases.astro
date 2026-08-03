@@ -13,13 +13,17 @@ const { entries, sectionLabel, labels, openDetails } = Astro.props;
   <span class="module-label">{sectionLabel}</span>
   <h2 id="work-title" class="section-title">{sectionLabel}</h2>
 
-  <div class="case-grid">
+  <div class="case-list">
     {
       entries.map((entry) => (
-        <article data-testid="case-entry" class="case-card">
-          <span class="module-label">{labels.result}</span>
+        <article data-testid="case-entry" class="case-entry">
           <h3>{entry.title}</h3>
-          <p class="case-result">{entry.result}</p>
+          <dl class="case-outcome">
+            <div>
+              <dt>{labels.result}</dt>
+              <dd class="case-result">{entry.result}</dd>
+            </div>
+          </dl>
           <details>
             <summary>{openDetails}</summary>
             <dl class="case-details">

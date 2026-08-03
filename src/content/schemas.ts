@@ -119,15 +119,12 @@ export const uiSchema = z.object({
     lead: nonEmpty,
     principle: nonEmpty,
   }),
-  workspace: z.object({
-    label: nonEmpty,
-    title: nonEmpty,
-  }),
   capabilities: z.object({
     title: nonEmpty,
     items: z.array(z.object({ title: nonEmpty, description: nonEmpty })).length(3),
   }),
   labels: z.object({
+    proof: nonEmpty,
     selectedWork: nonEmpty,
     journey: nonEmpty,
     toolkit: nonEmpty,

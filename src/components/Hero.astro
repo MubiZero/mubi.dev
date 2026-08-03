@@ -35,12 +35,14 @@ const socialIcons: Record<string, string> = {
       {profile.ctaLabel}
       <Icon name="ph:arrow-up-right" size="18" aria-hidden="true" />
     </a>
-    {
-      contact.links.map((link) => (
-        <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
-          <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
-        </a>
-      ))
-    }
+    <div data-testid="hero-secondary" class="hero-secondary">
+      {
+        contact.links.map((link) => (
+          <a class="social-link" href={link.url} rel="me noopener" aria-label={link.label}>
+            <Icon name={socialIcons[link.label] ?? 'ph:link'} size="20" aria-hidden="true" />
+          </a>
+        ))
+      }
+    </div>
   </div>
 </section>
