@@ -15,6 +15,11 @@ describe('profileSchema', () => {
     manLine: 'mubi - infrastructure engineer and product developer',
     summary: ['First sentence.', 'Second sentence.'],
     inlineStack: ['Linux', 'Docker'],
+    proof: [
+      { value: '30 min', label: 'server provisioning' },
+      { value: '50+', label: 'branches monitored' },
+      { value: '1 min', label: 'first incident response' },
+    ],
     ctaLabel: 'Get in touch',
   };
 
@@ -29,6 +34,10 @@ describe('profileSchema', () => {
   it('rejects a profile missing the man line', () => {
     const { manLine, ...withoutManLine } = valid;
     expect(() => profileSchema.parse(withoutManLine)).toThrow();
+  });
+
+  it('rejects a profile with fewer than three proof points', () => {
+    expect(() => profileSchema.parse({ ...valid, proof: valid.proof.slice(0, 2) })).toThrow();
   });
 });
 

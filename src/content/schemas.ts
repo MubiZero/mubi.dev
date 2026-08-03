@@ -7,6 +7,7 @@ export const profileSchema = z.object({
   manLine: nonEmpty,
   summary: z.array(nonEmpty).min(1).max(3),
   inlineStack: z.array(nonEmpty).min(1),
+  proof: z.array(z.object({ value: nonEmpty, label: nonEmpty })).length(3),
   ctaLabel: nonEmpty,
 });
 
