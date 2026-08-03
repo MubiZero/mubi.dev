@@ -38,41 +38,41 @@ function contrast(a: string, b: string): number {
 }
 
 describe('dark theme', () => {
-  const bg = token(":root, [data-theme='dark']", '--bg');
+  const bg = token("[data-theme='dark']", '--bg');
 
   it('primary text meets 4.5:1', () => {
-    expect(contrast(token(":root, [data-theme='dark']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token("[data-theme='dark']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('secondary text meets 4.5:1', () => {
-    expect(contrast(token(":root, [data-theme='dark']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token("[data-theme='dark']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('accent text meets 4.5:1', () => {
-    expect(contrast(token(":root, [data-theme='dark']", '--accent-text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token("[data-theme='dark']", '--accent-strong'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('focus ring meets 3:1 as non-text UI', () => {
-    expect(contrast(token(":root, [data-theme='dark']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
+    expect(contrast(token("[data-theme='dark']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
   });
 });
 
 describe('light theme', () => {
-  const bg = token("[data-theme='light']", '--bg');
+  const bg = token(":root,\n[data-theme='light']", '--bg');
 
   it('primary text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='light']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(":root,\n[data-theme='light']", '--text'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('secondary text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='light']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(":root,\n[data-theme='light']", '--text-muted'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('accent text meets 4.5:1', () => {
-    expect(contrast(token("[data-theme='light']", '--accent-text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(":root,\n[data-theme='light']", '--accent-strong'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('focus ring meets 3:1 as non-text UI', () => {
-    expect(contrast(token("[data-theme='light']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
+    expect(contrast(token(":root,\n[data-theme='light']", '--focus'), bg)).toBeGreaterThanOrEqual(3);
   });
 });

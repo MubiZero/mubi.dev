@@ -181,6 +181,42 @@ describe('uiSchema', () => {
       switchToLight: 'Switch to light theme',
       otherLanguageName: 'Русский',
     },
+    navigation: {
+      label: 'Navigation',
+      home: 'Home',
+      about: 'About',
+      expertise: 'Expertise',
+      work: 'Work',
+      experience: 'Experience',
+      contact: 'Contact',
+    },
+    about: {
+      title: 'About',
+      lead: 'A short lead.',
+      principle: 'A clear principle.',
+    },
+    workspace: {
+      label: 'Workspace',
+      title: 'Tools I use',
+    },
+    capabilities: {
+      title: 'Capabilities',
+      items: [
+        { title: 'Build', description: 'Build systems.' },
+        { title: 'Run', description: 'Run platforms.' },
+        { title: 'Improve', description: 'Improve products.' },
+      ],
+    },
+    labels: {
+      selectedWork: 'Selected work',
+      journey: 'Journey',
+      toolkit: 'Toolkit',
+      education: 'Education',
+      contactTitle: 'Get in touch',
+      contactLead: 'Start a conversation.',
+      openDetails: 'Open details',
+      skipToContent: 'Skip to content',
+    },
   };
 
   it('accepts a complete ui object', () => {
