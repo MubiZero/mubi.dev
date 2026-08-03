@@ -40,7 +40,7 @@ for (const path of paths) {
       document.documentElement.style.fontSize = '32px';
     });
 
-    const skipLink = page.locator('.v2-skip');
+    const skipLink = page.locator('.skip');
     await skipLink.focus();
     const focusBounds = await skipLink.evaluate((node) => {
       const rect = node.getBoundingClientRect();
@@ -78,7 +78,7 @@ test('focusing the final contact link keeps it clear of sticky UI', async ({ pag
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  const contact = page.getByTestId('v2-contact-mail');
+  const contact = page.getByTestId('contact-mail');
   await contact.focus();
   const obscured = await contact.evaluate((node) => {
     const rect = node.getBoundingClientRect();

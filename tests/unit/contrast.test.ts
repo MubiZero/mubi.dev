@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const css = readFileSync('src/styles/v2/tokens.css', 'utf8');
+const css = readFileSync('src/styles/tokens.css', 'utf8');
 
 function block(selector: string): string {
   const start = css.indexOf(selector);
@@ -36,36 +36,36 @@ function contrast(a: string, b: string): number {
 }
 
 const THEMES = [
-  { name: 'night shift', selector: "[data-v2],\n[data-v2][data-theme='dark']" },
-  { name: 'day shift', selector: "[data-v2][data-theme='light']" },
+  { name: 'night shift', selector: ":root,\n:root[data-theme='dark']" },
+  { name: 'day shift', selector: ":root[data-theme='light']" },
 ] as const;
 
 describe.each(THEMES)('$name palette', ({ selector }) => {
-  const bg = token(selector, '--v2-bg');
+  const bg = token(selector, '--bg');
 
   it('primary text meets 4.5:1', () => {
-    expect(contrast(token(selector, '--v2-text'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--text'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('secondary text meets 4.5:1', () => {
-    expect(contrast(token(selector, '--v2-muted'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--muted'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('the faintest text still meets 4.5:1', () => {
-    expect(contrast(token(selector, '--v2-faint'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--faint'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('the accent meets 4.5:1, because it carries the measured values', () => {
-    expect(contrast(token(selector, '--v2-accent'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token(selector, '--accent'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('text on the accent button meets 4.5:1', () => {
     expect(
-      contrast(token(selector, '--v2-on-accent'), token(selector, '--v2-accent')),
+      contrast(token(selector, '--on-accent'), token(selector, '--accent')),
     ).toBeGreaterThanOrEqual(4.5);
   });
 
   it('the focus ring meets 3:1 as non-text UI', () => {
-    expect(contrast(token(selector, '--v2-focus'), bg)).toBeGreaterThanOrEqual(3);
+    expect(contrast(token(selector, '--focus'), bg)).toBeGreaterThanOrEqual(3);
   });
 });

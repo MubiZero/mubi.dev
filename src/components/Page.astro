@@ -9,8 +9,8 @@ import Toolkit from './Toolkit.astro';
 import Repos from './Repos.astro';
 import Contributions from './Contributions.astro';
 import Contact from './Contact.astro';
-import { loadSitePage } from '../../lib/content';
-import type { Locale } from '../../lib/locale';
+import { loadSitePage } from '../lib/content';
+import type { Locale } from '../lib/locale';
 
 interface Props {
   locale: Locale;
@@ -22,11 +22,11 @@ const { profile, cases, experience, education, stack, contact, repos, ui, copy }
 const year = 2026;
 ---
 
-<a class="v2-skip" href="#main">{copy.skipToContent}</a>
+<a class="skip" href="#main">{copy.skipToContent}</a>
 
 <Masthead locale={locale} mark={copy.mark} nav={copy.nav} controls={ui.controls} />
 
-<main id="main" class="v2-shell">
+<main id="main" class="shell">
   <Hero profile={profile} contact={contact} lead={copy.lead} printLabel={copy.printLabel} />
 
   <Section id="practice" title={copy.sections.practice.title} rail={copy.sections.practice.rail}>
@@ -72,7 +72,7 @@ const year = 2026;
     />
   </Section>
 
-  <div class="v2-foot">
+  <div class="foot">
     <span>{copy.mark} · {year}</span>
     <span>{profile.now.location}</span>
   </div>

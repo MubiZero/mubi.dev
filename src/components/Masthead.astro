@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { localizedPath, type Locale } from '../../lib/locale';
+import { localizedPath, type Locale } from '../lib/locale';
 
 interface Props {
   locale: Locale;
@@ -38,22 +38,22 @@ const items = [
 ];
 ---
 
-<header class="v2-masthead">
-  <div class="v2-masthead__inner">
-    <a class="v2-mark" href="#home">{mark}</a>
+<header class="masthead">
+  <div class="masthead__inner">
+    <a class="mark" href="#home">{mark}</a>
 
-    <nav aria-label={nav.label} data-v2-nav>
+    <nav aria-label={nav.label} data-nav>
       {
         items.map((item) => (
-          <a class="v2-navlink" href={`#${item.id}`} data-v2-section-link={item.id}>
+          <a class="navlink" href={`#${item.id}`} data-section-link={item.id}>
             {item.label}
           </a>
         ))
       }
     </nav>
 
-    <div class="v2-controls">
-      <span class="v2-lang" aria-label={controls.switchLanguage}>
+    <div class="controls">
+      <span class="lang" aria-label={controls.switchLanguage}>
         {
           languages.map((code) =>
             code === locale ? (
@@ -73,15 +73,15 @@ const items = [
 
       <button
         type="button"
-        id="v2-theme-toggle"
-        class="v2-iconbutton"
+        id="theme-toggle"
+        class="iconbutton"
         data-to-dark={controls.switchToDark}
         data-to-light={controls.switchToLight}
       >
-        <Icon name="ph:sun" class="v2-theme-icon v2-theme-icon--sun" size="18" aria-hidden="true" />
+        <Icon name="ph:sun" class="theme-icon theme-icon--sun" size="18" aria-hidden="true" />
         <Icon
           name="ph:moon"
-          class="v2-theme-icon v2-theme-icon--moon"
+          class="theme-icon theme-icon--moon"
           size="18"
           aria-hidden="true"
         />
@@ -91,11 +91,11 @@ const items = [
 
   <!-- How far through the page you are, on the one edge already dividing the
        header from the content. It reports position, so it carries no label. -->
-  <span class="v2-progress" data-v2-progress aria-hidden="true"></span>
+  <span class="progress" data-progress aria-hidden="true"></span>
 </header>
 
 <script is:inline>
-  const toggle = document.getElementById('v2-theme-toggle');
+  const toggle = document.getElementById('theme-toggle');
 
   const renderToggle = () => {
     if (!toggle) return;
@@ -153,20 +153,20 @@ const items = [
   // The sections live further down the document than this script, so wait for
   // the parser to finish before looking them up.
   const initializeSectionNavigation = () => {
-  const links = [...document.querySelectorAll('[data-v2-section-link]')];
+  const links = [...document.querySelectorAll('[data-section-link]')];
   const sections = links
-    .map((link) => document.getElementById(link.dataset.v2SectionLink))
+    .map((link) => document.getElementById(link.dataset.sectionLink))
     .filter(Boolean);
 
   const setCurrent = (id) => {
     links.forEach((link) => {
-      if (link.dataset.v2SectionLink === id) link.setAttribute('aria-current', 'location');
+      if (link.dataset.sectionLink === id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   };
 
   links.forEach((link) => {
-    link.addEventListener('click', () => setCurrent(link.dataset.v2SectionLink));
+    link.addEventListener('click', () => setCurrent(link.dataset.sectionLink));
   });
 
   if (sections.length && 'IntersectionObserver' in window) {
@@ -197,7 +197,7 @@ const items = [
   }
 
   (() => {
-    const bar = document.querySelector('[data-v2-progress]');
+    const bar = document.querySelector('[data-progress]');
     if (!bar) return;
 
     let queued = false;

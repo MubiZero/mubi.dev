@@ -13,10 +13,10 @@ interface Props {
 const { entries, labels } = Astro.props;
 ---
 
-<div class="v2-cases">
+<div class="cases">
   {
     entries.map((entry) => (
-      <article id={`case-${entry.id}`} class="v2-case" data-testid="v2-case">
+      <article id={`case-${entry.id}`} class="case" data-testid="case">
         <h3>{entry.title}</h3>
 
         <dl>
@@ -25,7 +25,7 @@ const { entries, labels } = Astro.props;
           <dt>{labels.action}</dt>
           <dd>{entry.action}</dd>
           <dt>{labels.result}</dt>
-          <dd class="v2-case__result">{entry.result}</dd>
+          <dd class="case__result">{entry.result}</dd>
         </dl>
       </article>
     ))
@@ -33,9 +33,9 @@ const { entries, labels } = Astro.props;
 </div>
 
 <style>
-  .v2-cases {
+  .cases {
     display: flex;
     flex-direction: column;
-    gap: var(--v2-space-12);
+    gap: var(--space-12);
   }
 </style>

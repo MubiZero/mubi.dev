@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { loadRepoFacts, formatMonth, type RepoFacts } from '../../lib/github';
-import type { Locale } from '../../lib/locale';
+import { loadRepoFacts, formatMonth, type RepoFacts } from '../lib/github';
+import type { Locale } from '../lib/locale';
 
 interface Props {
   locale: Locale;
@@ -18,15 +18,15 @@ const rows = entries.map((entry) => {
 });
 ---
 
-<ul class="v2-repos">
+<ul class="repos">
   {
     rows.map((row) => (
       <li>
-        <a class="v2-repo" data-testid="v2-repo" href={row.url} rel="noopener">
-          <span class="v2-repo__name">{row.title}</span>
-          <span class="v2-repo__description">{row.description}</span>
-          <span class="v2-repo__meta">
-            {row.language && <span class="v2-repo__language">{row.language}</span>}
+        <a class="repo" data-testid="repo" href={row.url} rel="noopener">
+          <span class="repo__name">{row.title}</span>
+          <span class="repo__description">{row.description}</span>
+          <span class="repo__meta">
+            {row.language && <span class="repo__language">{row.language}</span>}
             <span>{row.updated}</span>
             <Icon name="ph:arrow-up-right" size="14" aria-hidden="true" />
           </span>

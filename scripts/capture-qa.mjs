@@ -44,7 +44,7 @@ try {
 
     await page.screenshot({ path: resolve(outputDirectory, `${locale}-320-200-top.png`) });
 
-    const skipLink = page.locator('.v2-skip');
+    const skipLink = page.locator('.skip');
     await skipLink.focus();
     await skipLink.evaluate((element) =>
       Promise.all(element.getAnimations().map((animation) => animation.finished)),
@@ -56,7 +56,7 @@ try {
     // The section nav is hidden at this width by design, so contact is reached
     // by its anchor rather than by a control that is not on screen.
     await page.locator('#contact').scrollIntoViewIfNeeded();
-    await page.locator('[data-v2-copy]').focus();
+    await page.locator('[data-copy]').focus();
     await page.screenshot({ path: resolve(outputDirectory, `${locale}-320-200-contact.png`) });
     await page.close();
   }

@@ -11,7 +11,7 @@ async function section<
     | 'contact'
     | 'repos'
     | 'ui'
-    | 'v2',
+    | 'copy',
 >(collection: T, locale: Locale) {
   const entry = await getEntry(collection, locale);
   if (!entry) throw new Error(`missing ${collection} data for locale ${locale}`);
@@ -28,7 +28,7 @@ export async function loadSitePage(locale: Locale) {
       section('stack', locale),
       section('contact', locale),
       section('ui', locale),
-      section('v2', locale),
+      section('copy', locale),
       section('repos', locale),
     ]);
   return { profile, experience, education, cases, stack, contact, ui, copy, repos };

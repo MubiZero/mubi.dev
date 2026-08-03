@@ -16,17 +16,17 @@ interface Props {
 const { entries, printEntries, education, educationTitle } = Astro.props;
 ---
 
-<div class="v2-track">
-  <div class="v2-track__screen">
+<div class="track">
+  <div class="track__screen">
     {
       entries.map((entry) => (
-        <article class="v2-track__entry" data-testid="v2-track-entry">
-          <p class="v2-track__period">{entry.period}</p>
+        <article class="track__entry" data-testid="track-entry">
+          <p class="track__period">{entry.period}</p>
           <div>
-            <p class="v2-track__role">{entry.role}</p>
-            <p class="v2-track__employer">{entry.employer}</p>
+            <p class="track__role">{entry.role}</p>
+            <p class="track__employer">{entry.employer}</p>
           </div>
-          <div class="v2-track__lines">
+          <div class="track__lines">
             {entry.lines.map((line) => (
               <p>{line}</p>
             ))}
@@ -38,16 +38,16 @@ const { entries, printEntries, education, educationTitle } = Astro.props;
 
   {/* The condensed history exists only for the printed resume, where the full
       screen version would not leave room for education, stack, and contacts. */}
-  <div class="v2-track__print">
+  <div class="track__print">
     {
       printEntries.map((entry) => (
-        <article class="v2-track__entry">
-          <p class="v2-track__period">{entry.period}</p>
+        <article class="track__entry">
+          <p class="track__period">{entry.period}</p>
           <div>
-            <p class="v2-track__role">{entry.role}</p>
-            <p class="v2-track__employer">{entry.employer}</p>
+            <p class="track__role">{entry.role}</p>
+            <p class="track__employer">{entry.employer}</p>
           </div>
-          <div class="v2-track__lines">
+          <div class="track__lines">
             {entry.lines.map((line) => (
               <p>{line}</p>
             ))}
@@ -57,17 +57,17 @@ const { entries, printEntries, education, educationTitle } = Astro.props;
     }
   </div>
 
-  <div class="v2-education">
+  <div class="education">
     <h3>{educationTitle}</h3>
     {
       education.map((entry) => (
-        <article class="v2-track__entry">
-          <p class="v2-track__period">{entry.period}</p>
+        <article class="track__entry">
+          <p class="track__period">{entry.period}</p>
           <div>
-            <p class="v2-track__role">{entry.degree}</p>
-            <p class="v2-track__employer">{entry.institution}</p>
+            <p class="track__role">{entry.degree}</p>
+            <p class="track__employer">{entry.institution}</p>
             {entry.details.length > 0 && (
-              <p class="v2-track__period">{entry.details.join(' · ')}</p>
+              <p class="track__period">{entry.details.join(' · ')}</p>
             )}
           </div>
         </article>

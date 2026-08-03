@@ -3,13 +3,13 @@ import { glob } from 'astro/loaders';
 import {
   casesSchema,
   contactSchema,
+  copySchema,
   educationSchema,
   experienceSchema,
   profileSchema,
   reposSchema,
   stackSchema,
   uiSchema,
-  v2Schema,
 } from './content/schemas';
 
 function localeCollection(directory: string, schema: Parameters<typeof defineCollection>[0]['schema']) {
@@ -28,5 +28,5 @@ export const collections = {
   contact: localeCollection('contact', contactSchema),
   repos: localeCollection('repos', reposSchema),
   ui: localeCollection('ui', uiSchema),
-  v2: localeCollection('v2', v2Schema),
+  copy: localeCollection('copy', copySchema),
 };

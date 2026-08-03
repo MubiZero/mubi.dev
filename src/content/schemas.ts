@@ -105,7 +105,7 @@ export const contactSchema = z.object({
   ),
 });
 
-export const v2Schema = z.object({
+export const copySchema = z.object({
   mark: nonEmpty,
   lead: nonEmpty,
   nav: z.object({

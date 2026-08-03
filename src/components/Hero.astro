@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import portrait from '../../assets/portrait.jpg';
+import portrait from '../assets/portrait.jpg';
 
 interface Props {
   profile: {
@@ -24,22 +24,22 @@ const socialIcons: Record<string, string> = {
 const role = [profile.now.role, profile.now.employer, profile.now.location].join(' · ');
 ---
 
-<section id="home" class="v2-section v2-hero" aria-labelledby="v2-hero-title">
-  <div class="v2-hero__copy">
-    <h1 id="v2-hero-title">{profile.name}</h1>
-    <p class="v2-hero__role">{role}</p>
-    <p class="v2-hero__lead">{lead}</p>
+<section id="home" class="section hero" aria-labelledby="hero-title">
+  <div class="hero__copy">
+    <h1 id="hero-title">{profile.name}</h1>
+    <p class="hero__role">{role}</p>
+    <p class="hero__lead">{lead}</p>
 
-    <div class="v2-hero__summary">
+    <div class="hero__summary">
       {profile.summary.map((sentence) => <p>{sentence}</p>)}
     </div>
 
-    <div class="v2-actions">
-      <a class="v2-button" data-testid="v2-hero-cta" href={`mailto:${contact.email}`}>
+    <div class="actions">
+      <a class="button" data-testid="hero-cta" href={`mailto:${contact.email}`}>
         {profile.ctaLabel}
         <Icon name="ph:arrow-up-right" size="16" aria-hidden="true" />
       </a>
-      <div class="v2-social">
+      <div class="social">
         {
           contact.links.map((link) => (
             <a href={link.url} rel="me noopener" aria-label={link.label}>
@@ -47,14 +47,14 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
             </a>
           ))
         }
-        <button type="button" data-v2-print aria-label={printLabel}>
+        <button type="button" data-print aria-label={printLabel}>
           <Icon name="ph:printer" size="18" aria-hidden="true" />
         </button>
       </div>
     </div>
   </div>
 
-  <div class="v2-hero__portrait">
+  <div class="hero__portrait">
     <!-- Wider than the 220px box on purpose: object-fit cover scales the image
          to the taller side, so the browser needs more pixels than the box. -->
     <Image src={portrait} alt={profile.name} widths={[400, 800]} sizes="400px" loading="eager" />
@@ -63,6 +63,6 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
 
 <script is:inline>
   document
-    .querySelector('[data-v2-print]')
+    .querySelector('[data-print]')
     ?.addEventListener('click', () => window.print());
 </script>

@@ -1,6 +1,6 @@
 ---
-import { loadContributions, formatDay } from '../../lib/github';
-import type { Locale } from '../../lib/locale';
+import { loadContributions, formatDay } from '../lib/github';
+import type { Locale } from '../lib/locale';
 
 interface Props {
   locale: Locale;
@@ -85,21 +85,21 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
 )}`;
 ---
 
-<figure class="v2-calendar" data-testid="v2-calendar">
+<figure class="calendar" data-testid="calendar">
   <!-- The scroller itself is focusable and named: a region you can only reach
        by dragging is unreachable from a keyboard. Once focused it also becomes
        the single tab stop from which the arrow keys walk the days, so reading
        the data never costs three hundred presses of Tab. -->
   <div
-    class="v2-calendar__scroll"
-    data-v2-calendar
+    class="calendar__scroll"
+    data-calendar
     tabindex="0"
     role="group"
     aria-label={`${countText}. ${range}`}
-    aria-describedby="v2-calendar-hint"
+    aria-describedby="calendar-hint"
   >
-    <div class="v2-calendar__inner" style={`--weeks:${weeks.length}`}>
-      <div class="v2-calendar__months" aria-hidden="true">
+    <div class="calendar__inner" style={`--weeks:${weeks.length}`}>
+      <div class="calendar__months" aria-hidden="true">
         {
           visibleMonths.map((month) => (
             <span style={`grid-column:${month.start} / span ${month.span}`}>{month.text}</span>
@@ -107,15 +107,15 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
         }
       </div>
 
-      <div class="v2-calendar__grid" aria-hidden="true">
+      <div class="calendar__grid" aria-hidden="true">
         {
           weeks
             .flat()
             .map((cell) =>
               cell === null ? (
-                <span class="v2-calendar__day" data-empty />
+                <span class="calendar__day" data-empty />
               ) : (
-                <span class="v2-calendar__day" data-level={cell.level} data-day={dayLabel(cell)} />
+                <span class="calendar__day" data-level={cell.level} data-day={dayLabel(cell)} />
               ),
             )
         }
@@ -125,28 +125,28 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
 
   <!-- The tooltip lives outside the scroller: an overlay drawn inside a box
        with overflow set would be clipped the moment it rose above the grid. -->
-  <span class="v2-calendar__tip" data-v2-calendar-tip aria-hidden="true"></span>
+  <span class="calendar__tip" data-calendar-tip aria-hidden="true"></span>
 
   <!-- The pointer gets the tooltip; a screen reader gets the same sentence
        here, because the tooltip itself is a decorative overlay. -->
-  <span class="v2-hidden" data-v2-calendar-live aria-live="polite"></span>
+  <span class="hidden" data-calendar-live aria-live="polite"></span>
 
-  <figcaption class="v2-calendar__caption">
+  <figcaption class="calendar__caption">
     <strong>{countText}</strong>
     <span>{range}</span>
-    <span class="v2-calendar__hint" id="v2-calendar-hint">{hint}</span>
+    <span class="calendar__hint" id="calendar-hint">{hint}</span>
   </figcaption>
 </figure>
 
 <script is:inline>
   (() => {
-    const scroller = document.querySelector('[data-v2-calendar]');
+    const scroller = document.querySelector('[data-calendar]');
     if (!scroller) return;
 
-    const figure = scroller.closest('.v2-calendar');
-    const tip = figure.querySelector('[data-v2-calendar-tip]');
-    const live = figure.querySelector('[data-v2-calendar-live]');
-    const days = [...scroller.querySelectorAll('.v2-calendar__day[data-day]')];
+    const figure = scroller.closest('.calendar');
+    const tip = figure.querySelector('[data-calendar-tip]');
+    const live = figure.querySelector('[data-calendar-live]');
+    const days = [...scroller.querySelectorAll('.calendar__day[data-day]')];
 
     // The calendar reads left to right in time, so a narrow screen should open
     // on the most recent weeks rather than on the start of the window.
@@ -170,7 +170,7 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
     };
 
     scroller.addEventListener('pointerover', (event) => {
-      const cell = event.target.closest('.v2-calendar__day[data-day]');
+      const cell = event.target.closest('.calendar__day[data-day]');
       if (cell) place(cell);
     });
 
