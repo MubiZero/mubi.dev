@@ -11,6 +11,25 @@ test('reduced motion collapses transitions', async ({ browser }) => {
   await context.close();
 });
 
+test('routine interaction transitions stay within the visual-system budget', async ({ page }) => {
+  await page.goto('/');
+  const durations = await page
+    .locator('.nav-link, .icon-button, .button, .social-link')
+    .evaluateAll((nodes) =>
+      nodes.flatMap((node) =>
+        getComputedStyle(node)
+          .transitionDuration.split(',')
+          .map((duration) => parseFloat(duration) * (duration.includes('ms') ? 1 : 1000)),
+      ),
+    );
+
+  expect(durations.length).toBeGreaterThan(0);
+  for (const duration of durations.filter((value) => value > 0)) {
+    expect(duration).toBeGreaterThanOrEqual(140);
+    expect(duration).toBeLessThanOrEqual(260);
+  }
+});
+
 test('no element animates the all property', async ({ page }) => {
   await page.goto('/');
   const offenders = await page.evaluate(() =>

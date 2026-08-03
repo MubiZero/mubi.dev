@@ -42,3 +42,17 @@ test('heading order is correct and there is a single h1', async ({ page }) => {
     expect(levels[index] - levels[index - 1]).toBeLessThanOrEqual(1);
   }
 });
+
+test('focusing the final contact link keeps it clear of sticky UI', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const contact = page.getByTestId('contact-email');
+  await contact.focus();
+  const obscured = await contact.evaluate((node) => {
+    const rect = node.getBoundingClientRect();
+    return rect.top < 0 || rect.bottom > window.innerHeight;
+  });
+
+  expect(obscured).toBe(false);
+});

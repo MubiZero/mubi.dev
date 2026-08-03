@@ -35,6 +35,14 @@ test('navigation targets the evidence-first sections in reading order', async ({
   ]);
 });
 
+test('current-section state follows anchor navigation', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('header a[href="#contact"]').click();
+
+  await expect(page.locator('header a[href="#contact"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-current', 'page');
+});
+
 for (const path of ['/', '/ru/']) {
   for (const width of [320, 390]) {
     test(`${path} header fits the ${width}px viewport`, async ({ page }) => {

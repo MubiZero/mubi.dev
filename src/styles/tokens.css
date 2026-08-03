@@ -1,35 +1,41 @@
 :root,
 [data-theme='light'] {
-  --bg: #ffffff;
-  --surface: #f5f5f6;
+  --bg: #fcfcfd;
+  --surface: #f3f3f5;
   --surface-raised: #ffffff;
+  --surface-strong: #e9e9ec;
   --text: #171719;
-  --text-muted: #606066;
-  --text-disabled: #919197;
-  --border: #e3e3e6;
-  --border-strong: #cbcbcf;
-  --accent: #ef3f38;
-  --accent-strong: #ca2924;
+  --text-muted: #5b5b62;
+  --text-disabled: #898990;
+  --border: #dedee2;
+  --border-strong: #bdbdc4;
+  --accent: #e93f37;
+  --accent-strong: #b72b25;
   --accent-contrast: #ffffff;
-  --success: #249b5a;
-  --focus: #b82420;
+  --success: #16854a;
+  --focus: #a9231e;
+  --shadow-control: 0 1px 2px rgb(15 15 18 / 8%), 0 8px 24px rgb(15 15 18 / 8%);
+  --shadow-float: 0 2px 4px rgb(15 15 18 / 6%), 0 14px 38px rgb(15 15 18 / 10%);
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #111214;
+  --bg: #121315;
   --surface: #1b1c1f;
   --surface-raised: #242529;
+  --surface-strong: #2c2d31;
   --text: #f0f0f1;
-  --text-muted: #aaaab0;
-  --text-disabled: #727278;
-  --border: #303136;
-  --border-strong: #4b4c52;
-  --accent: #ff6962;
-  --accent-strong: #ff8a84;
+  --text-muted: #b0b0b6;
+  --text-disabled: #76767d;
+  --border: #35363b;
+  --border-strong: #55565d;
+  --accent: #ff6f68;
+  --accent-strong: #ff918b;
   --accent-contrast: #151517;
   --success: #68d596;
-  --focus: #ff8a84;
+  --focus: #ff918b;
+  --shadow-control: none;
+  --shadow-float: none;
   color-scheme: dark;
 }
 
@@ -44,18 +50,16 @@
   --space-10: 40px;
   --space-12: 48px;
   --space-16: 64px;
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 30px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
   --radius-pill: 999px;
   --dur-short: 140ms;
   --dur-medium: 260ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
   --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
-  --shadow-control: 0 1px 2px rgb(15 15 18 / 8%), 0 8px 24px rgb(15 15 18 / 8%);
-  --shadow-float: 0 2px 4px rgb(15 15 18 / 6%), 0 14px 38px rgb(15 15 18 / 10%);
-  --container: 1180px;
+  --container: 1200px;
 }
 
 @theme inline {

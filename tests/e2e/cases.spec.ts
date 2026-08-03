@@ -23,6 +23,17 @@ test('case outcomes stay visible while supporting evidence uses native disclosur
   await expect(firstCase.locator('details summary')).toContainText('Read the full story');
 });
 
+test('expanded case evidence uses the wide row instead of a narrow side column', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1024 });
+  await page.goto('/');
+  const firstCase = page.getByTestId('case-entry').first();
+  const details = firstCase.locator('details');
+  await details.locator('summary').click();
+
+  const [caseBox, detailsBox] = await Promise.all([firstCase.boundingBox(), details.boundingBox()]);
+  expect(detailsBox?.width ?? 0).toBeGreaterThan((caseBox?.width ?? 0) * 0.5);
+});
+
 test('Russian cases use translated labels', async ({ page }) => {
   await page.goto('/ru/');
   await expect(page.getByTestId('case-entry').first()).toContainText('Проблема');

@@ -29,10 +29,12 @@ test('print uses the condensed experience and omits expanded case descriptions',
   await page.goto('/');
   await page.emulateMedia({ media: 'print' });
 
-  await expect(page.getByTestId('experience-axis')).toBeHidden();
-  await expect(page.getByTestId('print-experience')).toBeVisible();
-  await expect(page.getByTestId('print-experience')).toContainText('10 servers in parallel');
+  await expect(page.locator('.screen-experience')).toBeHidden();
+  await expect(page.locator('.print-experience')).toBeVisible();
+  await expect(page.locator('.print-experience')).toContainText('10 servers in parallel');
   await expect(page.getByTestId('case-entry').first()).toBeHidden();
+  await expect(page.locator('.proof-module')).toBeHidden();
+  await expect(page.locator('details summary').first()).toBeHidden();
 });
 
 test('print uses dark text on its white background', async ({ page }) => {
@@ -52,9 +54,20 @@ test('print keeps the resume content inside a readable page gutter', async ({ pa
 
   const [titleBox, sectionBox] = await Promise.all([
     page.getByRole('heading', { level: 1 }).boundingBox(),
-    page.locator('main h2').first().boundingBox(),
+    page.locator('main h2:visible').first().boundingBox(),
   ]);
 
   expect(titleBox?.x).toBeGreaterThanOrEqual(32);
   expect(sectionBox?.x).toBeGreaterThanOrEqual(32);
+});
+
+test('print resume fits on one A4 page', async ({ page }) => {
+  await page.goto('/');
+  const pdf = await page.pdf({ format: 'A4', printBackground: true });
+  const pageCounts = [...pdf.toString('latin1').matchAll(/\/Count\s+(\d+)/g)].map((match) =>
+    Number(match[1]),
+  );
+
+  expect(pageCounts.length).toBeGreaterThan(0);
+  expect(Math.max(...pageCounts)).toBe(1);
 });

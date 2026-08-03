@@ -12,7 +12,7 @@ const { entries, printEntries, sectionLabel } = Astro.props;
   <span class="module-label">{sectionLabel}</span>
   <h2 id="experience-title" class="section-title">{sectionLabel}</h2>
 
-  <ol class="experience-list screen-experience">
+  <ol data-testid="experience-axis" class="experience-list screen-experience">
     {
       entries.map((entry) => (
         <li data-testid="experience-entry" class="experience-entry">
