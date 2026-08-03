@@ -3,12 +3,6 @@ manLine: 'DevOps/SRE · infrastructure automation, monitoring, product work in G
 summary:
   - 'Two years in banking infrastructure: servers, access, networking, and monitoring for the things that must not fall over.'
   - I turn manual procedures into repeatable ones, and when no tool exists I write it and take it to production.
-inlineStack:
-  - Linux
-  - Docker
-  - Terraform
-  - Ansible
-  - Go
 now:
   role: Middle DevOps/SRE
   employer: Eskhata Bank

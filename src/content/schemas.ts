@@ -6,7 +6,6 @@ export const profileSchema = z.object({
   name: nonEmpty,
   manLine: nonEmpty,
   summary: z.array(nonEmpty).min(1).max(3),
-  inlineStack: z.array(nonEmpty).min(1),
   now: z.object({
     role: nonEmpty,
     employer: nonEmpty,
@@ -58,10 +57,6 @@ export const casesSchema = z.object({
       z.object({
         id: z.string().regex(/^[a-z][a-z0-9-]*$/, 'case id must be a lowercase slug'),
         title: nonEmpty,
-        metrics: z
-          .array(z.object({ value: nonEmpty, unit: z.string().default(''), label: nonEmpty }))
-          .min(1)
-          .max(2),
         problem: nonEmpty,
         action: nonEmpty,
         result: nonEmpty,
@@ -117,7 +112,11 @@ export const copySchema = z.object({
     contact: nonEmpty,
   }),
   sections: z.object({
-    practice: z.object({ title: nonEmpty, rail: nonEmpty }),
+    practice: z.object({
+      title: nonEmpty,
+      rail: nonEmpty,
+      items: z.array(z.object({ title: nonEmpty, description: nonEmpty })).length(3),
+    }),
     work: z.object({ title: nonEmpty, rail: nonEmpty }),
     track: z.object({ title: nonEmpty, rail: nonEmpty }),
     toolkit: z.object({ title: nonEmpty, rail: nonEmpty }),
@@ -153,52 +152,10 @@ export const copySchema = z.object({
 export const uiSchema = z.object({
   siteTitle: nonEmpty,
   metaDescription: nonEmpty,
-  sections: z.object({
-    name: nonEmpty,
-    experience: nonEmpty,
-    education: nonEmpty,
-    cases: nonEmpty,
-    stack: nonEmpty,
-    contact: nonEmpty,
-  }),
-  caseLabels: z.object({
-    problem: nonEmpty,
-    action: nonEmpty,
-    result: nonEmpty,
-  }),
   controls: z.object({
     switchLanguage: nonEmpty,
     switchToDark: nonEmpty,
     switchToLight: nonEmpty,
     otherLanguageName: nonEmpty,
-  }),
-  navigation: z.object({
-    label: nonEmpty,
-    home: nonEmpty,
-    about: nonEmpty,
-    expertise: nonEmpty,
-    work: nonEmpty,
-    experience: nonEmpty,
-    contact: nonEmpty,
-  }),
-  about: z.object({
-    title: nonEmpty,
-    lead: nonEmpty,
-    principle: nonEmpty,
-  }),
-  capabilities: z.object({
-    title: nonEmpty,
-    items: z.array(z.object({ title: nonEmpty, description: nonEmpty })).length(3),
-  }),
-  labels: z.object({
-    now: nonEmpty,
-    selectedWork: nonEmpty,
-    journey: nonEmpty,
-    toolkit: nonEmpty,
-    education: nonEmpty,
-    contactTitle: nonEmpty,
-    contactLead: nonEmpty,
-    openDetails: nonEmpty,
-    skipToContent: nonEmpty,
   }),
 });

@@ -11,6 +11,13 @@ sections:
   practice:
     title: What I can do
     rail: infrastructure, automation, tooling
+    items:
+      - title: I keep critical services running
+        description: Linux, networking, Docker, and RKE2 clusters. I watch the metrics in Prometheus and Grafana and dig for causes instead of symptoms.
+      - title: I take manual work out of provisioning
+        description: Terraform creates the virtual machines, Ansible finishes the configuration, FreeIPA grants access. A server is ready in 30 minutes, up to ten in parallel.
+      - title: I build the tools when none exist
+        description: Go, Angular, Flutter, and .NET. From a branch monitoring service to internal panels the team uses every day.
   work:
     title: Cases
     rail: problem, fix, outcome

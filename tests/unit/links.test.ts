@@ -8,14 +8,16 @@ function read<T>(collection: string, locale: string): T {
   return load(readFileSync(`src/content/${collection}/${locale}.yaml`, 'utf8')) as T;
 }
 
-type Cases = { entries: { id: string; metrics: { value: string; label: string }[] }[] };
+type Cases = { entries: { id: string; result: string }[] };
 
 describe.each(LOCALES)('%s cases', (locale) => {
   const { entries } = read<Cases>('cases', locale);
 
-  it('every case carries at least one measured outcome', () => {
+  // The numbers that used to sit beside each case are gone; the outcome now
+  // lives in the prose, so that is where it has to actually be present.
+  it('every case states an outcome', () => {
     for (const entry of entries) {
-      expect(entry.metrics.length, `case "${entry.id}"`).toBeGreaterThan(0);
+      expect(entry.result?.trim(), `case "${entry.id}"`).toBeTruthy();
     }
   });
 

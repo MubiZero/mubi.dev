@@ -14,7 +14,6 @@ describe('profileSchema', () => {
     name: 'Mubinjon Mukhamedov',
     manLine: 'mubi - infrastructure engineer and product developer',
     summary: ['First sentence.', 'Second sentence.'],
-    inlineStack: ['Linux', 'Docker'],
     now: { role: 'Middle DevOps/SRE', employer: 'Eskhata Bank', location: 'Dushanbe' },
     ctaLabel: 'Get in touch',
   };
@@ -117,7 +116,6 @@ describe('casesSchema', () => {
       {
         id: 'proxy-outage-recovery',
         title: 'Proxy outage recovery',
-        metrics: [{ value: '0', unit: '', label: 'unplanned downtime' }],
         problem: 'The proxy silently dropped traffic under load.',
         action: 'Rebuilt the routing rules and added health checks.',
         result: 'Zero unplanned downtime since.',
@@ -170,57 +168,11 @@ describe('uiSchema', () => {
   const valid = {
     siteTitle: 'Mubinjon Mukhamedov, infrastructure engineer',
     metaDescription: 'Infrastructure engineer and product developer.',
-    sections: {
-      name: 'NAME',
-      experience: 'EXPERIENCE',
-      education: 'EDUCATION',
-      cases: 'WHAT I FIXED',
-      stack: 'STACK',
-      contact: 'CONTACT',
-    },
-    caseLabels: {
-      problem: 'Problem',
-      action: 'What I did',
-      result: 'Result',
-    },
     controls: {
       switchLanguage: 'Switch language',
       switchToDark: 'Switch to dark theme',
       switchToLight: 'Switch to light theme',
       otherLanguageName: 'Русский',
-    },
-    navigation: {
-      label: 'Navigation',
-      home: 'Home',
-      about: 'About',
-      expertise: 'Expertise',
-      work: 'Work',
-      experience: 'Experience',
-      contact: 'Contact',
-    },
-    about: {
-      title: 'About',
-      lead: 'A short lead.',
-      principle: 'A clear principle.',
-    },
-    capabilities: {
-      title: 'Capabilities',
-      items: [
-        { title: 'Build', description: 'Build systems.' },
-        { title: 'Run', description: 'Run platforms.' },
-        { title: 'Improve', description: 'Improve products.' },
-      ],
-    },
-    labels: {
-      now: 'Now',
-      selectedWork: 'Selected work',
-      journey: 'Journey',
-      toolkit: 'Toolkit',
-      education: 'Education',
-      contactTitle: 'Get in touch',
-      contactLead: 'Start a conversation.',
-      openDetails: 'Open details',
-      skipToContent: 'Skip to content',
     },
   };
 
@@ -228,9 +180,9 @@ describe('uiSchema', () => {
     expect(uiSchema.parse(valid)).toEqual(valid);
   });
 
-  it('rejects ui data missing a section label', () => {
-    const { name, ...sectionsWithoutName } = valid.sections;
-    expect(() => uiSchema.parse({ ...valid, sections: sectionsWithoutName })).toThrow();
+  it('rejects ui data missing the document description', () => {
+    const { metaDescription, ...withoutDescription } = valid;
+    expect(() => uiSchema.parse(withoutDescription)).toThrow();
   });
 
   it('rejects ui data with an empty control label', () => {

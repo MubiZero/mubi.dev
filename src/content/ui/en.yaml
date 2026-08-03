@@ -1,49 +1,7 @@
 siteTitle: Mubinjon Mukhamedov, infrastructure engineer and product developer
 metaDescription: Infrastructure engineer working on banking systems, and developer of the applications that run on them. Linux, Docker, HAProxy, Go, Flutter.
-sections:
-  name: NAME
-  experience: EXPERIENCE
-  education: EDUCATION
-  cases: WHAT I FIXED
-  stack: STACK
-  contact: CONTACT
-caseLabels:
-  problem: Problem
-  action: What I did
-  result: Result
 controls:
   switchLanguage: Switch language
   switchToDark: Switch to dark theme
   switchToLight: Switch to light theme
   otherLanguageName: Русский
-navigation:
-  label: Main navigation
-  home: Home
-  about: About
-  expertise: Expertise
-  work: Work
-  experience: Experience
-  contact: Contact
-about:
-  title: I build things that run reliably and make sense.
-  lead: I work across infrastructure and product development, turning repetitive operations into systems that teams can trust.
-  principle: Make complex work calmer, clearer, and easier to operate.
-capabilities:
-  title: What I can do
-  items:
-    - title: I keep critical services running
-      description: Linux, networking, Docker, and RKE2 clusters. I watch the metrics in Prometheus and Grafana and dig for causes instead of symptoms.
-    - title: I take manual work out of provisioning
-      description: Terraform creates the virtual machines, Ansible finishes the configuration, FreeIPA grants access. A server is ready in 30 minutes, up to ten in parallel.
-    - title: I build the tools when none exist
-      description: Go, Angular, Flutter, and .NET. From a branch monitoring service to internal panels the team uses every day.
-labels:
-  now: Now
-  selectedWork: Selected work
-  journey: Journey
-  toolkit: Tools and technologies
-  education: Education
-  contactTitle: Let’s discuss the task.
-  contactLead: Describe the infrastructure or product development task, its constraints, and context so we can decide on the next step.
-  openDetails: Read the full story
-  skipToContent: Skip to content
