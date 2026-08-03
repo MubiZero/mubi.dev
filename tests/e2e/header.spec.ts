@@ -35,6 +35,24 @@ test('navigation targets the evidence-first sections in reading order', async ({
   ]);
 });
 
+for (const path of ['/', '/ru/']) {
+  for (const width of [320, 390]) {
+    test(`${path} header fits the ${width}px viewport`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto(path);
+
+      const geometry = await page.locator('header').evaluate((header) => ({
+        headerOverflow: header.scrollWidth - header.clientWidth,
+        viewportOverflow:
+          document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      }));
+
+      expect(geometry.headerOverflow).toBeLessThanOrEqual(0);
+      expect(geometry.viewportOverflow).toBeLessThanOrEqual(0);
+    });
+  }
+}
+
 test('theme toggle flips the theme and persists it', async ({ browser }) => {
   const context = await browser.newContext({ colorScheme: 'dark' });
   const page = await context.newPage();

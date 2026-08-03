@@ -97,4 +97,33 @@ const navigationItems = [
       display: none;
     }
   }
+
+  @media (max-width: 640px) {
+    .site-header__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: var(--space-2);
+    }
+
+    .primary-nav {
+      width: 100%;
+      min-width: 0;
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: stretch;
+      padding: 4px;
+    }
+
+    .primary-nav .nav-link {
+      min-width: 0;
+      flex: 1 1 0;
+      padding-inline: 4px;
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+
+    .header-controls {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
 </style>
