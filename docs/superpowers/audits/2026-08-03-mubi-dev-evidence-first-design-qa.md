@@ -2,12 +2,13 @@
 
 Date: 2026-08-03
 
-Status: agency-signoff review passed
+Status: agency-signoff review and reviewer fix round 1 passed
 
 Reference: `docs/design-references/mubi-dev-redesign-target.png` (923 × 1704)
 
 Implementation evidence: Playwright Chromium screenshots in
-`/tmp/mubi-dev-evidence-first-qa.u5uGtP/`
+`/tmp/mubi-dev-evidence-first-qa.u5uGtP/`; reviewer-fix evidence in
+`/tmp/mubi-dev-evidence-first-fix1.26iNeN/`
 
 ## Method
 
@@ -32,6 +33,11 @@ dashboard modules with the approved evidence-first editorial structure.
 Additional evidence:
 
 - 320 px: `en-320-light.png`, `ru-320-dark.png`
+- Reviewer fix round 1 at 320 px: `en-320-normal-top.png`, `ru-320-normal-top.png`,
+  `en-320-200-top.png`, `ru-320-200-top.png`
+- Anchor clearance at 320 px: `en-320-normal-work-anchor.png`,
+  `ru-320-normal-work-anchor.png`, `en-320-200-work-anchor.png`,
+  `ru-320-200-work-anchor.png`
 - Expanded disclosure: `en-case-open-section.png`
 - Print: `en-print.png`, `en-print.pdf`
 
@@ -49,8 +55,8 @@ and a minimum visible header-control target of 44 px.
 | Typography | Preserve Manrope continuity while strengthening editorial hierarchy and keeping 45–75 character prose. | One self-hosted family, large balanced headings, readable 66ch prose caps, compact labels, and purposefully smaller chronology/toolkit text. | Pass |
 | Palette and depth | Neutral white/graphite with one tomato accent; dark elevation through lighter graphite, not heavy shadow. | Light uses near-white plus neutral ruled surfaces. Dark uses `#121315` with lighter `#1b1c1f`/`#242529` surfaces and no dark shadows. Accent is reserved for evidence, roles, focus, and the final edge. | Pass |
 | Spacing and container model | Remove repeated equal cards, nested surfaces, workspace tiles, and dashboard repetition. | One 1200 px page container, open hero, border-only proof rail, wide case rows, ruled capabilities, chronology, grouped toolkit, and one decisive contact surface. | Pass |
-| Responsive behavior | Single semantic mobile column, no horizontal overflow from 320 to 2560, and 200% text without overflow. | Automated checks cover 320/375/768/1280/2560 at normal and 200% root text. RU/EN screenshots at 390 and representative 320 states show no clipping or overlap. | Pass |
-| Header and sticky behavior | Compact header instead of persistent mobile bottom navigation; controls must not obscure content. | Header remains at the top, four essential mobile links fit, every visible control is at least 44 × 44, and no bottom navigation is rendered. | Pass |
+| Responsive behavior | Single semantic mobile column, no horizontal overflow from 320 to 2560, and 200% text without overflow. | Automated checks cover 320/375/768/1280/2560 at normal and 200% root text. The strict 320 px checks cover EN/RU `body.scrollWidth`, visible element border boxes, and individual text ranges without relying on clipping. Final EN/RU values are 320 px with zero element or text violations at both scales. | Pass |
+| Header and sticky behavior | Compact header instead of persistent mobile bottom navigation; controls must not obscure content. | Header remains at the top, four essential mobile links fit, every visible control is at least 44 × 44, and no bottom navigation is rendered. Work, Experience, and Contact are tested against the measured 132 px header at 100% and 157.6 px header at 200%; minimum measured clearances are 3.8 px and 34.0 px. | Pass |
 | Focus visibility | Focus indicator at least 2 px and final contact focus fully visible. | Automated traversal checks every focusable element. Contact focus measured top 614 px / bottom 662 px in a 1024 px viewport with a 3 px computed outline. | Pass |
 | Interaction and motion | Immediate control feedback, 140–260 ms routine transitions, no `transition: all`, reduced-motion fallback, and functional disclosure/theme/navigation. | Case disclosure changes closed → open, theme changes and persists light → dark, current-section changes Home → Contact, durations stay within budget, and reduced motion collapses transitions. | Pass |
 | Print | Light, one page, content-first; hide navigation, proof duplication, cases/disclosures, toolkit, and decorative chrome. | PDF page tree reports one A4 page. Print is white with black text, condensed experience, education, email, and explicit social URLs. | Pass |
@@ -72,6 +78,13 @@ and a minimum visible header-control target of 44 px.
    readable columns.
 7. Print exposed duplicated proof and inherited theme colors. The print system now removes duplicated
    UI and forces black content on a white one-page CV.
+8. The original horizontal-overflow gate only compared the clipped document root, hiding real
+   out-of-viewport content. With clipping disabled, the reproduced body widths were 366 px for RU
+   at 100%, 515 px for EN at 200%, and 706 px for RU at 200%. Removed root/body clipping, reset the
+   mobile hero cross-axis and case outcome grid placement, and allowed long headings to wrap.
+9. Fixed pixel anchor offsets did not scale with the sticky header: at 200% text each target landed
+   about 30 px under the 157.6 px header. The shared offset now keeps a 136 px baseline and scales
+   to 6rem; target geometry is asserted in both locales at 100% and 200% text.
 
 ## Interaction proof
 
@@ -83,7 +96,7 @@ outline. No console or page errors occurred.
 ## Automated gates
 
 - Unit: 4 files, 44 tests passed.
-- E2E: 76 tests passed in Chromium.
+- E2E: 84 tests passed in Chromium.
 - Build: 2 localized static pages built.
 
 The test runner's parent environment sets `NO_COLOR`; Playwright sets `FORCE_COLOR` for child

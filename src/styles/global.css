@@ -7,11 +7,10 @@
 }
 
 html {
-  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  scroll-padding-top: 116px;
+  scroll-padding-top: var(--sticky-anchor-offset);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -19,7 +18,6 @@ body {
   min-width: 320px;
   min-height: 100dvh;
   margin: 0;
-  overflow-x: clip;
   background: var(--bg);
   font-size: 1rem;
   line-height: 1.6;
@@ -38,6 +36,7 @@ h2,
 h3 {
   line-height: 1.08;
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
@@ -55,7 +54,7 @@ a {
 
 button,
 a {
-  scroll-margin-block: 124px;
+  scroll-margin-block: var(--sticky-anchor-offset);
   touch-action: manipulation;
 }
 
@@ -820,10 +819,6 @@ button {
 }
 
 @media (max-width: 640px) {
-  html {
-    scroll-padding-top: 128px;
-  }
-
   .site-header {
     width: calc(100% - 16px);
     padding-top: 8px;
@@ -858,6 +853,8 @@ button {
   }
 
   .hero-copy {
+    min-width: 0;
+    align-self: stretch;
     margin-block: auto;
     padding-block: var(--space-12);
   }
@@ -927,6 +924,12 @@ button {
   .case-entry details,
   .case-entry details[open] {
     grid-column: 1;
+  }
+
+  .case-outcome {
+    min-width: 0;
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .case-details {

@@ -1,6 +1,103 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const widths = [320, 375, 768, 1280, 2560];
+
+type HorizontalBounds = {
+  body: {
+    left: number;
+    right: number;
+    scrollWidth: number;
+  };
+  document: {
+    clientWidth: number;
+    scrollWidth: number;
+  };
+  elementViolations: string[];
+  textViolations: string[];
+};
+
+async function horizontalBounds(page: Page) {
+  return page.evaluate<HorizontalBounds>(() => {
+    const tolerance = 0.5;
+    const viewportWidth = window.innerWidth;
+    const bodyRect = document.body.getBoundingClientRect();
+    const elements = [...document.querySelectorAll<HTMLElement>('header, header *, main, main *')];
+    const isRendered = (element: HTMLElement) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+    };
+    const describe = (element: HTMLElement) => {
+      const selector = `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${
+        typeof element.className === 'string' && element.className.trim()
+          ? `.${element.className.trim().replaceAll(/\s+/g, '.')}`
+          : ''
+      }`;
+      return `${selector}: ${element.textContent?.trim().replaceAll(/\s+/g, ' ').slice(0, 60) ?? ''}`;
+    };
+
+    const elementViolations = elements.filter(isRendered).flatMap((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.left < -tolerance || rect.right > viewportWidth + tolerance
+        ? [`${describe(element)} [${rect.left.toFixed(1)}, ${rect.right.toFixed(1)}]`]
+        : [];
+    });
+
+    const textViolations = elements.filter(isRendered).flatMap((element) =>
+      [...element.childNodes]
+        .filter((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
+        .flatMap((node) => {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          return [...range.getClientRects()].flatMap((rect) =>
+            rect.width > 0 && (rect.left < -tolerance || rect.right > viewportWidth + tolerance)
+              ? [`${describe(element)} [${rect.left.toFixed(1)}, ${rect.right.toFixed(1)}]`]
+              : [],
+          );
+        }),
+    );
+
+    return {
+      body: {
+        left: bodyRect.left,
+        right: bodyRect.right,
+        scrollWidth: document.body.scrollWidth,
+      },
+      document: {
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+      },
+      elementViolations,
+      textViolations,
+    };
+  });
+}
+
+for (const path of ['/', '/ru/']) {
+  for (const textScale of [100, 200]) {
+    test(`${path} keeps body, visible elements, and text inside 320px at ${textScale}% text`, async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 900 });
+      await page.goto(path);
+      await page.evaluate((scale) => {
+        document.documentElement.style.fontSize = `${scale / 100}rem`;
+      }, textScale);
+
+      const bounds = await horizontalBounds(page);
+      expect(bounds.document.scrollWidth, 'document scroll width').toBeLessThanOrEqual(
+        bounds.document.clientWidth,
+      );
+      expect(bounds.body.scrollWidth, 'body scroll width').toBeLessThanOrEqual(
+        bounds.document.clientWidth,
+      );
+      expect(bounds.body.left, 'body left edge').toBeGreaterThanOrEqual(-0.5);
+      expect(bounds.body.right, 'body right edge').toBeLessThanOrEqual(
+        bounds.document.clientWidth + 0.5,
+      );
+      expect(bounds.elementViolations, 'visible element bounds').toEqual([]);
+      expect(bounds.textViolations, 'visible text range bounds').toEqual([]);
+    });
+  }
+}
 
 for (const width of widths) {
   test(`no horizontal overflow at ${width}px`, async ({ page }) => {

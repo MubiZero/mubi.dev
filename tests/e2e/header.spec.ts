@@ -44,6 +44,37 @@ test('current-section state follows anchor navigation', async ({ page }) => {
 });
 
 for (const path of ['/', '/ru/']) {
+  for (const textScale of [100, 200]) {
+    test(`${path} anchor targets clear the real sticky header at ${textScale} percent text`, async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 900 });
+      await page.goto(path);
+      await page.evaluate((scale) => {
+        document.documentElement.style.fontSize = `${scale / 100}rem`;
+      }, textScale);
+
+      for (const id of ['work', 'experience', 'contact']) {
+        await page.locator(`header a[href="#${id}"]`).click();
+        const geometry = await page.evaluate((targetId) => {
+          const header = document.querySelector<HTMLElement>('header');
+          const target = document.getElementById(targetId);
+          if (!header || !target) throw new Error(`Missing header or #${targetId}`);
+
+          return {
+            headerBottom: header.getBoundingClientRect().bottom,
+            targetTop: target.getBoundingClientRect().top,
+          };
+        }, id);
+
+        expect(
+          geometry.targetTop,
+          `#${id} top should not be covered by header bottom at ${geometry.headerBottom.toFixed(1)}px`,
+        ).toBeGreaterThanOrEqual(geometry.headerBottom - 1);
+      }
+    });
+  }
+}
+
+for (const path of ['/', '/ru/']) {
   for (const width of [320, 390]) {
     test(`${path} header fits the ${width}px viewport`, async ({ page }) => {
       await page.setViewportSize({ width, height: 844 });
