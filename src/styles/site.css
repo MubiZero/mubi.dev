@@ -757,6 +757,27 @@ body {
   color: var(--faint);
 }
 
+.calendar__hint--coarse {
+  display: none;
+}
+
+/* A finger cannot hover and cannot hit ten pixels, so on a touch screen the
+   days grow to a size worth aiming at and the instructions change to match. */
+@media (pointer: coarse) {
+  .calendar {
+    --cell: 14px;
+    --cell-gap: 4px;
+  }
+
+  .calendar__hint--fine {
+    display: none;
+  }
+
+  .calendar__hint--coarse {
+    display: inline;
+  }
+}
+
 /* One accent, stepped by intensity, instead of a second colour imported from
    another product. */
 .calendar__day[data-level='1'] {
@@ -973,6 +994,98 @@ body {
   gap: var(--space-4);
 }
 
+/* ---------- section sheet (narrow screens) ---------- */
+
+/* The button only exists while the links themselves are out of reach, so it
+   appears at exactly the width where the header nav gives up. */
+.menubutton {
+  display: none;
+}
+
+.sheet {
+  width: min(100%, var(--shell));
+  max-width: none;
+  max-height: 90dvh;
+  margin: auto auto 0;
+  /* A phone held sideways has barely more height than the list is tall */
+  overflow-y: auto;
+  padding: var(--space-4) var(--gutter) max(var(--space-6), env(safe-area-inset-bottom));
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.sheet::backdrop {
+  background: color-mix(in srgb, #000 55%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.sheet[open] {
+  animation: sheet-in var(--dur-short) var(--ease-out);
+}
+
+@keyframes sheet-in {
+  from {
+    translate: 0 100%;
+  }
+}
+
+.sheet__nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet__link {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 0.92rem;
+  font-stretch: 90%;
+  gap: var(--space-4);
+  text-decoration: none;
+}
+
+.sheet__link:last-child {
+  border-bottom: 0;
+}
+
+.sheet__link:active {
+  background: var(--raised);
+}
+
+/* The section you are reading is named, not just tinted: colour alone would
+   not survive a grayscale screen or a reader who cannot separate the hues. */
+.sheet__link[aria-current='location'] {
+  color: var(--accent);
+}
+
+.sheet__link[aria-current='location']::after {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  content: '';
+}
+
+.sheet__close {
+  width: 100%;
+  min-height: var(--tap);
+  margin-top: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--display);
+  font-size: 0.7rem;
+  font-stretch: 85%;
+}
+
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
@@ -1006,12 +1119,32 @@ body {
     display: none;
   }
 
+  .menubutton {
+    display: inline-flex;
+  }
+
+  .hero {
+    gap: var(--space-6);
+  }
+
   .hero h1 {
     font-stretch: 100%;
   }
 
+  /* On a phone the photo is identification, not a portrait: at business-card
+     size the name, the thesis and the way to reach me all reach the first
+     screen, which a half-page headshot pushed below the fold. */
   .hero__portrait {
-    max-width: 160px;
+    max-width: 88px;
+    aspect-ratio: 1;
+  }
+
+  .hero__role {
+    margin-top: var(--space-4);
+  }
+
+  .hero__lead {
+    margin-top: var(--space-6);
   }
 
 

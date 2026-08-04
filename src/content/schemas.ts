@@ -105,6 +105,8 @@ export const copySchema = z.object({
   lead: nonEmpty,
   nav: z.object({
     label: nonEmpty,
+    open: nonEmpty,
+    close: nonEmpty,
     practice: nonEmpty,
     work: nonEmpty,
     track: nonEmpty,
@@ -132,6 +134,8 @@ export const copySchema = z.object({
         other: nonEmpty,
       }),
       calendarHint: nonEmpty,
+      // a pointer hint is a lie on a touch screen, so each input gets its own
+      calendarHintTouch: nonEmpty,
     }),
     contact: z.object({
       title: nonEmpty,

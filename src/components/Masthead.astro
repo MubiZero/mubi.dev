@@ -7,6 +7,8 @@ interface Props {
   mark: string;
   nav: {
     label: string;
+    open: string;
+    close: string;
     practice: string;
     work: string;
     track: string;
@@ -71,6 +73,20 @@ const items = [
         }
       </span>
 
+      <!-- The section links do not fit beside the wordmark on a phone, so on a
+           narrow screen they move into a sheet reached from here. Without it
+           the page is six thousand pixels of scrolling with no way to jump. -->
+      <button
+        type="button"
+        class="iconbutton menubutton"
+        data-menu
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-label={nav.open}
+      >
+        <Icon name="ph:list" size="18" aria-hidden="true" />
+      </button>
+
       <button
         type="button"
         id="theme-toggle"
@@ -93,6 +109,22 @@ const items = [
        header from the content. It reports position, so it carries no label. -->
   <span class="progress" data-progress aria-hidden="true"></span>
 </header>
+
+<!-- A dialog rather than a styled div: the focus trap, the Escape key and the
+     inertness of the page behind it all come with the element. -->
+<dialog class="sheet" data-sheet aria-label={nav.label}>
+  <nav class="sheet__nav">
+    {
+      items.map((item) => (
+        <a class="sheet__link" href={`#${item.id}`} data-section-link={item.id} data-sheet-link>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <button type="button" class="sheet__close" data-sheet-close>{nav.close}</button>
+</dialog>
 
 <script is:inline>
   const toggle = document.getElementById('theme-toggle');
@@ -149,6 +181,48 @@ const items = [
   });
 
   renderToggle();
+
+  (() => {
+    const button = document.querySelector('[data-menu]');
+    const sheet = document.querySelector('[data-sheet]');
+    if (!button || !sheet) return;
+
+    const close = () => {
+      if (sheet.open) sheet.close();
+    };
+
+    button.addEventListener('click', () => {
+      sheet.showModal();
+      button.setAttribute('aria-expanded', 'true');
+    });
+
+    sheet.addEventListener('close', () => button.setAttribute('aria-expanded', 'false'));
+    sheet.querySelector('[data-sheet-close]')?.addEventListener('click', close);
+
+    // The jump has to survive the dialog closing, so the sheet gets out of the
+    // way first and the browser is left to honour the anchor on its own.
+    sheet.querySelectorAll('[data-sheet-link]').forEach((link) => {
+      link.addEventListener('click', close);
+    });
+
+    // A dialog fills its backdrop area, so "outside" means outside its box
+    // rather than outside the element the click landed on.
+    sheet.addEventListener('click', (event) => {
+      const box = sheet.getBoundingClientRect();
+      const outside =
+        event.clientY < box.top ||
+        event.clientY > box.bottom ||
+        event.clientX < box.left ||
+        event.clientX > box.right;
+      if (outside) close();
+    });
+
+    // Rotating a phone can widen the screen past the point where the sheet is
+    // the way in, and a modal left open over the visible links traps the user.
+    matchMedia('(min-width: 721px)').addEventListener('change', (event) => {
+      if (event.matches) close();
+    });
+  })();
 
   // The sections live further down the document than this script, so wait for
   // the parser to finish before looking them up.

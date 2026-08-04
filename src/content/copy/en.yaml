@@ -2,6 +2,8 @@ mark: mubi.dev
 lead: I automate infrastructure and build the tools a team is missing.
 nav:
   label: Primary navigation
+  open: Open sections
+  close: Close
   practice: Practice
   work: Cases
   track: Track
@@ -36,6 +38,7 @@ sections:
       many: contributions
       other: contributions
     calendarHint: Hover a day, or step through them with the arrow keys
+    calendarHintTouch: Tap a day to see its date and contribution count
   contact:
     title: Let us talk about the work
     rail: Khujand, UTC+5

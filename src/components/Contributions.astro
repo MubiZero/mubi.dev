@@ -6,9 +6,10 @@ interface Props {
   locale: Locale;
   labels: { one: string; few: string; many: string; other: string };
   hint: string;
+  hintTouch: string;
 }
 
-const { locale, labels, hint } = Astro.props;
+const { locale, labels, hint, hintTouch } = Astro.props;
 const { from, levels, counts } = await loadContributions();
 
 const DAYS_IN_WEEK = 7;
@@ -96,7 +97,7 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
     tabindex="0"
     role="group"
     aria-label={`${countText}. ${range}`}
-    aria-describedby="calendar-hint"
+    aria-describedby="calendar-hint calendar-hint-touch"
   >
     <div class="calendar__inner" style={`--weeks:${weeks.length}`}>
       <div class="calendar__months" aria-hidden="true">
@@ -134,7 +135,10 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
   <figcaption class="calendar__caption">
     <strong>{countText}</strong>
     <span>{range}</span>
-    <span class="calendar__hint" id="calendar-hint">{hint}</span>
+    <!-- Both hints ship; the stylesheet keeps the one that matches the input
+         the visitor actually has, and the described-by covers them together. -->
+    <span class="calendar__hint calendar__hint--fine" id="calendar-hint">{hint}</span>
+    <span class="calendar__hint calendar__hint--coarse" id="calendar-hint-touch">{hintTouch}</span>
   </figcaption>
 </figure>
 
@@ -153,12 +157,27 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
     scroller.scrollLeft = scroller.scrollWidth;
 
     let cursor = -1;
+    let shown = null;
+    let pinned = false;
 
     const place = (cell) => {
+      shown = cell;
       const box = cell.getBoundingClientRect();
       const frame = figure.getBoundingClientRect();
       tip.textContent = cell.dataset.day;
-      tip.style.setProperty('--x', `${box.left - frame.left + box.width / 2}px`);
+
+      // A day near either edge would centre its reading off the screen, and on
+      // a phone the whole sentence is wider than the column it sits in. The
+      // centre is pulled back until both ends are inside the viewport.
+      const width = tip.getBoundingClientRect().width;
+      const centre = box.left + box.width / 2;
+      const margin = 8;
+      const clamped = Math.min(
+        Math.max(centre, margin + width / 2),
+        window.innerWidth - margin - width / 2,
+      );
+
+      tip.style.setProperty('--x', `${clamped - frame.left}px`);
       tip.style.setProperty('--y', `${box.top - frame.top}px`);
       tip.dataset.shown = '';
     };
@@ -167,14 +186,50 @@ const range = `${formatDay(dayIso(shown[0].index), locale)} – ${formatDay(
       delete tip.dataset.shown;
       if (cursor >= 0) delete days[cursor].dataset.cursor;
       cursor = -1;
+      shown = null;
+      pinned = false;
     };
 
     scroller.addEventListener('pointerover', (event) => {
+      if (event.pointerType === 'touch') return;
       const cell = event.target.closest('.calendar__day[data-day]');
       if (cell) place(cell);
     });
 
-    scroller.addEventListener('pointerleave', hide);
+    scroller.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'touch') hide();
+    });
+
+    // A finger has nothing to hover with, so on a touch screen the day is
+    // picked by tapping it and the reading stays put until the next tap.
+    scroller.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'touch') return;
+      const cell = event.target.closest('.calendar__day[data-day]');
+      if (!cell) {
+        hide();
+        return;
+      }
+      place(cell);
+      pinned = true;
+      live.textContent = cell.dataset.day;
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'touch' && !scroller.contains(event.target)) hide();
+    });
+
+    // The reading is positioned against the figure, so a sideways drag would
+    // otherwise leave it hanging over a cell that has moved. A tapped day is
+    // dropped instead of chased: the finger doing the dragging is the same one
+    // that would have to read it.
+    scroller.addEventListener(
+      'scroll',
+      () => {
+        if (pinned) hide();
+        else if (shown) place(shown);
+      },
+      { passive: true },
+    );
 
     // Left and right move a week at a time because a column is a week; up and
     // down move a single day, which is what a column actually stacks.

@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 const widths = [320, 375, 768, 1280, 2560];
@@ -188,4 +189,80 @@ test('localized headings stay fully inside the desktop viewport', async ({ page 
   );
 
   expect(clipped).toEqual([]);
+});
+
+// The section links are out of reach on a phone, so the sheet is the only way
+// to move around six thousand pixels of page. Every step of it is held here.
+test.describe('the section sheet on a narrow screen', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test('replaces the header links rather than sitting beside them', async ({ page }) => {
+    await page.goto('/ru/');
+    await expect(page.locator('.masthead nav')).toBeHidden();
+    await expect(page.locator('[data-menu]')).toBeVisible();
+  });
+
+  test('opens, jumps to the section, and closes behind itself', async ({ page }) => {
+    await page.goto('/ru/');
+    await page.locator('[data-menu]').click();
+
+    const sheet = page.locator('[data-sheet]');
+    await expect(sheet).toBeVisible();
+    await expect(page.locator('[data-menu]')).toHaveAttribute('aria-expanded', 'true');
+
+    await sheet.locator('[data-section-link="code"]').click();
+    await expect(sheet).toBeHidden();
+    await expect(page.locator('#code')).toBeInViewport();
+    await expect(page.locator('[data-menu]')).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('names the section being read', async ({ page }) => {
+    await page.goto('/ru/');
+    await page.evaluate(() => document.getElementById('track')?.scrollIntoView());
+    await page.locator('[data-menu]').click();
+    await expect(
+      page.locator('[data-sheet] [data-section-link="track"]'),
+    ).toHaveAttribute('aria-current', 'location');
+  });
+
+  test('closes on Escape and on a tap outside it', async ({ page }) => {
+    await page.goto('/ru/');
+    const sheet = page.locator('[data-sheet]');
+
+    await page.locator('[data-menu]').click();
+    await page.keyboard.press('Escape');
+    await expect(sheet).toBeHidden();
+
+    await page.locator('[data-menu]').click();
+    await page.mouse.click(195, 60);
+    await expect(sheet).toBeHidden();
+  });
+
+  test('a tapped day states its date, and a drag drops the reading', async ({ page }) => {
+    await page.goto('/ru/');
+    const tip = page.locator('[data-calendar-tip]');
+
+    await page.locator('.calendar__day[data-day]').nth(120).tap();
+    await expect(tip).toHaveAttribute('data-shown', '');
+    await expect(tip).toContainText(/\d{4}/);
+    // the reading never hangs off either edge of the screen
+    const box = (await tip.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(390);
+
+    await page.locator('[data-calendar]').evaluate((node) => {
+      node.scrollLeft -= 60;
+    });
+    await expect(tip).not.toHaveAttribute('data-shown', '');
+  });
+
+  test('has no detectable accessibility violations while open', async ({ page }) => {
+    await page.goto('/ru/');
+    await page.locator('[data-menu]').click();
+    await expect(page.locator('[data-sheet]')).toBeVisible();
+    const { violations } = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    expect(violations.map((violation) => violation.id)).toEqual([]);
+  });
 });

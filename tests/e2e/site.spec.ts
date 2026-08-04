@@ -228,24 +228,24 @@ for (const route of ROUTES) {
     });
 
     test('the code section is reachable from the navigation', async ({ page }) => {
-      await page.locator('[data-section-link="code"]').click();
+      await page.locator('.masthead [data-section-link="code"]').click();
       await expect(page).toHaveURL(/#code$/);
       await expect(page.locator('#code')).toBeInViewport();
     });
 
     test('the navigation follows the section you are reading', async ({ page }) => {
       await page.evaluate(() => document.getElementById('work')?.scrollIntoView());
-      await expect(page.locator('[data-section-link="work"]')).toHaveAttribute(
+      await expect(page.locator('.masthead [data-section-link="work"]')).toHaveAttribute(
         'aria-current',
         'location',
       );
 
       await page.evaluate(() => document.getElementById('contact')?.scrollIntoView());
-      await expect(page.locator('[data-section-link="contact"]')).toHaveAttribute(
+      await expect(page.locator('.masthead [data-section-link="contact"]')).toHaveAttribute(
         'aria-current',
         'location',
       );
-      await expect(page.locator('[data-section-link="work"]')).not.toHaveAttribute(
+      await expect(page.locator('.masthead [data-section-link="work"]')).not.toHaveAttribute(
         'aria-current',
         'location',
       );
