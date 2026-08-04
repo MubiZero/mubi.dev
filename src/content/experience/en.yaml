@@ -1,13 +1,13 @@
 entries:
   - period: Jan 2026 - present
-    employer: Bank Eskhata
+    employer: OJSC "Bank Eskhata"
     role: Middle DevOps/SRE
     lines:
       - Design and improve the bank's infrastructure so critical services remain stable, predictable, and secure.
       - Automate deployments with Ansible and Docker, standardize services, and develop monitoring and alerting with Prometheus and Grafana.
       - Own the lifecycle of server environments and core services, including performance tuning, capacity planning, release support, and incident resolution.
   - period: Jul 2025 - Jan 2026
-    employer: Bank Eskhata
+    employer: OJSC "Bank Eskhata"
     role: Junior DevOps/SRE
     lines:
       - Automated server deployment and configuration with Ansible and SemaphoreUI.
@@ -22,7 +22,7 @@ entries:
       - Trained employees to use computers and software, provided IT support, and performed on-site repairs.
 printEntries:
   - period: Jul 2025 - present
-    employer: Bank Eskhata
+    employer: OJSC "Bank Eskhata"
     role: Junior DevOps/SRE to Middle DevOps/SRE
     lines:
       - 'Automated VM provisioning with Terraform, Ansible, and FreeIPA: from two to four hours to about 30 minutes, with up to 10 servers in parallel.'
