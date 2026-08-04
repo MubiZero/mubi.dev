@@ -26,9 +26,9 @@ printEntries:
     role: Junior DevOps/SRE to Middle DevOps/SRE
     lines:
       - 'Automated VM provisioning with Terraform, Ansible, and FreeIPA: from two to four hours to about 30 minutes, with up to 10 servers in parallel.'
-      - Built and operate the RKE2/Rancher platform, standardize services with Docker, and monitor them with Prometheus and Grafana.
+      - Built and operate the Kubernetes platform on RKE2 and Rancher, standardize services with Docker, and monitor them with Prometheus and Grafana.
   - period: Oct 2024 - Jun 2025
     employer: CJSC Behdoshti
     role: IT Technician
     lines:
-      - Built Go and Angular monitoring for 50+ branches, cutting first response from about six business hours to one minute and typical resolution from ten hours to one hour.
+      - Built Go and Angular monitoring for 50+ clinics, cutting first response from about six business hours to one minute and typical resolution from ten hours to one hour.

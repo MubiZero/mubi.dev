@@ -1,6 +1,6 @@
 groups:
   - label: инфраструктура
-    items: [Linux, vSphere, Docker, RKE2, Rancher, Nginx, HAProxy, Coolify]
+    items: [Linux, vSphere, Docker, 'Kubernetes (RKE2)', Rancher, Nginx, HAProxy, Coolify]
   - label: автоматизация и доступы
     items: [Terraform, Ansible, FreeIPA]
   - label: мониторинг
