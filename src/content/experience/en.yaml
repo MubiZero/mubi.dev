@@ -14,7 +14,7 @@ entries:
       - Set up Prometheus and Grafana monitoring, analyzed metrics, and removed bottlenecks.
       - Provisioned and supported server environments, optimized performance, and worked with development and employee teams.
   - period: Oct 2024 - Jun 2025
-    employer: CJSC Behdoshti
+    employer: Behdoshti Ltd
     role: IT Technician
     lines:
       - Assembled and maintained computers, installed networks, and kept them operational.
@@ -28,7 +28,7 @@ printEntries:
       - 'Automated VM provisioning with Terraform, Ansible, and FreeIPA: from two to four hours to about 30 minutes, with up to 10 servers in parallel.'
       - Built and operate the Kubernetes platform on RKE2 and Rancher, standardize services with Docker, and monitor them with Prometheus and Grafana.
   - period: Oct 2024 - Jun 2025
-    employer: CJSC Behdoshti
+    employer: Behdoshti Ltd
     role: IT Technician
     lines:
       - Built Go and Angular monitoring for 50+ clinics, cutting first response from about six business hours to one minute and typical resolution from ten hours to one hour.
