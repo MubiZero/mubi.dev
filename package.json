@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview --port 4321",
+      "preview": "astro preview --port 4321",
     "qa:capture": "node scripts/capture-qa.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"
@@ -19,16 +19,16 @@
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/simple-icons": "^1.2.92",
-    "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.1.6",
-    "astro-icon": "^1.1.5",
-    "tailwindcss": "^4.3.3"
+    "astro-icon": "^1.1.5"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.62.1",
     "@types/js-yaml": "^4.0.9",
     "js-yaml": "^5.2.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   }
 }
