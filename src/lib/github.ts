@@ -21,7 +21,20 @@ const TIMEOUT_MS = 8000;
  * or one that hits the GitHub rate limit, still produces the page instead of
  * failing. It is the last known state, not invented data.
  */
-export async function loadRepoFacts(): Promise<Map<string, RepoFacts>> {
+/**
+ * One request per build, not one per locale. Both pages render the same
+ * component, and two independent fetches can fail independently: a build where
+ * one call times out and the other does not would publish an English page and
+ * a Russian page carrying different dates.
+ */
+let repoFacts: Promise<Map<string, RepoFacts>> | null = null;
+
+export function loadRepoFacts(): Promise<Map<string, RepoFacts>> {
+  repoFacts ??= fetchRepoFacts();
+  return repoFacts;
+}
+
+async function fetchRepoFacts(): Promise<Map<string, RepoFacts>> {
   const facts = new Map<string, RepoFacts>();
   for (const repo of snapshot as RepoFacts[]) facts.set(repo.name, repo);
 
@@ -115,7 +128,15 @@ function parseCalendar(html: string): Contributions | null {
  * snapshot rather than throwing. The rendered caption always states the period
  * the data covers, so a stale fallback is visible instead of silent.
  */
-export async function loadContributions(): Promise<Contributions> {
+let contributions: Promise<Contributions> | null = null;
+
+/** Memoised for the same reason as loadRepoFacts. */
+export function loadContributions(): Promise<Contributions> {
+  contributions ??= fetchContributions();
+  return contributions;
+}
+
+async function fetchContributions(): Promise<Contributions> {
   try {
     const response = await fetch(CALENDAR, {
       signal: AbortSignal.timeout(TIMEOUT_MS),
