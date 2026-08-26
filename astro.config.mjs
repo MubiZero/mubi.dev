@@ -13,5 +13,13 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-  integrations: [sitemap(), icon()],
+  integrations: [
+    // The head already declares hreflang; without this the sitemap emitted an
+    // xhtml namespace it never used, so the two disagreed about the locales.
+    sitemap({
+      i18n: { defaultLocale: 'en', locales: { en: 'en', ru: 'ru' } },
+      filter: (page) => !page.endsWith('/404/') && !page.endsWith('/404.html'),
+    }),
+    icon(),
+  ],
 });
