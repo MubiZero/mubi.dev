@@ -1,7 +1,7 @@
 name: Mubinjon Mukhamedov
 manLine: 'DevOps/SRE · infrastructure automation, monitoring, product work in Go and Flutter'
 summary:
-  - 'Two years in banking infrastructure: servers, access, networking, and monitoring for the things that must not fall over.'
+  - 'Two years in infrastructure, the last of them in banking: servers, access, networking, and monitoring for the things that must not fall over.'
   - I turn manual procedures into repeatable ones, and when no tool exists I write it and take it to production.
 now:
   role: Middle DevOps/SRE
