@@ -3,9 +3,12 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
-  reporter: 'list',
+  // On CI a run nobody watched needs a report and a trace to explain itself.
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  retries: process.env.CI ? 1 : 0,
   use: {
     baseURL: 'http://localhost:4321',
+    trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
