@@ -69,3 +69,61 @@ describe.each(THEMES)('$name palette', ({ selector }) => {
     expect(contrast(token(selector, '--focus'), bg)).toBeGreaterThanOrEqual(3);
   });
 });
+
+/**
+ * The graph's load-bearing distinction is "a day with work" against "a day
+ * without", and nothing else checked it: axe does not compare two adjacent
+ * fills, and the palette tests above only look at text on the page background.
+ * An evenly spaced ramp put that first step at 1.93:1 in dark and 1.61:1 in
+ * light, which is a graph whose lowest bar is invisible.
+ */
+function mix(accent: string, base: string, percent: number): string {
+  const channels = (hex: string, i: number) => parseInt(hex.replace('#', '').slice(i, i + 2), 16);
+  return `#${[0, 2, 4]
+    .map((i) =>
+      Math.round(channels(accent, i) * percent + channels(base, i) * (1 - percent))
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')}`;
+}
+
+const siteCss = readFileSync('src/styles/site.css', 'utf8');
+
+function levelPercent(level: number): number {
+  const match = siteCss.match(
+    new RegExp(
+      `\\.calendar__day\\[data-level='${level}'\\]\\s*\\{[^}]*color-mix\\(in srgb, var\\(--accent\\) (\\d+)%`,
+    ),
+  );
+  if (!match) throw new Error(`no colour-mix found for calendar level ${level}`);
+  return Number(match[1]) / 100;
+}
+
+describe.each(THEMES)('$name contribution calendar', ({ name, selector }) => {
+  const empty = token(selector, '--raised');
+  const accent = token(selector, '--accent');
+  // Light theme cannot reach 3:1 here: its accent is a dark brown and the whole
+  // ramp spans about 5:1, so the floor is what the palette allows, not the
+  // WCAG figure. The tooltip and the screen-reader text carry the exact count.
+  const floor = name === 'night shift' ? 3 : 2.3;
+
+  it('separates a day with contributions from an empty one', () => {
+    expect(contrast(mix(accent, empty, levelPercent(1)), empty)).toBeGreaterThanOrEqual(floor);
+  });
+
+  it('keeps every step brighter than the one below it', () => {
+    const fills = [
+      empty,
+      mix(accent, empty, levelPercent(1)),
+      mix(accent, empty, levelPercent(2)),
+      mix(accent, empty, levelPercent(3)),
+      accent,
+    ];
+    for (let i = 1; i < fills.length; i++) {
+      expect(contrast(fills[i], fills[i - 1]), `level ${i} against level ${i - 1}`).toBeGreaterThan(
+        1.15,
+      );
+    }
+  });
+});

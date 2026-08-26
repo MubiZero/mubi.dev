@@ -873,17 +873,25 @@ body {
 }
 
 /* One accent, stepped by intensity, instead of a second colour imported from
-   another product. */
+   another product.
+
+   The ramp is front-loaded on purpose. Five steps have to share the whole
+   distance from the empty cell to the accent, so spacing them evenly left the
+   first step at 1.93:1 in dark and 1.61:1 in light, and a day with one commit
+   was indistinguishable from a day with none. That boundary is the one the
+   graph exists to show, so it takes the largest jump (3.19:1 dark, 2.40:1
+   light) and the upper steps carry the remainder. The exact count is never
+   colour alone: every cell states it in its tooltip and to a screen reader. */
 .calendar__day[data-level='1'] {
-  background: color-mix(in srgb, var(--accent) 32%, var(--raised));
+  background: color-mix(in srgb, var(--accent) 55%, var(--raised));
 }
 
 .calendar__day[data-level='2'] {
-  background: color-mix(in srgb, var(--accent) 58%, var(--raised));
+  background: color-mix(in srgb, var(--accent) 72%, var(--raised));
 }
 
 .calendar__day[data-level='3'] {
-  background: color-mix(in srgb, var(--accent) 80%, var(--raised));
+  background: color-mix(in srgb, var(--accent) 86%, var(--raised));
 }
 
 .calendar__day[data-level='4'] {
