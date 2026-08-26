@@ -3,25 +3,37 @@
     "name": "afk4.net",
     "url": "https://github.com/MubiZero/afk4.net",
     "language": "C#",
-    "pushedAt": "2026-08-03T08:00:06Z"
-  },
-  {
-    "name": "mubi.dev",
-    "url": "https://github.com/MubiZero/mubi.dev",
-    "language": "TypeScript",
-    "pushedAt": "2026-07-31T12:49:21Z"
-  },
-  {
-    "name": "RabbitFarm",
-    "url": "https://github.com/MubiZero/RabbitFarm",
-    "language": "Dart",
-    "pushedAt": "2026-03-05T05:20:43Z"
+    "pushedAt": "2026-08-26T09:57:54Z"
   },
   {
     "name": "DuTaksim",
     "url": "https://github.com/MubiZero/DuTaksim",
     "language": "Dart",
     "pushedAt": "2025-10-30T11:53:03Z"
+  },
+  {
+    "name": "madadrehabuz",
+    "url": "https://github.com/MubiZero/madadrehabuz",
+    "language": "HTML",
+    "pushedAt": "2026-05-20T06:03:45Z"
+  },
+  {
+    "name": "mubi.dev",
+    "url": "https://github.com/MubiZero/mubi.dev",
+    "language": "TypeScript",
+    "pushedAt": "2026-08-26T16:03:05Z"
+  },
+  {
+    "name": "RabbitFarm",
+    "url": "https://github.com/MubiZero/RabbitFarm",
+    "language": "Dart",
+    "pushedAt": "2026-08-23T20:31:12Z"
+  },
+  {
+    "name": "SynergyDMS",
+    "url": "https://github.com/MubiZero/SynergyDMS",
+    "language": "Dart",
+    "pushedAt": "2026-01-16T06:26:10Z"
   },
   {
     "name": "Telegram-Bot-Ticket-Help-System",
