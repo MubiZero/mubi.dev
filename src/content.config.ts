@@ -1,5 +1,6 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import type { z } from 'astro/zod';
 import {
   casesSchema,
   contactSchema,
@@ -12,7 +13,10 @@ import {
   uiSchema,
 } from './content/schemas';
 
-function localeCollection(directory: string, schema: Parameters<typeof defineCollection>[0]['schema']) {
+// Generic in the schema on purpose: widening it to defineCollection's own
+// parameter type erased what each collection holds, and every consumer of
+// getEntry() then received `unknown`.
+function localeCollection<S extends z.ZodTypeAny>(directory: string, schema: S) {
   return defineCollection({
     loader: glob({ base: `./src/content/${directory}`, pattern: '*.yaml' }),
     schema,

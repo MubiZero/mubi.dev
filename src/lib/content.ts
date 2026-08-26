@@ -1,19 +1,13 @@
 import { getEntry } from 'astro:content';
 import type { Locale } from './locale';
 
-async function section<
-  T extends
-    | 'profile'
-    | 'experience'
-    | 'education'
-    | 'cases'
-    | 'stack'
-    | 'contact'
-    | 'repos'
-    | 'ui'
-    | 'copy',
->(collection: T, locale: Locale) {
-  const entry = await getEntry(collection, locale);
+/**
+ * Each collection is fetched by its own literal name rather than through a
+ * generic helper: a helper parameterised over the collection name collapses
+ * every schema into one union, and each caller then has to narrow a type the
+ * build already knows exactly.
+ */
+function required<T>(entry: { data: T } | undefined, collection: string, locale: Locale): T {
   if (!entry) throw new Error(`missing ${collection} data for locale ${locale}`);
   return entry.data;
 }
@@ -21,15 +15,26 @@ async function section<
 export async function loadSitePage(locale: Locale) {
   const [profile, experience, education, cases, stack, contact, ui, copy, repos] =
     await Promise.all([
-      section('profile', locale),
-      section('experience', locale),
-      section('education', locale),
-      section('cases', locale),
-      section('stack', locale),
-      section('contact', locale),
-      section('ui', locale),
-      section('copy', locale),
-      section('repos', locale),
+      getEntry('profile', locale),
+      getEntry('experience', locale),
+      getEntry('education', locale),
+      getEntry('cases', locale),
+      getEntry('stack', locale),
+      getEntry('contact', locale),
+      getEntry('ui', locale),
+      getEntry('copy', locale),
+      getEntry('repos', locale),
     ]);
-  return { profile, experience, education, cases, stack, contact, ui, copy, repos };
+
+  return {
+    profile: required(profile, 'profile', locale),
+    experience: required(experience, 'experience', locale),
+    education: required(education, 'education', locale),
+    cases: required(cases, 'cases', locale),
+    stack: required(stack, 'stack', locale),
+    contact: required(contact, 'contact', locale),
+    ui: required(ui, 'ui', locale),
+    copy: required(copy, 'copy', locale),
+    repos: required(repos, 'repos', locale),
+  };
 }

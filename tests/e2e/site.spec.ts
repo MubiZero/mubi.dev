@@ -1,5 +1,18 @@
+import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { load } from 'js-yaml';
+
+function content<T>(collection: string, locale: string): T {
+  return load(readFileSync(`src/content/${collection}/${locale}.yaml`, 'utf8')) as T;
+}
+
+// Read from the same files the page reads, so a content edit is one edit.
+const expectedRepoCount = content<{ entries: unknown[] }>('repos', 'en').entries.length;
+
+function profileRole(locale: string): string {
+  return content<{ now: { role: string } }>('profile', locale).now.role;
+}
 
 const ROUTES = [
   { locale: 'ru', path: '/ru/', lead: 'Автоматизирую инфраструктуру' },
@@ -14,7 +27,7 @@ for (const route of ROUTES) {
 
     test('opens on the name, the role, and the thesis', async ({ page }) => {
       await expect(page.locator('h1')).toBeVisible();
-      await expect(page.locator('.hero__role')).toContainText('DevOps/SRE');
+      await expect(page.locator('.hero__role')).toContainText(profileRole(route.locale));
       await expect(page.getByText(route.lead)).toBeVisible();
       await expect(page.getByTestId('hero-cta')).toHaveAttribute('href', /^mailto:/);
     });
@@ -95,7 +108,9 @@ for (const route of ROUTES) {
 
     test('the code section shows real repositories with live metadata', async ({ page }) => {
       const repos = page.getByTestId('repo');
-      await expect(repos).toHaveCount(5);
+      // the count the content file declares, so adding or dropping a
+      // repository is a content edit and not a test edit
+      await expect(repos).toHaveCount(expectedRepoCount);
 
       for (const repo of await repos.all()) {
         await expect(repo).toHaveAttribute('href', /^https:\/\/github\.com\/MubiZero\//);
@@ -121,10 +136,14 @@ for (const route of ROUTES) {
       // a region you can scroll must also be reachable by keyboard
       expect(await scroller.getAttribute('tabindex')).toBe('0');
 
-      const painted = await calendar
-        .locator('.calendar__day[data-level="4"]')
-        .count();
-      expect(painted).toBeGreaterThan(0);
+      // Every cell must carry a level the stylesheet knows how to paint. Which
+      // levels appear is a fact about the owner's year, not about the page, so
+      // asserting that a level-4 day exists would fail on a quiet month.
+      const levels = await calendar
+        .locator('.calendar__day[data-level]')
+        .evaluateAll((cells) => cells.map((cell) => cell.getAttribute('data-level')));
+      expect(levels.every((level) => /^[0-4]$/.test(level ?? ''))).toBe(true);
+      expect(new Set(levels).size).toBeGreaterThan(1);
     });
 
     test('a day answers when you point at it', async ({ page }) => {
