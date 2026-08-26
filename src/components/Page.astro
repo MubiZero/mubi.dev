@@ -27,7 +27,14 @@ const year = 2026;
 <Masthead locale={locale} mark={copy.mark} nav={copy.nav} controls={ui.controls} />
 
 <main id="main" class="shell">
-  <Hero profile={profile} contact={contact} lead={copy.lead} printLabel={copy.printLabel} />
+  <Hero
+    profile={profile}
+    contact={contact}
+    lead={copy.lead}
+    availability={copy.availability}
+    proof={copy.proof}
+    printLabel={copy.printLabel}
+  />
 
   <Section id="practice" title={copy.sections.practice.title} rail={copy.sections.practice.rail}>
     <Practice items={copy.sections.practice.items} />

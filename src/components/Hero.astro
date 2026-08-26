@@ -12,10 +12,12 @@ interface Props {
   };
   contact: { email: string; links: { label: string; url: string }[] };
   lead: string;
+  availability: string;
+  proof: { metric: string; label: string }[];
   printLabel: string;
 }
 
-const { profile, contact, lead, printLabel } = Astro.props;
+const { profile, contact, lead, availability, proof, printLabel } = Astro.props;
 const socialIcons: Record<string, string> = {
   GitHub: 'simple-icons:github',
   LinkedIn: 'simple-icons:linkedin',
@@ -30,9 +32,25 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
     <p class="hero__role">{role}</p>
     <p class="hero__lead">{lead}</p>
 
+    <!-- The measured results sit above the prose because a reader who leaves
+         after five seconds has read only this far. The cases below carry the
+         same figures with their context. -->
+    <dl class="proof">
+      {
+        proof.map((item) => (
+          <div class="proof__item">
+            <dt>{item.metric}</dt>
+            <dd>{item.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
     <div class="hero__summary">
       {profile.summary.map((sentence) => <p>{sentence}</p>)}
     </div>
+
+    <p class="hero__availability">{availability}</p>
 
     <div class="actions">
       <a class="button" data-testid="hero-cta" href={`mailto:${contact.email}`}>
