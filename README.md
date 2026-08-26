@@ -5,7 +5,7 @@
 ## What is included
 
 - English at `/` and Russian at `/ru/`
-- Modular personal homepage with an interactive workspace, capabilities, selected work, experience, education, and contacts
+- One page per locale: the hero with its measured results, capabilities, selected cases, track, toolkit, public code, and contacts
 - Light and dark themes, with the choice remembered in the browser
 - Responsive layout, keyboard navigation, visible focus states, and reduced-motion support
 - A4 print layout, so the current page can be saved as a PDF without maintaining a second CV file
@@ -13,8 +13,8 @@
 ## Stack
 
 - [Astro](https://astro.build/) for static rendering
-- Tailwind CSS 4 for utility styles, backed by shared CSS design tokens
-- Vitest for content, localisation, and contrast checks
+- Hand-written CSS in `src/styles/`, backed by shared design tokens in `tokens.css`
+- Vitest for schema, content, localisation, and contrast checks
 - Playwright and axe-core for browser, accessibility, responsive, and print checks
 - nginx in a multi-stage Docker build for production
 
@@ -34,15 +34,25 @@ The development server is available at `http://localhost:4321`.
 | `npm run dev` | Start the local development server. |
 | `npm run build` | Build the static site into `dist/`. |
 | `npm run preview` | Serve the production build locally. |
-| `npm test` | Validate content schemas, locale parity, English copy rules, and colour contrast. |
+| `npm run check` | Typecheck every `.ts` and `.astro` file with `astro check`. |
+| `npm test` | Parse the published YAML with its schemas, and check locale parity, English copy rules, and colour contrast. |
 | `npm run test:e2e` | Run browser interaction, accessibility, responsive, and print tests. |
 
 Before publishing a site change, run:
 
 ```bash
+npm run check
 npm test
 npm run test:e2e
 npm run build
+```
+
+The same sequence runs on every push and pull request in
+[.github/workflows/ci.yml](.github/workflows/ci.yml). The browser suite needs
+its browser once per machine:
+
+```bash
+npx playwright install --with-deps chromium
 ```
 
 ## Updating the CV
@@ -51,14 +61,16 @@ All public copy is separated from the components. Edit the matching English and 
 
 | Section | Files |
 | --- | --- |
-| Profile and navigation labels | `profile/{en,ru}.yaml` |
+| Name, current role, summary, hero CTA label | `profile/{en,ru}.yaml` |
+| Hero thesis, availability line, headline figures, section titles, every other on-page label | `copy/{en,ru}.yaml` |
 | Work history and print-only condensed entries | `experience/{en,ru}.yaml` |
 | Education | `education/{en,ru}.yaml` |
 | Selected engineering cases | `cases/{en,ru}.yaml` |
 | Skills and contacts | `stack/{en,ru}.yaml`, `contact/{en,ru}.yaml` |
-| Interface labels | `ui/{en,ru}.yaml` |
+| Public repositories, by name and description | `repos/{en,ru}.yaml` |
+| Document title, meta description, theme and language controls | `ui/{en,ru}.yaml` |
 
-Keep both locales structurally identical. The test suite intentionally fails if a field is added in only one language. For content conventions and a short maintenance checklist, see [docs/HANDOVER.md](docs/HANDOVER.md).
+Keep both locales structurally identical. The test suite intentionally fails if a field is added in only one language, and every file is parsed with its schema by `npm test`. For content conventions and a short maintenance checklist, see [docs/HANDOVER.md](docs/HANDOVER.md).
 
 ## Print a CV
 
@@ -75,7 +87,9 @@ The site needs no runtime environment variables or database. DNS and TLS are man
 
 ## Project documentation
 
-- [Current redesign specification](docs/superpowers/specs/2026-07-31-mubi-dev-redesign-design.md)
-- [Current redesign plan](docs/superpowers/plans/2026-07-31-mubi-dev-redesign.md)
-- [Original site specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
+Newest first, so the current design is the one at the top.
+
+- [Evidence-first redesign specification](docs/superpowers/specs/2026-08-03-mubi-dev-evidence-first-redesign-design.md) and its [plan](docs/superpowers/plans/2026-08-03-mubi-dev-evidence-first-redesign.md), which describe the site as it stands
+- [Design QA audit](docs/superpowers/audits/2026-08-03-mubi-dev-evidence-first-design-qa.md)
+- Superseded: the [first redesign](docs/superpowers/specs/2026-07-31-mubi-dev-redesign-design.md) and the [original site specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
 - [Content handover](docs/HANDOVER.md)
