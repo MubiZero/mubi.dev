@@ -73,9 +73,18 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
   </div>
 
   <div class="hero__portrait">
-    <!-- Wider than the 220px box on purpose: object-fit cover scales the image
-         to the taller side, so the browser needs more pixels than the box. -->
-    <Image src={portrait} alt={profile.name} widths={[400, 800]} sizes="400px" loading="eager" />
+    <!-- These are the width the image is painted at, not the width of the box:
+         object-fit cover scales a square source to the taller side, so the
+         220px desktop column with its 460px cap needs about 400px of image.
+         The phone box is a plain 88px square, and stating it stops every
+         retina phone from downloading the 800w candidate for a thumbnail. -->
+    <Image
+      src={portrait}
+      alt={profile.name}
+      widths={[400, 800]}
+      sizes="(max-width: 720px) 88px, (max-width: 900px) 275px, 400px"
+      loading="eager"
+    />
   </div>
 </section>
 
