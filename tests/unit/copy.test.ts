@@ -1,7 +1,19 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const COLLECTIONS = ['profile', 'experience', 'cases', 'stack', 'contact', 'repos', 'ui', 'copy'];
+// Every collection, in step with parity.test.ts: education used to be missing
+// here, so its files were exempt from both rules without anyone saying so.
+const COLLECTIONS = [
+  'profile',
+  'experience',
+  'education',
+  'cases',
+  'stack',
+  'contact',
+  'repos',
+  'ui',
+  'copy',
+];
 
 function files(locale: string): string[] {
   return COLLECTIONS.map((collection) => `src/content/${collection}/${locale}.yaml`);
