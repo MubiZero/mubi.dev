@@ -14,6 +14,13 @@ function profileRole(locale: string): string {
   return content<{ now: { role: string } }>('profile', locale).now.role;
 }
 
+declare global {
+  interface Window {
+    /** Set by the print test to count window.print() calls. */
+    __printed: number;
+  }
+}
+
 const ROUTES = [
   { locale: 'ru', path: '/ru/', lead: 'Автоматизирую инфраструктуру' },
   { locale: 'en', path: '/', lead: 'I automate infrastructure' },
