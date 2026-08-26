@@ -8,9 +8,9 @@ entries:
   - repo: RabbitFarm
     title: RabbitFarm
     description: 'Farm management: a Flutter mobile app and the REST API behind it.'
-  - repo: DuTaksim
-    title: DuTaksim
-    description: An app for splitting a restaurant bill. Built for the Eskhata Bank app contest.
+  - repo: ManClient
+    title: ManClient
+    description: 'A B2B SaaS for booking service businesses: a public page and a Telegram bot for clients, a back office with schedules, payments, and analytics.'
   - repo: Telegram-Bot-Ticket-Help-System
     title: Ticket Help System
     description: 'A Telegram support bot: customer tickets, routing to agents, and an admin panel.'

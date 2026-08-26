@@ -18,6 +18,12 @@
     "pushedAt": "2026-05-20T06:03:45Z"
   },
   {
+    "name": "ManClient",
+    "url": "https://github.com/MubiZero/ManClient",
+    "language": "TypeScript",
+    "pushedAt": "2026-08-21T19:36:24Z"
+  },
+  {
     "name": "mubi.dev",
     "url": "https://github.com/MubiZero/mubi.dev",
     "language": "TypeScript",
