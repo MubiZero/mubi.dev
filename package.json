@@ -11,6 +11,7 @@
     "check": "astro check",
     "preview": "astro preview --port 4321",
     "qa:capture": "node scripts/capture-qa.mjs",
+    "refresh:github": "node scripts/refresh-github-snapshot.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },

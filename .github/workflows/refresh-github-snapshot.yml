@@ -1,0 +1,48 @@
+name: Refresh GitHub snapshot
+
+# The contribution calendar and repo list are read live at build time
+# (src/lib/github.ts), but that live fetch is best-effort: if it fails —
+# rate limit, network hiccup, GitHub markup change — the build silently
+# falls back to the committed snapshot in src/data/. Without this job that
+# fallback only updates when someone happens to touch those files by hand,
+# so it can go stale for weeks while the live fetch keeps failing quietly.
+# Running it on a schedule keeps the fallback itself current, and pushing
+# the change to main also triggers a Coolify redeploy.
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-github-snapshot
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - run: npm run refresh:github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if the snapshots changed
+        run: |
+          if git diff --quiet -- src/data/github-snapshot.json src/data/github-contributions.json; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/github-snapshot.json src/data/github-contributions.json
+          git commit -m "chore: refresh the GitHub snapshot"
+          git push
