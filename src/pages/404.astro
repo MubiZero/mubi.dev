@@ -1,0 +1,28 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { loadSitePage } from '../lib/content';
+
+// A single English page: nginx serves it for every unmatched path in both
+// locales, and a Russian visitor who mistypes a URL still reads the two links
+// that matter more than the sentence above them.
+const { ui, profile, contact, copy } = await loadSitePage('en');
+---
+
+<SiteLayout
+  locale="en"
+  title={`404 - ${ui.siteTitle}`}
+  description={ui.metaDescription}
+  profile={profile}
+  contact={contact}
+  noIndex
+>
+  <main id="main" class="shell notfound">
+    <p class="notfound__code">404</p>
+    <h1>This page does not exist</h1>
+    <p class="notfound__lead">The address is wrong, or the page it named is gone.</p>
+    <nav class="notfound__links" aria-label="Recovery">
+      <a class="button" href="/">{copy.mark}</a>
+      <a href="/ru/">Русская версия</a>
+    </nav>
+  </main>
+</SiteLayout>

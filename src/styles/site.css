@@ -445,6 +445,47 @@ body {
   content: '';
 }
 
+/* ---------- not found ---------- */
+
+.notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  min-height: 70vh;
+  padding-block: var(--space-24);
+  gap: var(--space-4);
+}
+
+.notfound__code {
+  color: var(--accent);
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-stretch: 85%;
+  letter-spacing: 0.08em;
+}
+
+.notfound h1 {
+  max-width: 18ch;
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.notfound__lead {
+  max-width: 46ch;
+  color: var(--muted);
+}
+
+.notfound__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--space-4);
+  gap: var(--space-6);
+}
+
 /* ---------- actions ---------- */
 
 .actions {
