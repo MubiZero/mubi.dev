@@ -970,6 +970,13 @@ body {
   font-size: 0.62rem;
   font-stretch: 80%;
   gap: var(--space-3);
+  /* Three facts and an arrow do not fit one line on a narrow phone at 200%
+     text, and a row that cannot wrap pushes the page sideways instead. Each
+     fact still holds together; only the row between them breaks. */
+  flex-wrap: wrap;
+}
+
+.repo__meta > span {
   white-space: nowrap;
 }
 

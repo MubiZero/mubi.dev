@@ -38,6 +38,7 @@ async function fetchRepoSnapshot() {
       name: repo.name,
       url: repo.html_url,
       language: repo.language,
+      license: repo.license?.spdx_id ?? null,
       pushedAt: repo.pushed_at,
     }));
 }

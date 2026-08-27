@@ -47,6 +47,9 @@ describe('the committed GitHub snapshot', () => {
     for (const repo of snapshot) {
       expect(repo.url).toMatch(/^https:\/\/github\.com\//);
       expect(Number.isNaN(Date.parse(repo.pushedAt)), repo.name).toBe(false);
+      // The page states a licence per repository, so the fallback has to
+      // carry the field even when a repository has none of its own.
+      expect(repo, repo.name).toHaveProperty('license');
     }
   });
 });

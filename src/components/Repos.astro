@@ -27,6 +27,7 @@ const rows = entries.map((entry) => {
           <span class="repo__description">{row.description}</span>
           <span class="repo__meta">
             {row.language && <span class="repo__language">{row.language}</span>}
+            {row.license && <span>{row.license}</span>}
             <span>{row.updated}</span>
             <Icon name="ph:arrow-up-right" size="14" aria-hidden="true" />
           </span>
