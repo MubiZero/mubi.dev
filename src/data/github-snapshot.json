@@ -4,35 +4,35 @@
     "url": "https://github.com/MubiZero/afk4.net",
     "language": "C#",
     "license": "AGPL-3.0",
-    "pushedAt": "2026-08-26T09:57:54Z"
+    "pushedAt": "2026-08-27T10:07:13Z"
   },
   {
     "name": "DuTaksim",
     "url": "https://github.com/MubiZero/DuTaksim",
     "language": "Dart",
     "license": "AGPL-3.0",
-    "pushedAt": "2025-10-30T11:53:03Z"
+    "pushedAt": "2026-08-27T08:21:38Z"
   },
   {
     "name": "madadrehabuz",
     "url": "https://github.com/MubiZero/madadrehabuz",
     "language": "HTML",
     "license": "AGPL-3.0",
-    "pushedAt": "2026-05-20T06:03:45Z"
+    "pushedAt": "2026-08-27T08:13:31Z"
   },
   {
     "name": "ManClient",
     "url": "https://github.com/MubiZero/ManClient",
     "language": "TypeScript",
     "license": "AGPL-3.0",
-    "pushedAt": "2026-08-21T19:36:24Z"
+    "pushedAt": "2026-08-27T08:30:35Z"
   },
   {
     "name": "mubi.dev",
     "url": "https://github.com/MubiZero/mubi.dev",
     "language": "TypeScript",
     "license": "MIT",
-    "pushedAt": "2026-08-26T16:03:05Z"
+    "pushedAt": "2026-08-27T09:17:31Z"
   },
   {
     "name": "RabbitFarm",
@@ -46,7 +46,7 @@
     "url": "https://github.com/MubiZero/SynergyDMS",
     "language": "Dart",
     "license": "AGPL-3.0",
-    "pushedAt": "2026-01-16T06:26:10Z"
+    "pushedAt": "2026-08-27T08:14:54Z"
   },
   {
     "name": "Telegram-Bot-Ticket-Help-System",
