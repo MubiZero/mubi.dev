@@ -7,7 +7,15 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY . .
-RUN npm run build
+
+# Optional. The build reads GitHub for the repository facts the code section
+# states, and an anonymous call gets 60 requests an hour per address, which a
+# shared build host runs through quickly; a token raises that to 5000. Without
+# one the build still succeeds on the committed snapshot, only staler. Passed
+# to the one command that needs it rather than set as ENV, so it stays out of
+# the image's environment.
+ARG GITHUB_TOKEN=""
+RUN GITHUB_TOKEN="$GITHUB_TOKEN" npm run build
 
 FROM nginx:1.27-alpine
 
