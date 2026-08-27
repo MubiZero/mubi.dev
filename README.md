@@ -93,3 +93,12 @@ Newest first, so the current design is the one at the top.
 - [Design QA audit](docs/superpowers/audits/2026-08-03-mubi-dev-evidence-first-design-qa.md)
 - Superseded: the [first redesign](docs/superpowers/specs/2026-07-31-mubi-dev-redesign-design.md) and the [original site specification](docs/superpowers/specs/2026-07-31-mubi-dev-design.md)
 - [Content handover](docs/HANDOVER.md)
+
+## License
+
+`SPDX-License-Identifier: MIT`
+
+The code in this repository is distributed under the [MIT License](LICENSE).
+The licence covers the code, not the content: the text, the CV data under
+`src/content/`, and the portrait remain the author's and are not granted for
+reuse.
