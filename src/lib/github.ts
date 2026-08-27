@@ -5,6 +5,8 @@ export interface RepoFacts {
   name: string;
   url: string;
   language: string | null;
+  /** SPDX identifier, or null for a repository that carries no licence. */
+  license: string | null;
   pushedAt: string;
 }
 
@@ -53,6 +55,7 @@ async function fetchRepoFacts(): Promise<Map<string, RepoFacts>> {
       name: string;
       html_url: string;
       language: string | null;
+      license: { spdx_id: string } | null;
       pushed_at: string;
       fork: boolean;
     }[];
@@ -63,6 +66,7 @@ async function fetchRepoFacts(): Promise<Map<string, RepoFacts>> {
         name: repo.name,
         url: repo.html_url,
         language: repo.language,
+        license: repo.license?.spdx_id ?? null,
         pushedAt: repo.pushed_at,
       });
     }
