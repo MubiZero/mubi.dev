@@ -1,21 +1,25 @@
 # Facts that belong to the CV and nowhere else. Everything the CV shares with
-# the site - name, contacts, stack, experience, education, the metrics, the
-# public-repository figures - is read from src/content and src/data by
-# scripts/build-cv.mjs, so the two cannot drift apart. Only what the site does
-# not say lives here.
-target: DevSecOps специалист
+# the site - name, contacts, skills, experience, education - is read from
+# src/content by scripts/build-cv.mjs, so the two cannot drift apart. Only what
+# the site does not say lives here.
+target: DevOps специалист
 location: Худжанд, Таджикистан — готов к релокации в Ташкент
 
-# Leads with work already done rather than with an intention. The certificate
-# below is five years old and cannot carry the case on its own; access control
-# and incident work can.
 summary: >-
-  Инженер банковской инфраструктуры: серверы, доступы, сети и мониторинг того,
-  что не должно падать. Безопасность здесь уже часть работы, а не намерение —
-  ролевые модели доступа и защищённые ветки в GitLab, централизованные учётные
-  записи на FreeIPA, разбор инцидентов. Хочу перейти в DevSecOps и встраивать
-  проверки в CI/CD и SSDLC: под это же профильное образование по защите
-  информационных систем. Код открыт и проверяем.
+  Разработчик и инженер инфраструктуры: серверы, доступы, сети и мониторинг
+  того, что не должно падать. Безопасность здесь уже часть работы, а не
+  намерение — ролевые модели доступа и защищённые ветки в GitLab,
+  централизованные учётные записи на FreeIPA, разбор инцидентов. Хочу перейти в
+  DevSecOps и встраивать проверки в CI/CD и SSDLC: под это же профильное
+  образование по защите информационных систем.
+
+# The measured results have a section of their own on the site. On paper they
+# were cut for room, and the experience bullets carry the same figures.
+showProof: false
+
+# Present on the site, deliberately absent from the CV.
+stackOmit: [Coolify]
+showEducationDetails: false
 
 # Appended to the experience entry whose role matches the key. The build fails
 # on a key that matches nothing, so renaming a role in src/content cannot leave
@@ -25,6 +29,18 @@ extraLines:
     - Веду ролевые модели доступа, защищённые ветки и пайплайны в GitLab CI/CD, централизую учётные записи на FreeIPA.
   Junior DevOps/SRE:
     - 'Автоматизировал развёртывание виртуальных машин с Terraform, Ansible и FreeIPA, развернул Kubernetes-платформу на RKE2 и Rancher.'
+
+projects:
+  - >-
+    Активно разрабатываю коммерческие решения, более чем в 10 проектах: Safo
+    Pharmacy (safo.mubi.dev), NJ-Cosmetics.com, ChicagoBurger.tj,
+    EliteBurger.online, AziziMoliya.com, imongroup.com и так далее по проектам,
+    что уже под NDA и/или не достойны особого внимания.
+  - >-
+    Кроме коммерческих, также занимаюсь полностью open-source (AGPL) пет-проектами,
+    к примеру: AFK4.NET — комплексное решение для управления компьютерными клубами,
+    ManClient — booking-сервис для бизнеса и его клиентов. Ещё 6 проектов, можете
+    ознакомиться на моей странице в GitHub.
 
 certificates:
   - name: Kaspersky Academy — Cybersecurity Certification

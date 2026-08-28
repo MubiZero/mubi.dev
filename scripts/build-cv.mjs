@@ -7,7 +7,6 @@ import {
   BorderStyle,
   Document,
   ExternalHyperlink,
-  ImageRun,
   Packer,
   PageOrientation,
   Paragraph,
@@ -15,12 +14,7 @@ import {
   PositionalTabAlignment,
   PositionalTabLeader,
   PositionalTabRelativeTo,
-  Table,
-  TableCell,
-  TableRow,
   TextRun,
-  VerticalAlign,
-  WidthType,
 } from 'docx';
 
 const usage = `Usage:
@@ -35,10 +29,9 @@ if (process.argv.includes('--help')) {
   process.exit(0);
 }
 
-const out = resolve(process.argv[2] ?? 'cv/Mukhamedov-DevSecOps-ru.docx');
+const out = resolve(process.argv[2] ?? 'cv/MukhamedovM_CV.docx');
 
 const yaml = (path) => load(readFileSync(resolve(path), 'utf8'));
-const json = (path) => JSON.parse(readFileSync(resolve(path), 'utf8'));
 
 const profile = yaml('src/content/profile/ru.yaml');
 const contact = yaml('src/content/contact/ru.yaml');
@@ -47,8 +40,6 @@ const stack = yaml('src/content/stack/ru.yaml');
 const experience = yaml('src/content/experience/ru.yaml');
 const education = yaml('src/content/education/ru.yaml');
 const cv = yaml('src/data/cv-ru.yaml');
-const repos = json('src/data/github-snapshot.json');
-const commits = json('src/data/github-contributions.json');
 
 /**
  * The site's light palette, because paper is a light ground. The dark-theme
@@ -70,7 +61,7 @@ const ACCENT = '8F5200';
 const FONT = 'Arial';
 
 const A4 = { width: 11906, height: 16838 };
-const MARGIN = { top: 640, bottom: 560, left: 850, right: 850 };
+const MARGIN = { top: 560, bottom: 480, left: 850, right: 850 };
 const TEXT_WIDTH = A4.width - MARGIN.left - MARGIN.right;
 
 const half = (points) => points * 2;
@@ -96,7 +87,7 @@ function rightTab() {
 
 function sectionHeading(title) {
   return new Paragraph({
-    spacing: { before: 180, after: 80 },
+    spacing: { before: 120, after: 50 },
     border: { bottom: { style: BorderStyle.SINGLE, size: 6, space: 4, color: LINE } },
     children: [text(title.toUpperCase(), { bold: true, size: half(10), color: INK, characterSpacing: 24 })],
   });
@@ -104,7 +95,7 @@ function sectionHeading(title) {
 
 function body(value, options = {}) {
   return new Paragraph({
-    spacing: { after: 40, line: 250 },
+    spacing: { after: 40, line: 242 },
     ...options,
     children: [text(value, { size: half(10), color: INK })],
   });
@@ -113,7 +104,7 @@ function body(value, options = {}) {
 function bullet(value) {
   return new Paragraph({
     numbering: { reference: 'cv-bullets', level: 0 },
-    spacing: { after: 30, line: 250 },
+    spacing: { after: 26, line: 242 },
     children: [text(value, { size: half(10), color: INK })],
   });
 }
@@ -133,57 +124,18 @@ function roleLine(role, employer, period) {
 }
 
 /**
- * The header is a table because the mark has to sit beside the name rather
- * than on its baseline, and Word gives no other reliable way to do that.
+ * No mark on the CV. A logo beside a name on a one-page document is a brand
+ * asserting itself where the reader is looking for a person, and the site and
+ * the email signature already carry it.
  */
 function header() {
-  const markWidth = 720;
-  return new Table({
-    columnWidths: [markWidth, TEXT_WIDTH - markWidth],
-    borders: {
-      top: { style: BorderStyle.NONE },
-      bottom: { style: BorderStyle.NONE },
-      left: { style: BorderStyle.NONE },
-      right: { style: BorderStyle.NONE },
-      insideHorizontal: { style: BorderStyle.NONE },
-      insideVertical: { style: BorderStyle.NONE },
-    },
-    rows: [
-      new TableRow({
-        children: [
-          new TableCell({
-            width: { size: markWidth, type: WidthType.DXA },
-            margins: { right: 160 },
-            verticalAlign: VerticalAlign.CENTER,
-            children: [
-              new Paragraph({
-                children: [
-                  new ImageRun({
-                    type: 'png',
-                    data: readFileSync(resolve('public/favicon-180.png')),
-                    transformation: { width: 34, height: 34 },
-                  }),
-                ],
-              }),
-            ],
-          }),
-          new TableCell({
-            width: { size: TEXT_WIDTH - markWidth, type: WidthType.DXA },
-            verticalAlign: VerticalAlign.CENTER,
-            children: [
-              new Paragraph({
-                spacing: { after: 20 },
-                children: [text(profile.name, { bold: true, size: half(17), color: INK })],
-              }),
-              new Paragraph({
-                children: [text(cv.target, { size: half(11), color: MUTED })],
-              }),
-            ],
-          }),
-        ],
-      }),
-    ],
-  });
+  return [
+    new Paragraph({
+      spacing: { after: 20 },
+      children: [text(profile.name, { bold: true, size: half(17), color: INK })],
+    }),
+    new Paragraph({ children: [text(cv.target, { size: half(11), color: MUTED })] }),
+  ];
 }
 
 function link(label, url) {
@@ -199,7 +151,7 @@ function contactLines() {
   const site = 'https://mubi.dev';
   return [
     new Paragraph({
-      spacing: { before: 200, after: 40 },
+      spacing: { before: 140, after: 40 },
       children: [
         link(contact.email, `mailto:${contact.email}`),
         SEPARATOR(),
@@ -226,7 +178,7 @@ function contactLines() {
 function proof() {
   return copy.proof.map((entry) =>
     new Paragraph({
-      spacing: { after: 40, line: 250 },
+      spacing: { after: 40, line: 242 },
       children: [
         text(entry.metric.replace('->', '→'), { bold: true, size: half(10), color: ACCENT }),
         text('   ', { size: half(10) }),
@@ -237,16 +189,17 @@ function proof() {
 }
 
 function skills() {
+  const omit = new Set(cv.stackOmit ?? []);
   return stack.groups.map((group) =>
     new Paragraph({
-      spacing: { after: 40, line: 250 },
+      spacing: { after: 40, line: 242 },
       children: [
         text(`${group.label[0].toUpperCase()}${group.label.slice(1)}: `, {
           bold: true,
           size: half(10),
           color: INK,
         }),
-        text(group.items.join(', '), { size: half(10), color: INK }),
+        text(group.items.filter((item) => !omit.has(item)).join(', '), { size: half(10), color: INK }),
       ],
     }),
   );
@@ -276,40 +229,28 @@ function experienceSection() {
   return paragraphs;
 }
 
-function openSource() {
-  const licences = [...new Set(repos.map((repo) => repo.license).filter(Boolean))].sort();
-  const total = commits.total.toLocaleString('ru-RU');
-
-  if (commits.source !== 'public-commits') {
-    throw new Error(
-      `the contribution snapshot claims source "${commits.source}"; the CV will not print a ` +
-        'figure it cannot attribute to public repositories. Run `npm run refresh:github` first.',
-    );
-  }
-
-  return [
-    new Paragraph({
-      spacing: { after: 40, line: 250 },
-      children: [
-        text(`${total} коммитов`, { bold: true, size: half(10), color: ACCENT }),
-        text(`  за год в ${repos.length} публичных репозиториях, ${licences.join(' и ')}. `, {
-          size: half(10),
-          color: MUTED,
-        }),
-        text('Каждый коммит можно открыть и прочитать.', { size: half(10), color: MUTED }),
-      ],
-    }),
-    body('AFK4 и ManClient — собственные платформы; mubi.dev — этот сайт, собран и развёрнут самостоятельно.'),
-  ];
+function projects() {
+  return cv.projects.map((entry) => body(entry));
 }
 
 function educationSection() {
+  // The institution carries the date; the degree gets its own line. Putting
+  // both on one line pushes the date into the middle of a wrap, where it reads
+  // as an interruption rather than as a column.
   return education.entries.flatMap((entry) => [
-    roleLine(entry.institution, entry.degree, entry.period),
-    ...(entry.details?.length
+    new Paragraph({
+      spacing: { before: 110, after: 20 },
+      children: [
+        text(entry.institution, { bold: true, size: half(10.5), color: INK }),
+        rightTab(),
+        text(entry.period, { size: half(9.5), color: MUTED }),
+      ],
+    }),
+    body(entry.degree),
+    ...(cv.showEducationDetails !== false && entry.details?.length
       ? [
           new Paragraph({
-            spacing: { after: 60 },
+            spacing: { after: 40 },
             children: [text(entry.details.join(' · '), { size: half(9.5), color: MUTED })],
           }),
         ]
@@ -320,7 +261,7 @@ function educationSection() {
 function certificates() {
   return cv.certificates.map((entry) =>
     new Paragraph({
-      spacing: { after: 40, line: 250 },
+      spacing: { after: 40, line: 242 },
       children: [
         text(entry.name, { size: half(10), color: INK }),
         text(` — ${entry.detail}`, { size: half(10), color: MUTED }),
@@ -368,18 +309,17 @@ const document = new Document({
         },
       },
       children: [
-        header(),
+        ...header(),
         ...contactLines(),
         sectionHeading('О себе'),
         body(cv.summary),
-        sectionHeading('Результаты'),
-        ...proof(),
+        ...(cv.showProof === false ? [] : [sectionHeading('Результаты'), ...proof()]),
         sectionHeading('Ключевые навыки'),
         ...skills(),
         sectionHeading('Опыт работы'),
         ...experienceSection(),
-        sectionHeading('Открытый код'),
-        ...openSource(),
+        sectionHeading('Проекты'),
+        ...projects(),
         sectionHeading('Образование'),
         ...educationSection(),
         sectionHeading('Сертификаты'),
