@@ -1,11 +1,6 @@
 mark: mubi.dev
 lead: I automate infrastructure and build the tools a team is missing.
 availability: Open to remote roles and to relocation.
-proof:
-  - metric: '2-4 h -> 30 min'
-    label: to provision a server, up to 10 in parallel
-  - metric: '6 h -> 1 min'
-    label: to react to a network incident across 50+ clinics
 nav:
   label: Primary navigation
   open: Open sections

@@ -35,7 +35,6 @@ const yaml = (path) => load(readFileSync(resolve(path), 'utf8'));
 
 const profile = yaml('src/content/profile/ru.yaml');
 const contact = yaml('src/content/contact/ru.yaml');
-const copy = yaml('src/content/copy/ru.yaml');
 const stack = yaml('src/content/stack/ru.yaml');
 const experience = yaml('src/content/experience/ru.yaml');
 const education = yaml('src/content/education/ru.yaml');
@@ -170,24 +169,6 @@ function contactLines() {
   ];
 }
 
-/**
- * The only amber on the page, and the site's own rule for it: the accent is
- * reserved for measured results. A rule or a heading painted in it would spend
- * the colour on decoration and leave nothing to mark the numbers with.
- */
-function proof() {
-  return copy.proof.map((entry) =>
-    new Paragraph({
-      spacing: { after: 40, line: 242 },
-      children: [
-        text(entry.metric.replace('->', '→'), { bold: true, size: half(10), color: ACCENT }),
-        text('   ', { size: half(10) }),
-        text(entry.label, { size: half(10), color: MUTED }),
-      ],
-    }),
-  );
-}
-
 function skills() {
   const omit = new Set(cv.stackOmit ?? []);
   return stack.groups.map((group) =>
@@ -313,7 +294,6 @@ const document = new Document({
         ...contactLines(),
         sectionHeading('О себе'),
         body(cv.summary),
-        ...(cv.showProof === false ? [] : [sectionHeading('Результаты'), ...proof()]),
         sectionHeading('Ключевые навыки'),
         ...skills(),
         sectionHeading('Опыт работы'),

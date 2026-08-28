@@ -13,10 +13,6 @@ summary: >-
   DevSecOps и встраивать проверки в CI/CD и SSDLC: под это же профильное
   образование по защите информационных систем.
 
-# The measured results have a section of their own on the site. On paper they
-# were cut for room, and the experience bullets carry the same figures.
-showProof: false
-
 # Present on the site, deliberately absent from the CV.
 stackOmit: [Coolify]
 showEducationDetails: false

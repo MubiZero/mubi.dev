@@ -392,37 +392,6 @@ body {
   line-height: 1.22;
 }
 
-/* Measured results read as a short table, not as prose: the display face and
-   the accent are the same pair the cases use, so the figure a reader meets in
-   the hero is recognisably the figure they meet again in context below. */
-.proof {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: var(--space-8);
-  gap: var(--space-6) var(--space-12);
-}
-
-.proof__item {
-  max-width: 32ch;
-}
-
-.proof dt {
-  color: var(--accent);
-  font-family: var(--display);
-  font-size: 0.95rem;
-  font-stretch: 85%;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-.proof dd {
-  margin-top: var(--space-2);
-  color: var(--muted);
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-
 /* The reader's first question about someone in Khujand is whether the distance
    is a problem. Answered here, before they close the tab to avoid asking. */
 .hero__availability {
@@ -1403,7 +1372,6 @@ a.project:focus-visible svg {
   .foot,
   .hero__portrait,
   .hero .social,
-  .proof,
   .hero__availability,
   .button,
   .copy,

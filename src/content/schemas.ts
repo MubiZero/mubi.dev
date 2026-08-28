@@ -120,9 +120,6 @@ export const copySchema = z.object({
   mark: nonEmpty,
   lead: nonEmpty,
   availability: nonEmpty,
-  // The measured outcomes the cases below prove, stated where a reader who
-  // never scrolls still sees them. Two or three, never a wall.
-  proof: z.array(z.object({ metric: nonEmpty, label: nonEmpty })).min(2).max(3),
   nav: z.object({
     label: nonEmpty,
     open: nonEmpty,
