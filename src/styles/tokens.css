@@ -68,6 +68,23 @@
   --dur-micro: 120ms;
   --dur-short: 220ms;
   --dur-draw: 520ms;
+  /* The theme wave crosses a phone in a third of the distance it crosses a
+     desktop, so one duration cannot suit both: held fixed it reads as hurried
+     on a wide screen and sluggish on a narrow one. Stepped by width rather
+     than computed, because CSS cannot turn a length into a time. */
+  --wave-duration: 420ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@media (min-width: 720px) {
+  :root {
+    --wave-duration: 560ms;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --wave-duration: 680ms;
+  }
 }

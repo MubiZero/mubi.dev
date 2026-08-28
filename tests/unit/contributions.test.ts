@@ -4,14 +4,6 @@ import snapshot from '../../src/data/github-contributions.json';
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 describe('the committed contribution snapshot', () => {
-  it('states that it was built from public commits, which is what the page claims', () => {
-    // src/lib/github.ts refuses any other source, and the section is headed
-    // "public repositories". A snapshot scraped from the profile calendar
-    // would fold in private work that no reader can open.
-    expect(snapshot.source).toBe('public-commits');
-    expect(snapshot.repos).toBeGreaterThan(0);
-  });
-
   it('covers exactly the days between its own bounds', () => {
     const from = Date.parse(`${snapshot.from}T00:00:00Z`);
     const to = Date.parse(`${snapshot.to}T00:00:00Z`);
@@ -33,7 +25,7 @@ describe('the committed contribution snapshot', () => {
     expect(snapshot.counts.reduce((sum, count) => sum + count, 0)).toBe(snapshot.total);
   });
 
-  it('marks a day as active exactly when it has commits', () => {
+  it('marks a day as active exactly when it has contributions', () => {
     [...snapshot.levels].forEach((level, index) => {
       expect(level === '0', `day ${index}`).toBe(snapshot.counts[index] === 0);
     });

@@ -36,14 +36,14 @@ sections:
     rail: in daily use
   code:
     title: Code
-    rail: public repositories
+    rail: GitHub, public and private
     contributions:
-      one: commit
-      few: commits
-      many: commits
-      other: commits
+      one: contribution
+      few: contributions
+      many: contributions
+      other: contributions
     calendarHint: Hover a day, or step through them with the arrow keys
-    calendarHintTouch: Tap a day to see its date and commit count
+    calendarHintTouch: Tap a day to see its date and contribution count
   contact:
     title: Let us talk about the work
     rail: Khujand, UTC+5

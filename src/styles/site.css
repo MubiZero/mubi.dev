@@ -232,17 +232,24 @@ body {
   display: none;
 }
 
-/* The default cross fade would blur the two themes together halfway through.
-   The old theme simply holds still while the new one is wiped over it, which
-   is what makes the circle read as a wave rather than a dissolve.
+/* The theme change is revealed as a circle opening from the control that was
+   pressed. The old theme holds still underneath while the new one is wiped
+   over it, which is what makes it read as a wave rather than a dissolve; the
+   group is silenced too, since its default morph is anchored at the top left
+   and is a no-op only while the two snapshots agree on their size.
 
-   The group is silenced for the same reason. Its default animation morphs the
-   snapshot from the old size to the new one, anchored at the top left, which
-   is invisible only while the two sizes agree - and on a phone they need not,
-   since a tap can collapse the address bar between the snapshots. */
+   The radius is 142% and never computed. A percentage radius resolves against
+   sqrt(w² + h²) / sqrt(2), so the full diagonal is sqrt(2), or 141.4%, of it:
+   142% covers the screen from any point inside it, whatever the shape. There
+   is no reach to get wrong on a viewport the script cannot see.
+
+   The origin arrives as --wave-x and --wave-y, set on :root before the
+   transition starts and removed after it finishes. They are percentages of
+   the pseudo-element's own box, so they land in the right place even where a
+   pixel coordinate would not. The centre is the fallback: with no custom
+   property set, the circle opens from the middle rather than from a corner. */
 ::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-old(root) {
   animation: none;
   mix-blend-mode: normal;
 }
@@ -253,6 +260,18 @@ body {
 
 ::view-transition-new(root) {
   z-index: 1;
+  animation: theme-wave var(--wave-duration) var(--ease-out) forwards;
+  mix-blend-mode: normal;
+}
+
+@keyframes theme-wave {
+  from {
+    clip-path: circle(0% at var(--wave-x, 50%) var(--wave-y, 50%));
+  }
+
+  to {
+    clip-path: circle(142% at var(--wave-x, 50%) var(--wave-y, 50%));
+  }
 }
 
 /* ---------- reading progress ---------- */

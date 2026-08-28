@@ -157,38 +157,35 @@ const items = [
       return;
     }
 
-    // The new theme is revealed through a circle growing from the control that
-    // was pressed, so the change reads as coming from the button rather than
-    // from the page at large.
-    //
-    // The origin is the point that was touched, not the box the button is
-    // measured to be in.
-    // A phone put the circle in the top left corner while the button sits top
-    // right, which means the measured box was not where the button was; the
-    // pointer cannot disagree with itself the same way. Keyboard activation
-    // reports no point (detail 0), so the box answers for it, and a box with
-    // no size falls back to the middle of the screen rather than to 0,0 - the
-    // corner is the symptom being fixed here.
+    // The origin is handed to CSS as a fraction of the viewport, never as a
+    // pixel coordinate. Pixels have to agree with the box the browser lays the
+    // view transition out in, and on at least one phone they did not: the
+    // circle opened from the top left corner while the button sat top right,
+    // with the button measuring correctly and the pointer reporting the right
+    // point. A percentage cannot be off that way, because it resolves against
+    // whatever box the snapshot actually has.
     const box = toggle.getBoundingClientRect();
     const pointed = event.detail > 0 && (event.clientX > 0 || event.clientY > 0);
+    const share = (value, total) => {
+      if (!total) return 50;
+      return Math.min(100, Math.max(0, (value / total) * 100));
+    };
+
     const x = pointed ? event.clientX : box.width ? box.left + box.width / 2 : innerWidth / 2;
     const y = pointed ? event.clientY : box.height ? box.top + box.height / 2 : innerHeight / 2;
-    const reach = Math.hypot(
-      Math.max(x, innerWidth - x),
-      Math.max(y, innerHeight - y),
-    );
 
-    document.startViewTransition(apply).ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${reach}px at ${x}px ${y}px)`],
-        },
-        {
-          duration: 620,
-          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-          pseudoElement: '::view-transition-new(root)',
-        },
-      );
+    const root = document.documentElement;
+    root.style.setProperty('--wave-x', `${share(x, innerWidth).toFixed(2)}%`);
+    root.style.setProperty('--wave-y', `${share(y, innerHeight).toFixed(2)}%`);
+
+    // The animation itself lives in the stylesheet. Animating a view
+    // transition pseudo-element from script needs WAAPI support for pseudos,
+    // which Safari does not have; a CSS animation works wherever view
+    // transitions do, and the duration can then answer to the viewport.
+    const transition = document.startViewTransition(apply);
+    transition.finished.finally(() => {
+      root.style.removeProperty('--wave-x');
+      root.style.removeProperty('--wave-y');
     });
   });
 
