@@ -946,6 +946,22 @@ body {
   font-weight: 600;
 }
 
+.languages {
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 0.7rem;
+  font-stretch: 80%;
+  line-height: 1.8;
+}
+
+.languages__gap {
+  color: var(--line-strong);
+}
+
+.languages__level {
+  color: var(--faint);
+}
+
 /* ---------- projects ---------- */
 
 .projects__lead {

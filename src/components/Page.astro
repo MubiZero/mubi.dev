@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const { profile, cases, experience, education, stack, contact, repos, projects, ui, copy } =
+const { profile, cases, experience, education, stack, contact, repos, projects, languages, ui, copy } =
   await loadSitePage(locale);
 const year = new Date().getFullYear();
 ---
@@ -50,6 +50,8 @@ const year = new Date().getFullYear();
       printEntries={experience.printEntries}
       education={education.entries}
       educationTitle={copy.educationTitle}
+      languages={languages.entries}
+      languagesTitle={copy.languagesTitle}
     />
   </Section>
 

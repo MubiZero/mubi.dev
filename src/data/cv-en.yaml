@@ -14,6 +14,10 @@ headings:
   education: Education
   certificates: Certificates
 
+# Not a section of its own: languages are a skill, and a heading plus a line
+# costs a page that has none to spare.
+languagesLabel: Languages
+
 target: DevOps engineer
 location: Khujand, Tajikistan — open to relocating to Tashkent
 

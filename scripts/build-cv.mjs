@@ -43,6 +43,7 @@ const contact = yaml(`src/content/contact/${locale}.yaml`);
 const stack = yaml(`src/content/stack/${locale}.yaml`);
 const experience = yaml(`src/content/experience/${locale}.yaml`);
 const education = yaml(`src/content/education/${locale}.yaml`);
+const languages = yaml(`src/content/languages/${locale}.yaml`);
 const cv = yaml(`src/data/cv-${locale}.yaml`);
 
 /**
@@ -65,7 +66,7 @@ const ACCENT = '8F5200';
 const FONT = 'Arial';
 
 const A4 = { width: 11906, height: 16838 };
-const MARGIN = { top: 560, bottom: 480, left: 850, right: 850 };
+const MARGIN = { top: 520, bottom: 440, left: 850, right: 850 };
 const TEXT_WIDTH = A4.width - MARGIN.left - MARGIN.right;
 
 const half = (points) => points * 2;
@@ -91,7 +92,7 @@ function rightTab() {
 
 function sectionHeading(title) {
   return new Paragraph({
-    spacing: { before: 120, after: 50 },
+    spacing: { before: 100, after: 44 },
     border: { bottom: { style: BorderStyle.SINGLE, size: 6, space: 4, color: LINE } },
     children: [text(title.toUpperCase(), { bold: true, size: half(10), color: INK, characterSpacing: 24 })],
   });
@@ -99,7 +100,7 @@ function sectionHeading(title) {
 
 function body(value, options = {}) {
   return new Paragraph({
-    spacing: { after: 40, line: 242 },
+    spacing: { after: 34, line: 242 },
     ...options,
     children: [text(value, { size: half(10), color: INK })],
   });
@@ -108,7 +109,7 @@ function body(value, options = {}) {
 function bullet(value) {
   return new Paragraph({
     numbering: { reference: 'cv-bullets', level: 0 },
-    spacing: { after: 26, line: 242 },
+    spacing: { after: 22, line: 242 },
     children: [text(value, { size: half(10), color: INK })],
   });
 }
@@ -116,7 +117,7 @@ function bullet(value) {
 /** "Role · Employer" on the left, the period pushed to the right margin. */
 function roleLine(role, employer, period) {
   return new Paragraph({
-    spacing: { before: 110, after: 30 },
+    spacing: { before: 96, after: 28 },
     children: [
       text(role, { bold: true, size: half(10.5), color: INK }),
       text('  ·  ', { size: half(10.5), color: MUTED }),
@@ -174,21 +175,26 @@ function contactLines() {
   ];
 }
 
+function skillRow(label, items) {
+  return new Paragraph({
+    spacing: { after: 34, line: 242 },
+    children: [
+      text(`${label[0].toUpperCase()}${label.slice(1)}: `, { bold: true, size: half(10), color: INK }),
+      text(items, { size: half(10), color: INK }),
+    ],
+  });
+}
+
 function skills() {
   const omit = new Set(cv.stackOmit ?? []);
-  return stack.groups.map((group) =>
-    new Paragraph({
-      spacing: { after: 40, line: 242 },
-      children: [
-        text(`${group.label[0].toUpperCase()}${group.label.slice(1)}: `, {
-          bold: true,
-          size: half(10),
-          color: INK,
-        }),
-        text(group.items.filter((item) => !omit.has(item)).join(', '), { size: half(10), color: INK }),
-      ],
-    }),
+  const rows = stack.groups.map((group) =>
+    skillRow(group.label, group.items.filter((item) => !omit.has(item)).join(', ')),
   );
+
+  // A CEFR level says what the reader can expect in an interview; a bare list
+  // of languages does not.
+  const spoken = languages.entries.map((entry) => `${entry.name} ${entry.level}`).join(', ');
+  return [...rows, skillRow(cv.languagesLabel, spoken)];
 }
 
 function experienceSection() {
@@ -225,7 +231,7 @@ function educationSection() {
   // as an interruption rather than as a column.
   return education.entries.flatMap((entry) => [
     new Paragraph({
-      spacing: { before: 110, after: 20 },
+      spacing: { before: 96, after: 18 },
       children: [
         text(entry.institution, { bold: true, size: half(10.5), color: INK }),
         rightTab(),
@@ -247,7 +253,7 @@ function educationSection() {
 function certificates() {
   return cv.certificates.map((entry) =>
     new Paragraph({
-      spacing: { after: 40, line: 242 },
+      spacing: { after: 34, line: 242 },
       children: [
         text(entry.name, { size: half(10), color: INK }),
         text(` — ${entry.detail}`, { size: half(10), color: MUTED }),

@@ -100,6 +100,18 @@ export const contactSchema = z.object({
   ),
 });
 
+export const languagesSchema = z.object({
+  entries: z
+    .array(
+      z.object({
+        name: nonEmpty,
+        // A CEFR level, which is the same string in both locales.
+        level: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2']),
+      }),
+    )
+    .min(1),
+});
+
 export const projectsSchema = z.object({
   lead: nonEmpty,
   entries: z
@@ -169,6 +181,7 @@ export const copySchema = z.object({
   caseLabels: z.object({ context: nonEmpty, action: nonEmpty, result: nonEmpty }),
   cvLabel: nonEmpty,
   educationTitle: nonEmpty,
+  languagesTitle: nonEmpty,
   skipToContent: nonEmpty,
 });
 

@@ -10,6 +10,10 @@ headings:
   education: Образование
   certificates: Сертификаты
 
+# Not a section of its own: languages are a skill, and a heading plus a line
+# costs a page that has none to spare.
+languagesLabel: Языки
+
 target: DevOps специалист
 location: Худжанд, Таджикистан — готов к релокации в Ташкент
 

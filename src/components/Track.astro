@@ -11,9 +11,12 @@ interface Props {
   printEntries: Entry[];
   education: { degree: string; institution: string; period: string; details: string[] }[];
   educationTitle: string;
+  languages: { name: string; level: string }[];
+  languagesTitle: string;
 }
 
-const { entries, printEntries, education, educationTitle } = Astro.props;
+const { entries, printEntries, education, educationTitle, languages, languagesTitle } =
+  Astro.props;
 ---
 
 <div class="track">
@@ -73,5 +76,23 @@ const { entries, printEntries, education, educationTitle } = Astro.props;
         </article>
       ))
     }
+  </div>
+
+  {/* Levels, not a row of flags or bars: a CEFR code says what someone can
+      actually do with a language, and anything drawn instead of stated invites
+      the reader to guess the scale. */}
+  <div class="education">
+    <h3>{languagesTitle}</h3>
+    <p class="languages">
+      {
+        languages.map((language, index) => (
+          <>
+            {index > 0 && <span class="languages__gap" aria-hidden="true"> · </span>}
+            <span class="languages__name">{language.name}</span>
+            <span class="languages__level"> {language.level}</span>
+          </>
+        ))
+      }
+    </p>
   </div>
 </div>
