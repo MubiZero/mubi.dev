@@ -6,4 +6,4 @@ groups:
   - label: мониторинг
     items: [Prometheus, Grafana]
   - label: разработка
-    items: [Go, Flutter, Angular, PrimeNG, .NET]
+    items: [Go, Flutter, Angular, PrimeNG, .NET, PostgreSQL]

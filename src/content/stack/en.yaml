@@ -6,4 +6,4 @@ groups:
   - label: observability
     items: [Prometheus, Grafana]
   - label: development
-    items: [Go, Flutter, Angular, PrimeNG, .NET]
+    items: [Go, Flutter, Angular, PrimeNG, .NET, PostgreSQL]
