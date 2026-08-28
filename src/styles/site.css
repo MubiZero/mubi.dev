@@ -260,7 +260,7 @@ body {
 
 ::view-transition-new(root) {
   z-index: 1;
-  animation: theme-wave var(--wave-duration) var(--ease-out) forwards;
+  animation: theme-wave var(--wave-duration) var(--wave-ease) forwards;
   mix-blend-mode: normal;
 }
 

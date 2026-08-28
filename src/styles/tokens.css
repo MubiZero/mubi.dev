@@ -72,19 +72,25 @@
      desktop, so one duration cannot suit both: held fixed it reads as hurried
      on a wide screen and sluggish on a narrow one. Stepped by width rather
      than computed, because CSS cannot turn a length into a time. */
-  --wave-duration: 420ms;
+  --wave-duration: 700ms;
+  /* Not --ease-out. That curve spends most of its travel in the first third,
+     which is right for a control answering a press and wrong for a sweep
+     across the whole screen: it arrives before the eye has followed it. This
+     one leaves and lands gently and holds an even pace between, so the edge
+     reads as moving rather than as already past. */
+  --wave-ease: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
 
 @media (min-width: 720px) {
   :root {
-    --wave-duration: 560ms;
+    --wave-duration: 900ms;
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --wave-duration: 680ms;
+    --wave-duration: 1080ms;
   }
 }
