@@ -50,3 +50,41 @@ test('the system theme still resolves when storage access throws', async ({ brow
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await context.close();
 });
+
+test('the theme wave starts from the control, not from a corner', async ({ page }) => {
+  // A phone once ran this animation out of the top left corner while the button
+  // sat top right. Asserting the rendered circle rather than the code that
+  // computes it is the only way to notice that happening again.
+  await page.goto('/');
+  await page.evaluate(() => {
+    const original = Element.prototype.animate;
+    Element.prototype.animate = function (
+      keyframes: Keyframe[] | PropertyIndexedKeyframes | null,
+      options?: number | KeyframeAnimationOptions,
+    ) {
+      const pseudo = typeof options === 'object' ? options?.pseudoElement : undefined;
+      const frames = keyframes as PropertyIndexedKeyframes | null;
+      if (String(pseudo).includes('view-transition')) {
+        Object.assign(window, { __clip: (frames?.clipPath as string[] | undefined)?.[0] });
+      }
+      return original.call(this, keyframes, options);
+    };
+  });
+
+  const toggle = page.locator('#theme-toggle');
+  const box = (await toggle.boundingBox())!;
+  await toggle.click();
+
+  // The animation is started from the view transition's ready promise, so it
+  // does not exist yet when the click returns.
+  await page.waitForFunction(() => (window as unknown as { __clip?: string }).__clip);
+  const clip = await page.evaluate(() => (window as unknown as { __clip?: string }).__clip);
+  const origin = clip?.match(/circle\(0px at ([\d.]+)px ([\d.]+)px\)/);
+  expect(origin, `no circle was animated, got ${clip}`).toBeTruthy();
+
+  const [x, y] = [Number(origin![1]), Number(origin![2])];
+  expect(x).toBeGreaterThanOrEqual(box.x);
+  expect(x).toBeLessThanOrEqual(box.x + box.width);
+  expect(y).toBeGreaterThanOrEqual(box.y);
+  expect(y).toBeLessThanOrEqual(box.y + box.height);
+});

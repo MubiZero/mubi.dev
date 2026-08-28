@@ -236,14 +236,10 @@ body {
    The old theme simply holds still while the new one is wiped over it, which
    is what makes the circle read as a wave rather than a dissolve.
 
-   The group has to be silenced too, and it is the one that bites on a phone.
-   Its default animation morphs the snapshot from the old size to the new one,
-   anchored at the top left. On a desktop the two sizes are identical and the
-   animation is a no-op, so nothing shows. On a phone, tapping the toggle can
-   collapse the address bar, the viewport grows between the two snapshots, and
-   that no-op becomes a visible scale out of the top left corner - which reads
-   as the wave starting from the wrong place, whatever origin the script sets
-   on the circle below. */
+   The group is silenced for the same reason. Its default animation morphs the
+   snapshot from the old size to the new one, anchored at the top left, which
+   is invisible only while the two sizes agree - and on a phone they need not,
+   since a tap can collapse the address bar between the snapshots. */
 ::view-transition-group(root),
 ::view-transition-old(root),
 ::view-transition-new(root) {

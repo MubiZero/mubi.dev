@@ -137,7 +137,7 @@ const items = [
     toggle.setAttribute('aria-label', isDark ? toggle.dataset.toLight : toggle.dataset.toDark);
   };
 
-  toggle?.addEventListener('click', () => {
+  toggle?.addEventListener('click', (event) => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
 
     // The preference is stored before the animation, not after: a reload part
@@ -157,15 +157,22 @@ const items = [
       return;
     }
 
-    // The new theme is revealed through a circle growing from the button that
-    // was pressed, so the change reads as coming from the control the user
-    // touched rather than from the page at large.
-    // A button with no box would put the circle at the origin, and a wave out
-    // of the top left corner looks like a bug rather than a flourish. The
-    // centre of the screen is the honest fallback: no particular source.
+    // The new theme is revealed through a circle growing from the control that
+    // was pressed, so the change reads as coming from the button rather than
+    // from the page at large.
+    //
+    // The origin is the point that was touched, not the box the button is
+    // measured to be in.
+    // A phone put the circle in the top left corner while the button sits top
+    // right, which means the measured box was not where the button was; the
+    // pointer cannot disagree with itself the same way. Keyboard activation
+    // reports no point (detail 0), so the box answers for it, and a box with
+    // no size falls back to the middle of the screen rather than to 0,0 - the
+    // corner is the symptom being fixed here.
     const box = toggle.getBoundingClientRect();
-    const x = box.width ? box.left + box.width / 2 : innerWidth / 2;
-    const y = box.height ? box.top + box.height / 2 : innerHeight / 2;
+    const pointed = event.detail > 0 && (event.clientX > 0 || event.clientY > 0);
+    const x = pointed ? event.clientX : box.width ? box.left + box.width / 2 : innerWidth / 2;
+    const y = pointed ? event.clientY : box.height ? box.top + box.height / 2 : innerHeight / 2;
     const reach = Math.hypot(
       Math.max(x, innerWidth - x),
       Math.max(y, innerHeight - y),
