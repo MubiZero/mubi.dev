@@ -1,0 +1,32 @@
+# Facts that belong to the CV and nowhere else. Everything the CV shares with
+# the site - name, contacts, stack, experience, education, the metrics, the
+# public-repository figures - is read from src/content and src/data by
+# scripts/build-cv.mjs, so the two cannot drift apart. Only what the site does
+# not say lives here.
+target: DevSecOps специалист
+location: Худжанд, Таджикистан — готов к релокации в Ташкент
+
+# Leads with work already done rather than with an intention. The certificate
+# below is five years old and cannot carry the case on its own; access control
+# and incident work can.
+summary: >-
+  Инженер банковской инфраструктуры: серверы, доступы, сети и мониторинг того,
+  что не должно падать. Безопасность здесь уже часть работы, а не намерение —
+  ролевые модели доступа и защищённые ветки в GitLab, централизованные учётные
+  записи на FreeIPA, разбор инцидентов. Хочу перейти в DevSecOps и встраивать
+  проверки в CI/CD и SSDLC: под это же профильное образование по защите
+  информационных систем. Код открыт и проверяем.
+
+# Appended to the experience entry whose role matches the key. The build fails
+# on a key that matches nothing, so renaming a role in src/content cannot leave
+# these lines silently unprinted.
+extraLines:
+  Middle DevOps/SRE:
+    - Веду ролевые модели доступа, защищённые ветки и пайплайны в GitLab CI/CD, централизую учётные записи на FreeIPA.
+  Junior DevOps/SRE:
+    - 'Автоматизировал развёртывание виртуальных машин с Terraform, Ansible и FreeIPA, развернул Kubernetes-платформу на RKE2 и Rancher.'
+
+certificates:
+  - name: Kaspersky Academy — Cybersecurity Certification
+    detail: курс по кибербезопасности
+    period: окт. 2021
