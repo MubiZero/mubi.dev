@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  lead: string;
+  entries: { name: string; domain: string; url?: string }[];
+}
+
+const { lead, entries } = Astro.props;
+---
+
+<p class="projects__lead">{lead}</p>
+
+<ul class="projects">
+  {
+    entries.map((entry) => (
+      <li>
+        {/* An entry without a URL is a product that is live but not linkable
+            from here. It still belongs on the list; it just does not pretend
+            to be a link the reader can follow. */}
+        {entry.url ? (
+          <a class="project" data-testid="project" href={entry.url} rel="noopener">
+            <span class="project__name">{entry.name}</span>
+            <span class="project__domain">{entry.domain}</span>
+            <Icon name="ph:arrow-up-right" size="14" aria-hidden="true" />
+          </a>
+        ) : (
+          <span class="project project--plain" data-testid="project">
+            <span class="project__name">{entry.name}</span>
+            <span class="project__domain">{entry.domain}</span>
+          </span>
+        )}
+      </li>
+    ))
+  }
+</ul>

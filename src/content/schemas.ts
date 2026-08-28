@@ -100,6 +100,22 @@ export const contactSchema = z.object({
   ),
 });
 
+export const projectsSchema = z.object({
+  lead: nonEmpty,
+  entries: z
+    .array(
+      z.object({
+        name: nonEmpty,
+        domain: nonEmpty,
+        // Optional on purpose: an entry without one renders as plain text.
+        // A dead link on a page whose whole argument is "check for yourself"
+        // costs more than a name the reader has to search for.
+        url: z.string().url().optional(),
+      }),
+    )
+    .min(1),
+});
+
 export const copySchema = z.object({
   mark: nonEmpty,
   lead: nonEmpty,
@@ -114,6 +130,7 @@ export const copySchema = z.object({
     practice: nonEmpty,
     work: nonEmpty,
     track: nonEmpty,
+    projects: nonEmpty,
     code: nonEmpty,
     contact: nonEmpty,
   }),
@@ -125,6 +142,7 @@ export const copySchema = z.object({
     }),
     work: z.object({ title: nonEmpty, rail: nonEmpty }),
     track: z.object({ title: nonEmpty, rail: nonEmpty }),
+    projects: z.object({ title: nonEmpty, rail: nonEmpty }),
     toolkit: z.object({ title: nonEmpty, rail: nonEmpty }),
     code: z.object({
       title: nonEmpty,

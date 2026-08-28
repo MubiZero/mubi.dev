@@ -915,6 +915,81 @@ body {
   font-weight: 600;
 }
 
+/* ---------- projects ---------- */
+
+.projects__lead {
+  max-width: 62ch;
+  margin-bottom: var(--space-5);
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+}
+
+.project {
+  display: grid;
+  align-items: baseline;
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--line);
+  color: inherit;
+  gap: var(--space-1) var(--space-6);
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  text-decoration: none;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+
+.projects li:last-child .project {
+  border-bottom: 1px solid var(--line);
+}
+
+a.project:hover,
+a.project:focus-visible {
+  background: var(--surface);
+}
+
+.project__name {
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-stretch: 85%;
+  font-weight: 600;
+}
+
+a.project:hover .project__name,
+a.project:focus-visible .project__name {
+  color: var(--accent);
+}
+
+.project__domain {
+  color: var(--faint);
+  font-family: var(--display);
+  font-size: 0.62rem;
+  font-stretch: 80%;
+  white-space: nowrap;
+}
+
+.project svg {
+  color: var(--line-strong);
+  transition: color var(--dur-micro) var(--ease-out),
+    translate var(--dur-short) var(--ease-out);
+}
+
+a.project:hover svg,
+a.project:focus-visible svg {
+  color: var(--accent);
+  translate: 2px -2px;
+}
+
+/* Keeps the domain column in line with the linked rows above and below it,
+   where the arrow would otherwise leave a hole. */
+.project--plain {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
 /* ---------- code ---------- */
 
 .repos {
@@ -1339,6 +1414,32 @@ body {
   #work,
   #code {
     display: none !important;
+  }
+
+  /* The products list is worth the two lines it costs on paper, but not the
+     table it draws on screen: one row per product would push the resume onto
+     a second page. Names only, run together like a sentence. */
+  .projects__lead,
+  .project__domain,
+  .project svg {
+    display: none !important;
+  }
+
+  .projects {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .projects li:not(:last-child)::after {
+    color: #333333;
+    content: ' · ';
+  }
+
+  .project,
+  .projects li:last-child .project {
+    display: inline;
+    padding: 0;
+    border: 0;
   }
 
   .track__print {

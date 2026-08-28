@@ -13,7 +13,7 @@ function required<T>(entry: { data: T } | undefined, collection: string, locale:
 }
 
 export async function loadSitePage(locale: Locale) {
-  const [profile, experience, education, cases, stack, contact, ui, copy, repos] =
+  const [profile, experience, education, cases, stack, contact, ui, copy, repos, projects] =
     await Promise.all([
       getEntry('profile', locale),
       getEntry('experience', locale),
@@ -24,6 +24,7 @@ export async function loadSitePage(locale: Locale) {
       getEntry('ui', locale),
       getEntry('copy', locale),
       getEntry('repos', locale),
+      getEntry('projects', locale),
     ]);
 
   return {
@@ -36,5 +37,6 @@ export async function loadSitePage(locale: Locale) {
     ui: required(ui, 'ui', locale),
     copy: required(copy, 'copy', locale),
     repos: required(repos, 'repos', locale),
+    projects: required(projects, 'projects', locale),
   };
 }
