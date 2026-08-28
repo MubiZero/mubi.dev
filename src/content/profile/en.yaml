@@ -3,7 +3,6 @@ manLine: 'DevOps/SRE · infrastructure automation, monitoring, product work in G
 summary:
   - 'A developer and an infrastructure engineer: servers, access, networking, and monitoring for the things that must not fall over.'
   - 'Security is already part of the work here rather than an intention: access role models and protected branches in GitLab, centralised accounts on FreeIPA, incident response.'
-  - I want to move into DevSecOps and build the checks into CI/CD and the SSDLC, which is what my degree covered.
 now:
   role: Middle DevOps/SRE
   employer: Eskhata Bank
