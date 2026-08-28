@@ -114,3 +114,24 @@ test('the wave covers the screen from wherever it opens', async ({ page }) => {
   });
   expect(radius).toMatch(/circle\(\s*1(4[2-9]|[5-9]\d)%/);
 });
+
+test('moving between languages is a transition, not a reload flash', async ({ page }) => {
+  // Cross-document view transitions are opted into from CSS, and the only
+  // proof they took is the new document reporting one on pagereveal. Asserting
+  // the @view-transition rule instead would only prove the stylesheet parsed.
+  await page.addInitScript(() => {
+    window.addEventListener('pagereveal', (event) => {
+      Object.assign(window, {
+        __revealed: Boolean((event as PageRevealEvent).viewTransition),
+      });
+    });
+  });
+
+  await page.goto('/');
+  await page.getByRole('link', { name: /switch language/i }).first().click();
+  await page.waitForURL('**/ru/');
+
+  expect(await page.evaluate(() => (window as unknown as { __revealed?: boolean }).__revealed)).toBe(
+    true,
+  );
+});

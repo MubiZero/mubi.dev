@@ -232,38 +232,67 @@ body {
   display: none;
 }
 
-/* The theme change is revealed as a circle opening from the control that was
+/* Two transitions share one snapshot pair: the theme change and the move
+   between the Russian and English pages. Which one runs is chosen by custom
+   properties rather than by a selector, because the pseudo-element tree has
+   no class of its own to hook - it inherits from :root, which is the only
+   handle either transition has on it.
+
+   The defaults are the language one: a cross fade, since the two pages differ
+   only in their words and anything more energetic would be motion for its own
+   sake. The theme toggle overrides the pair before it starts, and clears the
+   overrides afterwards.
+
+   The group is silenced in both cases. Its default morph is anchored at the
+   top left and is a no-op only while the two snapshots agree on their size,
+   which on a phone they need not: a tap can collapse the address bar between
+   them. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(root) {
+  animation: none;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+  animation: var(--vt-old, page-out) var(--vt-duration, var(--page-duration))
+    var(--vt-ease, var(--ease-glide)) forwards;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+  animation: var(--vt-new, page-in) var(--vt-duration, var(--page-duration))
+    var(--vt-ease, var(--ease-glide)) forwards;
+  mix-blend-mode: normal;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The theme change instead opens as a circle from the control that was
    pressed. The old theme holds still underneath while the new one is wiped
-   over it, which is what makes it read as a wave rather than a dissolve; the
-   group is silenced too, since its default morph is anchored at the top left
-   and is a no-op only while the two snapshots agree on their size.
+   over it, which is what makes it read as a wave rather than a dissolve.
 
    The radius is 142% and never computed. A percentage radius resolves against
    sqrt(w² + h²) / sqrt(2), so the full diagonal is sqrt(2), or 141.4%, of it:
    142% covers the screen from any point inside it, whatever the shape. There
    is no reach to get wrong on a viewport the script cannot see.
 
-   The origin arrives as --wave-x and --wave-y, set on :root before the
-   transition starts and removed after it finishes. They are percentages of
-   the pseudo-element's own box, so they land in the right place even where a
-   pixel coordinate would not. The centre is the fallback: with no custom
-   property set, the circle opens from the middle rather than from a corner. */
-::view-transition-group(root),
-::view-transition-old(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-old(root) {
-  z-index: 0;
-}
-
-::view-transition-new(root) {
-  z-index: 1;
-  animation: theme-wave var(--wave-duration) var(--wave-ease) forwards;
-  mix-blend-mode: normal;
-}
-
+   The origin arrives as --wave-x and --wave-y, percentages of the
+   pseudo-element's own box, so they land in the right place even where a pixel
+   coordinate would not. With nothing set the circle opens from the centre. */
 @keyframes theme-wave {
   from {
     clip-path: circle(0% at var(--wave-x, 50%) var(--wave-y, 50%));
@@ -271,6 +300,14 @@ body {
 
   to {
     clip-path: circle(142% at var(--wave-x, 50%) var(--wave-y, 50%));
+  }
+}
+
+/* A page that is not allowed to move should not slide sideways between
+   languages either, and a cross fade is still motion. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
   }
 }
 

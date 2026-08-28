@@ -73,12 +73,16 @@
      on a wide screen and sluggish on a narrow one. Stepped by width rather
      than computed, because CSS cannot turn a length into a time. */
   --wave-duration: 700ms;
+  /* The cross fade between the two language pages does not travel, so it needs
+     no step by width. It is longer than a control transition and shorter than
+     the wave: next to a 700ms sweep, 220ms reads as a cut. */
+  --page-duration: 360ms;
   /* Not --ease-out. That curve spends most of its travel in the first third,
-     which is right for a control answering a press and wrong for a sweep
-     across the whole screen: it arrives before the eye has followed it. This
-     one leaves and lands gently and holds an even pace between, so the edge
-     reads as moving rather than as already past. */
-  --wave-ease: cubic-bezier(0.65, 0, 0.35, 1);
+     which is right for a control answering a press and wrong for anything
+     crossing the whole screen: it arrives before the eye has followed it.
+     This one leaves and lands gently and holds an even pace between. Both the
+     theme wave and the language fade run on it. */
+  --ease-glide: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 }

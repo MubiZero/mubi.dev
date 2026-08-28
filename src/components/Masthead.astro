@@ -174,18 +174,31 @@ const items = [
     const x = pointed ? event.clientX : box.width ? box.left + box.width / 2 : innerWidth / 2;
     const y = pointed ? event.clientY : box.height ? box.top + box.height / 2 : innerHeight / 2;
 
-    const root = document.documentElement;
-    root.style.setProperty('--wave-x', `${share(x, innerWidth).toFixed(2)}%`);
-    root.style.setProperty('--wave-y', `${share(y, innerHeight).toFixed(2)}%`);
-
     // The animation itself lives in the stylesheet. Animating a view
     // transition pseudo-element from script needs WAAPI support for pseudos,
     // which Safari does not have; a CSS animation works wherever view
     // transitions do, and the duration can then answer to the viewport.
+    //
+    // The same pseudo-elements carry the cross fade between the Russian and
+    // English pages, so the wave is switched on here and off again after,
+    // leaving the fade as what the stylesheet does by default.
+    const root = document.documentElement;
+    const overrides = {
+      '--wave-x': `${share(x, innerWidth).toFixed(2)}%`,
+      '--wave-y': `${share(y, innerHeight).toFixed(2)}%`,
+      '--vt-old': 'none',
+      '--vt-new': 'theme-wave',
+      '--vt-duration': 'var(--wave-duration)',
+      '--vt-ease': 'var(--ease-glide)',
+    };
+
+    for (const [name, value] of Object.entries(overrides)) {
+      root.style.setProperty(name, value);
+    }
+
     const transition = document.startViewTransition(apply);
     transition.finished.finally(() => {
-      root.style.removeProperty('--wave-x');
-      root.style.removeProperty('--wave-y');
+      for (const name of Object.keys(overrides)) root.style.removeProperty(name);
     });
   });
 
