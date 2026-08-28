@@ -1,19 +1,19 @@
 lead: Commercial products I build and keep running. Work under NDA is not on this list.
 entries:
-  - name: Safo Pharmacy
-    domain: safo.mubi.dev
-    url: https://safo.mubi.dev
   - name: NJ-Cosmetics
     domain: nj-cosmetics.com
     url: https://nj-cosmetics.com
+  - name: Imon Group
+    domain: imongroup.com
+    url: https://imongroup.com
   - name: EliteBurger
     domain: eliteburger.online
     url: https://eliteburger.online
   - name: AziziMoliya
     domain: azizimoliya.com
     url: https://azizimoliya.com
-  - name: Imon Group
-    domain: imongroup.com
-    url: https://imongroup.com
   - name: ChicagoBurger
     domain: chicagoburger.tj
+  - name: Safo Pharmacy
+    domain: safo.mubi.dev
+    url: https://safo.mubi.dev
