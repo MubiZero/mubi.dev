@@ -56,6 +56,6 @@ caseLabels:
   context: Контекст
   action: Что сделал
   result: Результат
-printLabel: Распечатать резюме
+cvLabel: Скачать резюме
 educationTitle: Образование
 skipToContent: Перейти к содержанию

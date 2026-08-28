@@ -33,7 +33,7 @@ const year = new Date().getFullYear();
     contact={contact}
     lead={copy.lead}
     availability={copy.availability}
-    printLabel={copy.printLabel}
+    cv={{ href: locale === 'en' ? '/cv-en' : '/cv', label: copy.cvLabel }}
   />
 
   <Section id="practice" title={copy.sections.practice.title} rail={copy.sections.practice.rail}>

@@ -1,0 +1,56 @@
+# Facts that belong to the CV and nowhere else. Everything the CV shares with
+# the site - name, contacts, skills, experience, education - is read from
+# src/content by scripts/build-cv.mjs, so the two cannot drift apart. Only what
+# the site does not say lives here.
+#
+# The Russian file is the original; this one follows it. When one changes, the
+# other has to, which is why they sit side by side rather than in the content
+# collections, where the parity test would already be watching them.
+headings:
+  about: Profile
+  skills: Core skills
+  experience: Experience
+  projects: Projects
+  education: Education
+  certificates: Certificates
+
+target: DevOps engineer
+location: Khujand, Tajikistan — open to relocating to Tashkent
+
+summary: >-
+  A developer and an infrastructure engineer: servers, access, networking and
+  monitoring for the things that must not fall over. Security is already part
+  of the work rather than an intention — access role models and protected
+  branches in GitLab, centralised accounts on FreeIPA, incident response. I
+  want to move into DevSecOps and build the checks into CI/CD and the SSDLC,
+  and my degree covers exactly that.
+
+# Present on the site, deliberately absent from the CV.
+stackOmit: [Coolify]
+showEducationDetails: false
+
+# Appended to the experience entry whose role matches the key. The build fails
+# on a key that matches nothing, so renaming a role in src/content cannot leave
+# these lines silently unprinted.
+extraLines:
+  Middle DevOps/SRE:
+    - Run access role models, protected branches and pipelines in GitLab CI/CD, and centralise accounts on FreeIPA.
+  Junior DevOps/SRE:
+    - 'Automated virtual machine provisioning with Terraform, Ansible and FreeIPA, and stood up a Kubernetes platform on RKE2 and Rancher.'
+
+projects:
+  - >-
+    Commercial products, more than ten of them: NJ-Cosmetics.com,
+    imongroup.com, EliteBurger.online, AziziMoliya.com, ChicagoBurger.tj, Safo
+    Pharmacy (safo.mubi.dev), and others that are under NDA or not worth the
+    space.
+  - >-
+    Alongside the commercial work I keep pet projects fully open source under
+    AGPL: AFK4.NET, a complete management system for internet cafes, and
+    ManClient, a booking service for businesses and their customers. Six more
+    are on my GitHub page.
+
+certificates:
+  - name: Kaspersky Academy — Cybersecurity Certification
+    detail: cybersecurity course
+    period: Oct 2021

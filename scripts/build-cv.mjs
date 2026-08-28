@@ -18,27 +18,32 @@ import {
 } from 'docx';
 
 const usage = `Usage:
-  npm run build:cv [-- <output path>]
+  npm run build:cv [-- <output path>] [--locale ru|en]
 
 Builds the CV from the same content the site renders. Everything but the
-CV-only material in src/data/cv-ru.yaml is read from src/content and
-src/data, so the document cannot claim something the site contradicts.`;
+CV-only material in src/data/cv-<locale>.yaml is read from src/content, so
+the document cannot claim something the site contradicts.`;
 
 if (process.argv.includes('--help')) {
   process.stdout.write(`${usage}\n`);
   process.exit(0);
 }
 
-const out = resolve(process.argv[2] ?? 'cv/MukhamedovM_CV.docx');
+const localeFlag = process.argv.indexOf('--locale');
+const locale = localeFlag === -1 ? 'ru' : process.argv[localeFlag + 1];
+if (!['ru', 'en'].includes(locale)) throw new Error(`unknown locale "${locale}"`);
+
+const positional = process.argv.slice(2).find((argument) => !argument.startsWith('--') && argument !== locale);
+const out = resolve(positional ?? `cv/MukhamedovM_CV${locale === 'en' ? '_EN' : ''}.docx`);
 
 const yaml = (path) => load(readFileSync(resolve(path), 'utf8'));
 
-const profile = yaml('src/content/profile/ru.yaml');
-const contact = yaml('src/content/contact/ru.yaml');
-const stack = yaml('src/content/stack/ru.yaml');
-const experience = yaml('src/content/experience/ru.yaml');
-const education = yaml('src/content/education/ru.yaml');
-const cv = yaml('src/data/cv-ru.yaml');
+const profile = yaml(`src/content/profile/${locale}.yaml`);
+const contact = yaml(`src/content/contact/${locale}.yaml`);
+const stack = yaml(`src/content/stack/${locale}.yaml`);
+const experience = yaml(`src/content/experience/${locale}.yaml`);
+const education = yaml(`src/content/education/${locale}.yaml`);
+const cv = yaml(`src/data/cv-${locale}.yaml`);
 
 /**
  * The site's light palette, because paper is a light ground. The dark-theme
@@ -202,8 +207,8 @@ function experienceSection() {
 
   if (unused.size) {
     throw new Error(
-      `cv-ru.yaml adds lines to roles that no longer exist: ${[...unused].join(', ')}. ` +
-        'Rename the key to match src/content/experience/ru.yaml, or drop it.',
+      `cv-${locale}.yaml adds lines to roles that no longer exist: ${[...unused].join(', ')}. ` +
+        `Rename the key to match src/content/experience/${locale}.yaml, or drop it.`,
     );
   }
 
@@ -292,17 +297,17 @@ const document = new Document({
       children: [
         ...header(),
         ...contactLines(),
-        sectionHeading('О себе'),
+        sectionHeading(cv.headings.about),
         body(cv.summary),
-        sectionHeading('Ключевые навыки'),
+        sectionHeading(cv.headings.skills),
         ...skills(),
-        sectionHeading('Опыт работы'),
+        sectionHeading(cv.headings.experience),
         ...experienceSection(),
-        sectionHeading('Проекты'),
+        sectionHeading(cv.headings.projects),
         ...projects(),
-        sectionHeading('Образование'),
+        sectionHeading(cv.headings.education),
         ...educationSection(),
-        sectionHeading('Сертификаты'),
+        sectionHeading(cv.headings.certificates),
         ...certificates(),
       ],
     },

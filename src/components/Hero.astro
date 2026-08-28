@@ -13,10 +13,10 @@ interface Props {
   contact: { email: string; links: { label: string; url: string }[] };
   lead: string;
   availability: string;
-  printLabel: string;
+  cv: { href: string; label: string };
 }
 
-const { profile, contact, lead, availability, printLabel } = Astro.props;
+const { profile, contact, lead, availability, cv } = Astro.props;
 const socialIcons: Record<string, string> = {
   GitHub: 'simple-icons:github',
   LinkedIn: 'simple-icons:linkedin',
@@ -50,9 +50,12 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
             </a>
           ))
         }
-        <button type="button" data-print aria-label={printLabel}>
-          <Icon name="ph:printer" size="18" aria-hidden="true" />
-        </button>
+        <!-- The document rather than the print dialog. Printing the page is
+             still tidy and still one sheet, but the file is the same layout
+             for everyone, and it arrives named. -->
+        <a data-testid="cv" href={cv.href} download aria-label={cv.label}>
+          <Icon name="ph:file-arrow-down" size="18" aria-hidden="true" />
+        </a>
       </div>
     </div>
   </div>
@@ -73,8 +76,4 @@ const role = [profile.now.role, profile.now.employer, profile.now.location].join
   </div>
 </section>
 
-<script is:inline>
-  document
-    .querySelector('[data-print]')
-    ?.addEventListener('click', () => window.print());
-</script>
+

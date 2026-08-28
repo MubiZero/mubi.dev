@@ -2,6 +2,14 @@
 # the site - name, contacts, skills, experience, education - is read from
 # src/content by scripts/build-cv.mjs, so the two cannot drift apart. Only what
 # the site does not say lives here.
+headings:
+  about: О себе
+  skills: Ключевые навыки
+  experience: Опыт работы
+  projects: Проекты
+  education: Образование
+  certificates: Сертификаты
+
 target: DevOps специалист
 location: Худжанд, Таджикистан — готов к релокации в Ташкент
 

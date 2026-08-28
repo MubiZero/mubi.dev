@@ -16,8 +16,6 @@ function profileRole(locale: string): string {
 
 declare global {
   interface Window {
-    /** Set by the print test to count window.print() calls. */
-    __printed: number;
   }
 }
 
@@ -57,22 +55,14 @@ for (const route of ROUTES) {
       }
     });
 
-    test('the print button sits with the profile links and actually prints', async ({ page }) => {
-      const button = page.locator('[data-print]');
-      await expect(button).toHaveCount(1);
-      await expect(button).toHaveAttribute('aria-label', /\S/);
-
-      const siblings = page.locator('.hero .social > *');
-      await expect(siblings).toHaveCount(4);
-
-      await page.evaluate(() => {
-        window.__printed = 0;
-        window.print = () => {
-          window.__printed += 1;
-        };
-      });
-      await button.click();
-      expect(await page.evaluate(() => window.__printed)).toBe(1);
+    test('the CV sits with the profile links and downloads as a file', async ({ page }) => {
+      const link = page.getByTestId('cv');
+      await expect(link).toBeVisible();
+      // download, not target: the file is the point, and the attribute names it
+      // even where the server does not send a disposition header.
+      await expect(link).toHaveAttribute('download', '');
+      expect(await link.getAttribute('href')).toMatch(/^\/cv(-en)?$/);
+      expect((await link.getAttribute('aria-label'))?.length).toBeGreaterThan(0);
     });
 
     test('printing produces a one page resume, not a screenshot of the site', async ({ page }) => {

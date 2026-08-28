@@ -167,7 +167,7 @@ export const copySchema = z.object({
     }),
   }),
   caseLabels: z.object({ context: nonEmpty, action: nonEmpty, result: nonEmpty }),
-  printLabel: nonEmpty,
+  cvLabel: nonEmpty,
   educationTitle: nonEmpty,
   skipToContent: nonEmpty,
 });

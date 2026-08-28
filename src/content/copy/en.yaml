@@ -56,6 +56,6 @@ caseLabels:
   context: Context
   action: What I did
   result: Outcome
-printLabel: Print the resume
+cvLabel: Download the CV
 educationTitle: Education
 skipToContent: Skip to content
