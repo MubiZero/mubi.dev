@@ -1,6 +1,6 @@
 # mubi.dev
 
-[mubi.dev](https://mubi.dev) is the bilingual personal CV and developer portfolio of [Mubinjon Mukhamedov](https://www.linkedin.com/in/mubizero). The site is static, fast to load, and designed to work equally well as a web page and a one-page printable CV.
+[mubi.dev](https://mubi.dev) is the bilingual personal CV and developer portfolio of [Mubinzhon Mukhamedov](https://www.linkedin.com/in/mubizero). The site is static, fast to load, and designed to work equally well as a web page and a one-page printable CV.
 
 ## What is included
 

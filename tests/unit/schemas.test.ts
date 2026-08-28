@@ -11,7 +11,7 @@ import {
 
 describe('profileSchema', () => {
   const valid = {
-    name: 'Mubinjon Mukhamedov',
+    name: 'Mubinzhon Mukhamedov',
     manLine: 'mubi - infrastructure engineer and product developer',
     summary: ['First sentence.', 'Second sentence.'],
     now: { role: 'Middle DevOps/SRE', employer: 'Eskhata Bank', location: 'Dushanbe' },
@@ -166,7 +166,7 @@ describe('stackSchema', () => {
 
 describe('uiSchema', () => {
   const valid = {
-    siteTitle: 'Mubinjon Mukhamedov, infrastructure engineer',
+    siteTitle: 'Mubinzhon Mukhamedov, infrastructure engineer',
     metaDescription: 'Infrastructure engineer and product developer.',
     controls: {
       switchLanguage: 'Switch language',
