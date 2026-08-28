@@ -58,10 +58,14 @@ async function fetchRepoFacts(): Promise<Map<string, RepoFacts>> {
       license: { spdx_id: string } | null;
       pushed_at: string;
       fork: boolean;
+      private: boolean;
     }[];
 
     for (const repo of live) {
-      if (repo.fork) continue;
+      // The endpoint returns public repositories only, but a token widens
+      // plenty of other GitHub endpoints. The section is headed "public
+      // repositories", so the check is stated rather than assumed.
+      if (repo.fork || repo.private) continue;
       facts.set(repo.name, {
         name: repo.name,
         url: repo.html_url,
@@ -80,81 +84,42 @@ async function fetchRepoFacts(): Promise<Map<string, RepoFacts>> {
 export interface Contributions {
   from: string;
   to: string;
+  /** How the numbers were produced. Only `public-commits` is accepted. */
+  source: string;
+  /** How many public repositories were counted. */
+  repos: number;
   total: number;
   /** One digit per day, 0 to 4, in date order starting from `from`. */
   levels: string;
-  /** Contributions per day, same order and length as `levels`. */
+  /** Commits per day, same order and length as `levels`. */
   counts: number[];
 }
 
-const CALENDAR = `https://github.com/users/${OWNER}/contributions`;
-
 /**
- * Per-day counts come from the cell tooltips, not from the headline number.
- * Without them the page could only ever state a yearly total, and any shorter
- * window it draws would be captioned with a figure that does not match it.
+ * The calendar is read from the committed snapshot, which
+ * scripts/refresh-github-snapshot.mjs rebuilds nightly by counting commits in
+ * the owner's public repositories.
+ *
+ * It used to be scraped live from the profile page instead. That page cannot
+ * support the claim this section makes: with "include private contributions on
+ * my profile" enabled, GitHub folds private commits into the same squares,
+ * anonymised, and nothing in the markup separates them again. Drawing that
+ * under a heading reading "public repositories" overstated the case, so the
+ * live fetch is gone rather than merely discouraged, and the build has no path
+ * back to it.
+ *
+ * A snapshot from the old source is refused outright. Failing the build is the
+ * right outcome: a number nobody can open and verify is worse than no number.
  */
-function parseCalendar(html: string): Contributions | null {
-  const tooltips = new Map<string, number>();
-  for (const match of html.matchAll(/<tool-tip[^>]*for="([^"]+)"[^>]*>([^<]+)<\/tool-tip>/g)) {
-    const count = match[2].match(/^(\d+|No) contribution/);
-    if (count) tooltips.set(match[1], count[1] === 'No' ? 0 : Number(count[1]));
-  }
-
-  const cells: { date: string; level: string; count: number }[] = [];
-  for (const [tag] of html.matchAll(/<td[^>]*class="ContributionCalendar-day"[^>]*>/g)) {
-    const date = tag.match(/data-date="(\d{4}-\d{2}-\d{2})"/);
-    const level = tag.match(/data-level="(\d)"/);
-    const id = tag.match(/id="([^"]+)"/);
-    if (!date || !level || !id) continue;
-    const count = tooltips.get(id[1]);
-    if (count === undefined) continue;
-    cells.push({ date: date[1], level: level[1], count });
-  }
-
-  if (cells.length < 300) return null;
-  cells.sort((a, b) => a.date.localeCompare(b.date));
-
-  return {
-    from: cells[0].date,
-    to: cells[cells.length - 1].date,
-    total: cells.reduce((sum, cell) => sum + cell.count, 0),
-    levels: cells.map((cell) => cell.level).join(''),
-    counts: cells.map((cell) => cell.count),
-  };
-}
-
-/**
- * The contribution calendar, read at build time from the same public endpoint
- * the profile page uses. GitHub's REST API does not expose it and the GraphQL
- * one needs a token, so this is markup parsing: it can break on a redesign,
- * which is why a failed or unrecognisable response falls back to the committed
- * snapshot rather than throwing. The rendered caption always states the period
- * the data covers, so a stale fallback is visible instead of silent.
- */
-let contributions: Promise<Contributions> | null = null;
-
-/** Memoised for the same reason as loadRepoFacts. */
 export function loadContributions(): Promise<Contributions> {
-  contributions ??= fetchContributions();
-  return contributions;
-}
-
-async function fetchContributions(): Promise<Contributions> {
-  try {
-    const response = await fetch(CALENDAR, {
-      signal: AbortSignal.timeout(TIMEOUT_MS),
-      headers: { Accept: 'text/html' },
-    });
-    if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
-
-    const parsed = parseCalendar(await response.text());
-    if (!parsed) throw new Error('the calendar markup did not parse');
-    return parsed;
-  } catch (error) {
-    console.warn(`[github] contributions from snapshot: ${(error as Error).message}`);
-    return contributionsSnapshot as Contributions;
+  const snapshot = contributionsSnapshot as Contributions;
+  if (snapshot.source !== 'public-commits') {
+    throw new Error(
+      `[github] the contribution snapshot claims source "${snapshot.source}"; ` +
+        'run `npm run refresh:github` to rebuild it from the public repositories',
+    );
   }
+  return Promise.resolve(snapshot);
 }
 
 /**
