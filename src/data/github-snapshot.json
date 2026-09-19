@@ -4,7 +4,7 @@
     "url": "https://github.com/MubiZero/afk4.net",
     "language": "C#",
     "license": "AGPL-3.0",
-    "pushedAt": "2026-09-18T08:30:50Z"
+    "pushedAt": "2026-09-19T05:41:15Z"
   },
   {
     "name": "DuTaksim",
@@ -32,14 +32,14 @@
     "url": "https://github.com/MubiZero/mubi.dev",
     "language": "TypeScript",
     "license": "MIT",
-    "pushedAt": "2026-09-17T09:10:02Z"
+    "pushedAt": "2026-09-18T08:43:11Z"
   },
   {
     "name": "RabbitFarm",
     "url": "https://github.com/MubiZero/RabbitFarm",
     "language": "Dart",
     "license": "MIT",
-    "pushedAt": "2026-09-18T06:54:55Z"
+    "pushedAt": "2026-09-18T09:58:08Z"
   },
   {
     "name": "SynergyDMS",
