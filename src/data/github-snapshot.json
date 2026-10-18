@@ -32,7 +32,7 @@
     "url": "https://github.com/MubiZero/mubi.dev",
     "language": "TypeScript",
     "license": "MIT",
-    "pushedAt": "2026-10-16T08:43:31Z"
+    "pushedAt": "2026-10-17T08:14:01Z"
   },
   {
     "name": "RabbitFarm",
@@ -40,6 +40,13 @@
     "language": "Dart",
     "license": "MIT",
     "pushedAt": "2026-09-22T02:47:03Z"
+  },
+  {
+    "name": "store-screenshots",
+    "url": "https://github.com/MubiZero/store-screenshots",
+    "language": "JavaScript",
+    "license": "MIT",
+    "pushedAt": "2026-10-17T17:05:44Z"
   },
   {
     "name": "SynergyDMS",
