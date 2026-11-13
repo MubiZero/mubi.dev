@@ -7,6 +7,13 @@
     "pushedAt": "2026-11-05T14:55:12Z"
   },
   {
+    "name": "claude-progress-bar",
+    "url": "https://github.com/MubiZero/claude-progress-bar",
+    "language": "TypeScript",
+    "license": "MIT",
+    "pushedAt": "2026-11-13T06:14:13Z"
+  },
+  {
     "name": "DuTaksim",
     "url": "https://github.com/MubiZero/DuTaksim",
     "language": "Dart",
@@ -32,7 +39,7 @@
     "url": "https://github.com/MubiZero/mubi.dev",
     "language": "TypeScript",
     "license": "MIT",
-    "pushedAt": "2026-11-11T11:39:45Z"
+    "pushedAt": "2026-11-12T12:08:30Z"
   },
   {
     "name": "RabbitFarm",
